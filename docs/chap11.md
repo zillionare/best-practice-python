@@ -1,0 +1,10 @@
+# 发布应用
+## 通过PyPI发布应用
+### TestPyPI
+### PyPI
+### 案例：发布一个包到TestPyPI
+## Whl格式的局限
+## 制作Native的安装包
+### makeself的多平台安装包（内含案例）
+### 基于PyInstaller的多平台安装包
+### Nuitka
