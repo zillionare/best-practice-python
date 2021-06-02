@@ -1,62 +1,18 @@
-# 高效的软件开发语言
-Python是一门优雅、迷人和高效的开发语言。
 
-从一开始起，它就把优美易读，接近自然语言作为第一设计目标，从而增进了程序开发的效率，把编程的快乐重新还给开发者。从那时起，“人生苦短，我用Python”就成为Python狂热爱好者的口号。
+2020年，欧洲太空署（European Space Agency，简称ESA)打算向火星派出一个探测器，把一些岩石样品带回地球，以检测火星上是否存在生命。但是探测器只能带回500g的火星岩石。因此，在样本被带回来之前，必须精挑细选。科学家们准备构建一个现场挑选器，这个挑选器必须有视觉重建能力，因此他们构建了一个人工神经网络。在这项任务中，无论是构建多CPU集群，还是通过PyCUDA来使用NVIIDA的CUDA库，他们都重度使用了Python。
 
-语言的简洁、优美在Python中的地位是如此重要，以至于它被写进了Python“宪章” -- PEP20[^PEP20](2004年8月）：
+![](http://images.jieyu.ai/images/202106/mars-67522_1920.jpg) 
+_图片来源: [mars-rover-space-traveler]_
 
+上一个登陆火星的编程语言，还是Java。它由勇气(Spirit)号探测器携带，于2004年1月4号着陆在火星上。这一次，为了完成更复杂、更智慧的任务，科学家们选择了Python。
 
-!!! cite "Zen of Python -  by Tim Peters[^Tim_Peters]"     
-    Beautiful is better than ugly.
+做出这个选择并不困难，实际上，Python也是这项任务的不二之选。
 
-    Explicit is better than implicit.
+Python是一门有着悠久历史的开发语言，它由出生于荷兰的程序员Guido Van Rossum开发。Guido Van Rossum在国内被粉丝亲切地称作“龟叔”。从创立这门语言起的长达30年时间里，Guido Van Rossum一直以他的热情和热爱指引着这门语言的未来发展方向，被称作“仁慈的终身独裁者”（the benevolent dictator for life）。大约在2018年他有过一段短暂的退休，不过很快于2020年重新回归社区，加入微软并继续领导Python的开发。这一次，他给社区带来了4年提升5倍性能的承诺。
 
-    Simple is better than complex.
+Python的最初版本于1994年1月发布，甚至还要早于Java[^JAVA]。一开始它吸收了很多Lisp语言的特性，比如引入了函数式编程工具，其痕迹一直遗留到今天 -- 这就是现在仍然在广泛使用的`reduce`, `filter`, `map`等函数的出处。在那时，Perl还是一种非常流行的脚本语言， Python也从中吸收了很多成熟模块的功能，这样就成功地留住了一批寻找Perl的替换语言的用户。
 
-    Complex is better than complicated.
-
-    Flat is better than nested.
-
-    Sparse is better than dense.
-
-    Readability counts.
-
-    Special cases aren't special enough to break the rules.
-
-    Although practicality beats purity.
-
-    Errors should never pass silently.
-
-    Unless explicitly silenced.
-
-    In the face of ambiguity, refuse the temptation to guess.
-
-    There should be one-- and preferably only one --obvious way to do it.
-
-    Although that way may not be obvious at first unless you're Dutch.
-
-    Now is better than never.
-
-    Although never is often better than *right* now.
-
-    If the implementation is hard to explain, it's a bad idea.
-
-    If the implementation is easy to explain, it may be a good idea.
-
-    Namespaces are one honking great idea -- let's do more of those!
-
-这段文字甚至还以复活节彩蛋的方式出现。如果执行以下的命令：
-
-```bash
-python -c 'import this'
-```
-就会输出上面的文字。
-
-Python是一门有着悠久历史的开发语言，它由出生于荷兰的程序员Guido Van Rossum开发。Guido Van Rossum在国内被粉丝亲热地称作“龟叔”。从创立这门语言起的长达30年时间里，Guido Van Rossum一直以他的热情和热爱指引着这门语言的未来发展方向，被称作“仁慈的终身独裁者”（the benevolent dictator for life）。
-
-Python最初版本于1994年1月发布，甚至还要早于Java[^JAVA]。最初它吸收了很多Lisp语言的特性，比如引入了函数式编程工具，其痕迹一直遗留到今天 -- 这就是现在仍然在广泛使用的`reduce`, `filter`, `map`等函数的出处。在那时，Perl还是一种非常流行的脚本语言， Python也从中吸收了很多成熟模块的功能，这样就成功地留住了一批寻找Perl的替换语言的用户。
-
-90年代末，面向对象编程如日中天，Java也正如冉冉升起明星。2000年Python发布2.0版，这一版本引入了列表表达式。2001年底，Python 2.2发布，从而使得Python也成为一门纯粹的面向对象的编程语言。这一段时间，Java在企业应用端开枝散叶，而Python则在数据和基础设施管理方面找到用武之地。
+90年代末，c++是最流行的开发语言，而Java则是一颗冉冉升起的明星，面向对象编程如日中天。2000年Python发布2.0版，引入了列表表达式。2001年底，Python 2.2发布，从而使得Python也成为一门纯粹的面向对象的编程语言。这一段时间，Java在企业应用端开枝散叶，而Python则在数据和基础设施管理方面找到用武之地。2008年，Python 3.0版本发布，这个版本与2.x完全不兼容，这也是史上最具争议的一个Python版本，但也就此甩掉了长久以来积累的一些沉重包袱。此后Python轻装上阵，直到3.6版本开始，成为Python 3系列第一个比较稳定可靠的版本。也是在这个过程中，随着大数据、机器学习与人工智能的快速演进，Python进一步发挥出它的优势，被越来越多的人认识和使用，其排名在[TIOBE]排行榜上逐年攀升：
 
 2007年，Dropbox成立，Dropbox项目成为完全使用Python开发^[Dropbox]的最大规模的应用。这也使得更多的企业应用开始认真地思考是否应该使用Python来构建。
 
@@ -67,6 +23,58 @@ Python最初版本于1994年1月发布，甚至还要早于Java[^JAVA]。最初�
 自从[TIOBE]开始编制各种开发语言的排序以来，Python还分别于2020年、2018年、2010年和2007年获得年度之星称号，这也是惟一一个四次获得该称号的开发语言：
 
 ![](http://images.jieyu.ai/images/202105/20210522224627.png)
+
+
+Python是一门优雅、迷人和高效的开发语言。从一开始起，它就把优美易读，接近自然语言作为第一设计目标，从而提高了程序开发的效率，把编程的快乐重新还给开发者。从那时起，“人生苦短，我用Python”就成为Python狂热爱好者的口号。
+
+语言的简洁、优美在Python中的地位是如此重要，以至于它被写进了Python“宪章” -- PEP20[^PEP20](2004年8月）： 
+
+!!! cite "Zen of Python -  by Tim Peters[^Tim_Peters]"     
+    Beautiful is better than ugly.
+    优美胜于丑陋
+    Explicit is better than implicit.
+    明了胜于晦涩
+    Simple is better than complex.
+    简单优于复杂
+    Complex is better than complicated.
+    复杂优于凌乱
+    Flat is better than nested.
+    扁平好过嵌套
+    Sparse is better than dense.
+    稀疏强于稠密
+    Readability counts.
+    可读性很重要！
+    Special cases aren't special enough to break the rules.
+    特例亦不可违背原则
+    Although practicality beats purity.
+    即使实用战胜了纯粹
+    Errors should never pass silently.
+    错误绝不能悄悄忽略
+    Unless explicitly silenced.
+    除非我们确定需要如此
+    In the face of ambiguity, refuse the temptation to guess.
+    面对不确定性，拒绝妄加猜测
+    There should be one-- and preferably only one --obvious way to do it.
+    永远都应该只有一种显而易见的解决之道
+    Although that way may not be obvious at first unless you're Dutch.
+    即便解决之道起初看起来并不显而易见
+    Now is better than never.
+    做总比不做强
+    Although never is often better than *right* now.
+    然而不假思索还不如不做
+    If the implementation is hard to explain, it's a bad idea.
+    难以名状的，必然是坏的
+    If the implementation is easy to explain, it may be a good idea.
+    易以言传的，可能是好的
+    Namespaces are one honking great idea -- let's do more of those!
+    名字空间是个绝妙的主意，请好好使用！
+
+这段文字甚至还以复活节彩蛋的方式出现。如果执行以下的命令：
+
+```bash
+python -c 'import this'
+```
+就会输出上面的文字。
 
 
 [^PEP20]: PEP是Python Ehancement Proposals的首字母缩写。它是将新特性引入Python的重要方式。
@@ -164,4 +172,6 @@ Python的语法显然更简单，但又不需要复杂的技巧。c和java虽然
 ### 严格执行软件开发流程
 ### 重视开发中3个核心步骤
 ### 选用高效的开发工具
+
+[mars-rover-space-traveler]: https://pixabay.com/photos/mars-mars-rover-space-travel-rover-67522/
 
