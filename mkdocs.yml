@@ -5,7 +5,7 @@ repo_name: best-practice-python
 #strict: true
 
 nav:
-  - 一 高效的软件开发语言 -- python: chap01.md
+  - 一、为什么是Python: chap01.md
   - 二 Python的编程开发环境: chap02.md
   - 三 构建Python虚拟环境: chap03.md
   - 四 项目布局和项目生成向导: chap04.md
