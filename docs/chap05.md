@@ -14,7 +14,7 @@
 
 我们的程序将会访问postgres数据库里的users表。一般来说，我们都会使用sqlalchemy来访问数据库，而避免直接使用特定的数据库驱动。这样做的好处是，万一将来我们需要更换数据库，那么这种迁移带来的工作量将轻松不少。
 
-在2021年，python的异步io已经大放异彩。而sqlalchemy依然不支持这一最新特性，不免让人有些失望 -- 这会导致在进行数据库查询时，python进程会死等数据库返回结果，而无法有效利用CPU时间。好在有一个名为Gino的项目弥补了这一缺陷：
+在2021年3月，python的异步io已经大放异彩。而sqlalchemy依然不支持这一最新特性，这不免让人有些失望 -- 这会导致在进行数据库查询时，python进程会死等数据库返回结果，从而无法有效利用CPU时间。好在有一个名为Gino的项目弥补了这一缺陷：
 
 ```
 pip install gino
@@ -128,9 +128,9 @@ Collecting SQLAlchemy<2.0,>=1.2
 !!!Info
     上述文本是在2021年3月安装gino 1.0时的输出。如果您现在运行``pip install gino==1.0``，会安装SQLAlchemy 1.4.46版本，这是它在1.x下的最后一个版本。
 
-从pip的安装日志可以看到，gino声明能接受的SQLAlchemy的最小版本是1.2，最大版本则不到2.0。因此，当我们安装gino 1.0时，只要SQLAlchemy有超过1.2，且于于2.0的最新版本，它就一定会选择安装这个最新版本，最终，SQLAlchemy 1.4.0被安装到环境中。
+从pip的安装日志可以看到，gino声明能接受的SQLAlchemy的最小版本是1.2，最大版本则不到2.0。因此，当我们安装gino 1.0时，只要SQLAlchemy存在超过1.2，且小于2.0的最新版本，它就一定会选择安装这个最新版本，最终，SQLAlchemy 1.4.0被安装到环境中。
 
-SQLAlchemy在2020年也意识到了asyncio的重要性，并且从1.4开始使用了异步IO。然而，这样一来，调用接口就必须发生改变 -- 也就是，之前依赖于SQLAlchemy的那些程序，不进行修改是无法直接使用SQLAlchemy 1.4的。1.4.0这个版本发布于2021年3月16日。
+SQLAlchemy在2020年也意识到了asyncio的重要性，并计划在1.4版本时转向asyncio。然而，这样一来，调用接口就必须发生改变 -- 也就是，之前依赖于SQLAlchemy的那些程序，不进行修改是无法直接使用SQLAlchemy 1.4的。1.4.0这个版本发布于2021年3月16日。
 
 原因找到了，最终问题也解决了。最终，我把这个错误报告给了gino，gino的开发者承担了责任，发布了1.0.1,将SQLAlchemy的版本锁定在">1.2,<1.4"这个范围内。
 
@@ -143,7 +143,7 @@ Collecting SQLAlchemy<1.4,>=1.2.16
   Using cached SQLAlchemy-1.3.24-cp39-cp39-macosx_11_0_arm64.whl
 ```
 
-在这个案例中，最终用户并没有要求升级并使用SQLAlchemy的新功能，因此，新的安装本不应该去升级这样一个破坏性的版本；但是如果SQLAlchemy出了新的安全更新，或者bug修复，显然，我们也希望我们的程序在不进行更新发布的情况下，就能对依赖进行更新（否则，如果任何一个依赖发布安全更新，都将导致主程序不得不发布更新的话，这种耦合也是很难接受的）。因此，是否存在一种机制，使得我们的应用在指定直接依赖时，也可以恰当地锁定传递依赖的版本，并且允许传递依赖进行合理的更新？这是我们这个案例提出来的第三个问题。
+在这个案例中，我并没有要求升级并使用SQLAlchemy的新功能，因此，新的安装本不应该去升级这样一个破坏性的版本；但是如果SQLAlchemy出了新的安全更新，或者bug修复，显然，我们也希望我们的程序在不进行更新发布的情况下，就能对依赖进行更新（否则，如果任何一个依赖发布安全更新，都将导致主程序不得不发布更新的话，这种耦合也是很难接受的）。因此，是否存在一种机制，使得我们的应用在指定直接依赖时，也可以恰当地锁定传递依赖的版本，并且允许传递依赖进行合理的更新？这是我们这个案例提出来的第三个问题。
 
 现在，似乎是我们将产品发布的时候了。我们看到其它人开发的开源项目发布在pypi上，这很酷。我也希望我的程序能被千百万人使用。这就需要编写MANINFEST.in, setup.cfg, setup.py等文件。
 
@@ -159,11 +159,10 @@ with open('requirements.txt') as f:
 with open('requirements_dev.txt') as f:
     extras_dev_requires = f.read().splitlines()
 
+# setup是一个有着庞大参数体的函数，这里只显示了部分相关参数
 setup(
     name='foo',
     version='0.0.1',
-    author='Aaron',
-    author_email='aaron_yang@jieyu.ai',
     install_requires=install_requires,
     extras_require={'dev': extras_dev_requires},
     packages=['foo'],
@@ -185,19 +184,17 @@ setup(
 
     翻译：Python的打包系统和依赖管理相当复杂，对新人来讲尤其费解。要正确地创建Python项目所需要的文件:setup.py, requirements.txt, setup.cfg, MANIFEST.in和新加入的pipfile，有时候即使对一个有经验的老手，也是有一些困难的。因此，我希望创建一种工具，只用一个文件就实现依赖管理、打包和发布。
 
-依赖是指我们的应用程序中使用到的第三方库。比如，当你写一个网络爬虫时，很可能会使用requests, lxml等第三方库。因此，您的程序是依赖到这些第三方库的。
+通过前面的案例，我们已经提出了一些问题。但不止于此。
 
-我们在上一章中已经介绍过，打包一个Python程序库，需要有setup.py, setup.cfg, MANIFEST.in, requirements.txt等文件，这个流程和规范是[Pypa](https://www.pypa.io)定义的，也成为Python标准库的一部分。但是，在那一章里，我们没有详细介绍这些文件的作用和配置，因为我们已经决定使用Poetry来取代它。
-
-现在，我们来简单地看一下，标准流程有哪些不足？
-
-需求依赖散布于requirements.txt和setup.py之中；当您将依赖加入到工程时，没有人帮你确定它是否与既存的依赖能够和平共处；所以一般的做法是，先将它们加进来，完成开发和测试，在打包之前，运行``pip freeze > requirements.txt``来锁定依赖库的版本。但这也将一些你的工程中并不直接依赖的包加入进来--你可能甚至并不清楚它是做什么的。
+当您将依赖加入到requirements.txt时，没有人帮你确定它是否与既存的依赖能够和平共处，这个过程要比我们想象的复杂许多，不仅仅是直接依赖，还需要考虑彼此的传递依赖是否也能彼此兼容；所以一般的做法是，先将它们加进来，完成开发和测试，在打包之前，运行``pip freeze > requirements.txt``来锁定依赖库的版本。但我们也在前面的案例中提到，这种方法可能会将不必要的开发依赖打入到发行版中；此外，它也会过度锁定版本，从而使得一些活跃的第三方库失去自动更新热修复和安全更新的机会。
 
 项目的版本管理也是一个问题。在老旧的Python项目中，一般我们使用bumpversion来管理版本，它需要使用三个文件。在我的日常使用时，它常常会出现各种问题，最常见的是单双引号导致把``__version__=0.1``当成一个版本号，而不是``0.1``。这样打出来的包名也会奇怪地多一个无意义的version字样。单双引号则是因为你的format工具对字符串常量应该使用什么样的引号规则有自己的意见。
 
-Poetry解决了所有这些问题。它提供了版本管理、依赖解析、构建和发布的一站式服务，并将所有的配置，集中到一个文件中，即pyproject.toml。此外，Poetry还提供了一个简单的工程创建向导。不过这个向导的功能比较简单，我们的推荐是使用上一章介绍的python project wizard。
+项目进行打包和发布需要准备太多的文件，正如Poetry的开发者所说，要确保这些文件的内容完全正确，对一个有经验的开发者来说，也不是轻而易举的事。
 
-!!! Readmore
+Poetry解决了所有这些问题（除了案例中的第一个，该问题要通过tox和CI来解决）。它提供了版本管理、依赖解析、构建和发布的一站式服务，并将所有的配置，集中到一个文件中，即pyproject.toml。此外，Poetry还提供了一个简单的工程创建向导。不过这个向导的功能仍然过于简单，我们的推荐则是使用上一章介绍的python project wizard。
+
+!!! Info
     实际上Poetry还会用到另一个文件，即poetry.lock。这个文件并非独立文件，而是Poetry根据pyproject.toml生成的、锁定了依赖版本的最终文件。
 
 现在，让我们看一眼sample项目中的pyproject.toml文件:
@@ -305,13 +302,13 @@ profile = "black"
 我们简单地解读一下这个文件：
 在[tool.poetry]那一节，定义了包的名字（这里是sample)、版本号(这里是0.1.0)，其它的一些字段，比如classifiers，这是打包和发布时需要的。如果您熟悉python setup tools，那么对这些字段将不会陌生。packages字段指明了打包时需要包含的文件。在示例中，我们要求在以.whl格式发布的包中，将sample目录下的所有文件打包发布；而以sdist格式(即.tar.gz)发布的包中，还要包含tests目录下的文件。
 
-接下来是[tool.poetry.dependencies]一节，这是我们声明工程的依赖的地方。首先是工程要求的python版本声明。这里我们要求必须在3.7.1以上，4.0以下的python环境中运行。因此，python 3.7.1， 3.9， 3.10都是恰当的python版本，但4.0则不允许。
+接下来是[tool.poetry.dependencies]一节，这是我们声明项目依赖的地方。首先是项目要求的python版本声明。这里我们要求必须在3.7.1以上，4.0以下的python环境中运行。因此，python 3.7.1，3.8， 3.9， 3.10都是恰当的python版本，但4.0则不允许。
 
-接下来就是工程中需要用到的其它第三方依赖，有运行时的（即当最终用户使用我们的程序时，必须安装的那些第三方依赖），也有开发时的（即只在开发和测试过程中使用到的，比如文档工具类mkdocs， 测试类tox, pytest等）。
+接下来就是工程中需要用到的其它第三方依赖，有运行时的（即当最终用户使用我们的程序时，必须安装的那些第三方依赖），也有开发时的（即只在开发和测试过程中使用到的，比如文档工具类mkdocs，测试类tox, pytest等）。
 
-我们对运行时和开发时需要的依赖进行了分组。对开发时需要的依赖，我们分成dev, test和doc三组，通过d [tool.poetry.extras]中进行分组声明。对于归入到dev, test和doc分组中的依赖，我们在[tool.poetry.dependencies]中，将其声明为optional的，这样在安装最终分发包时，这些声明为optional的第三方依赖将不会安装到用户环境中。
+我们对运行时和开发时需要的依赖进行了分组。对开发时需要的依赖，我们分成dev, test和doc三组，通过[tool.poetry.extras]中进行分组声明。对于归入到dev, test和doc分组中的依赖，我们在[tool.poetry.dependencies]中，将其声明为optional的，这样在安装最终分发包时，这些声明为optional的第三方依赖将不会安装到用户环境中。
 
-再接下来，[tool.poetry.scripts]声明了一个console script入口。Console script是一种特殊的Python脚本，它使得您可以象调用普通的shell命令一样来调用这个脚本。在这里：
+再接下来，[tool.poetry.scripts]声明了一个console script入口。Console script是一种特殊的Python脚本，它使得您可以象调用普通的shell命令一样来调用这个脚本。
 ```toml
 [tool.poetry.scripts]
 sample = 'sample.cli:main'
@@ -320,11 +317,24 @@ sample = 'sample.cli:main'
 
 接下来就是关于如何构建的相关指示，在[build-system]中。如果你的程序中只包含纯粹的Python代码，那么这部分可不做任何修改。如果你的程序包含了一些原生的代码（比如c的），那么就需要自己定义构建脚本。
 
-在示例代码中，还有[tool.black]和[tool.isort]两个小节，分别是black（代码格式化工具）和isort（将导入进行排序的工具）的配置文件。
+在示例代码中，还有[tool.black]和[tool.isort]两个小节，分别是black（代码格式化工具）和isort（将导入进行排序的工具）的配置文件。它们是对pyproject.toml的扩展，并不是poetry所要求的。
 
 ## 版本管理
 poetry为我们的package提供了基于语义(semantic version)的版本管理功能。它通过`poetry version`这个命令，让我们查看package的版本，并且实现版本号的升级。
 ### Semantic Versioning（基于语义的版本管理）
+说到版本管理，我不禁想起忒修斯之船（The Ship of Theseus）问题，该问题是最为古老的思想实验之一，最早出自公元一世纪普鲁塔克的记载。它描述的是一艘可以在海上航行几百年的船，归功于不间断的维修和替换部件。只要一块木板腐烂了，它就会被替换掉，以此类推，直到所有的功能部件都不是最开始的那些了。问题是，最终产生的这艘船是否还是原来的那艘特修斯之船，还是一艘完全不同的船？如果不是原来的船，那么在什么时候它不再是原来的船了？
+
+在软件开发领域中，我们也常常对同一软件进行不断的修补和更新。但是，随着这种修补和替换越来越多，软件会不会也出现忒修斯船之问：现在的软件还是不是当初的软件，如果不是，那它是在什么时候不再是原来的软件了呢？该软件应该如何向外界表明它已发生了实质性的变化；生态内依赖于该软件的其它软件，又应该如何识别软件的蜕变呢？
+
+为了解决上述问题，Tom Preston-Werner（Github的共同创始人）提出Semantic versioniong方案，即基于语义的版本管理。Semantic version表示法提出的初衷是：
+
+!!! Quote
+    在软件管理的领域里存在着被称作“依赖地狱”的死亡之谷，系统规模越大，加入的包越多，你就越有可能在未来的某一天发现自己已深陷绝望之中。
+
+    在依赖高的系统中发布新版本包可能很快会成为噩梦。如果依赖关系过高，可能面临版本控制被锁死的风险（必须对每一个依赖包改版才能完成某次升级）。而如果依赖关系过于松散，又将无法避免版本的混乱（假设兼容于未来的多个版本已超出了合理数量）。当你专案的进展因为版本依赖被锁死或版本混乱变得不够简便和可靠，就意味着你正处于依赖地狱之中。
+
+Semantic versioning简单地说，就是用版本号的变化向外界表明软件变更的剧烈程度。要理解Semantic versioning，我们首先得了解软件的版本号。
+
 当我们说起软件的版本号时，我们通常会意识到，软件的版本号一般由主版本号(major)，次版本号(minor)，修订号(patch)和构建编号(build no.)四部分组成。由于Python程序没有其它语言通常意义上的构建，所以，对Python程序而言，一般只用三段，即major.minor.patch来表示。
 
 !!! Info
@@ -332,18 +342,19 @@ poetry为我们的package提供了基于语义(semantic version)的版本管理�
 
 上述版本表示法没有反映出任何规则。在什么情况下，你的软件应该定义为0.x，什么时候又应该定义为1.x，什么时候递增主版本号，什么时候则只需要递增修订号呢？如果不同的软件生产商对以这些问题没有共识的话，会产生什么问题吗？
 
-实际上，由于随意定义版本号引起的问题很多。在前面我们提到过SQLAlchemy的升级导致许多Python软件不能正常工作的例子。归根结底，这是由于SQLAlchemy官方错误地定义版本号引起的。
-
-正是看到这一问题，Tom Preston-Werner（Github的共同创始人）提出Semantic versioniong方案，即基于语义的版本管理。Semantic version表示法提出的初衷是：
-
-!!! Quote
-    在软件管理的领域里存在着被称作“依赖地狱”的死亡之谷，系统规模越大，加入的包越多，你就越有可能在未来的某一天发现自己已深陷绝望之中。
-
-    在依赖高的系统中发布新版本包可能很快会成为噩梦。如果依赖关系过高，可能面临版本控制被锁死的风险（必须对每一个依赖包改版才能完成某次升级）。而如果依赖关系过于松散，又将无法避免版本的混乱（假设兼容于未来的多个版本已超出了合理数量）。当你专案的进展因为版本依赖被锁死或版本混乱变得不够简便和可靠，就意味着你正处于依赖地狱之中。
+实际上，由于随意定义版本号引起的问题很多。在前面我们提到过SQLAlchemy的升级导致许多Python软件不能正常工作的例子。在讲述那个例子时，我指出，是gino的开发者承担了责任，发行了新的gino版本，解决了这个问题。但实际上，责任的根源在SQLAlchemy的开发者那里。从1.3.x到1.4.x,出现了接口的变更，这是一种破坏性的更新，会导致使用者如果不修改他们的调用方式，就无法使用SQLAlchemy的问题。gino的开发者认为（这也是符合semantic versioning思想的），SQLAlchemy从1.2到2.0之间的版本，可以增加接口，增强性能，修复安全漏洞，但不应该变更接口；因此，它声明为依赖SQLAlchemy小于2.0的版本是安全的。但可惜的是，SQLAlchemy并没有遵循这个约定。
 
 Sematic versioning提议用一组简单的规则及条件来约束版本号的配置和增长。首先，你规划好公共API，在此后的新版本发布中，透过修改相应的版本号来向大家说明你的修改的特性。考虑使用这样的版本号格式：X.Y.Z （主版本号.次版本号.修订号）：修复问题但不影响API 时，递增修订号；API 保持向下兼容的新增及修改时，递增次版本号；进行不向下兼容的修改时，递增主版本号。
 
 在前面我们提到过SQLAlchemy从1.x升级到1.4的例子。实际上，这是个不能向下兼容的修改，引入了异步机制，因此，SQLAlchemy本应该启用2.x的全新版本序列号，而把1.4留作1.x的后续修补发布版本号使用。如此以来，SQLAlchemy的使用者就很容易明白，如果要使用最新的SQLAlchemy版本，则必须对他们的应用程序进行完全的适配和测试，而不能象之前的升级一样，简单地把最新版本安装上，仍然期望它能象之前一样工作。不仅如此，一个定义了良好依赖关系的软件，还能自动从升级中排除掉升级到SQLAlchemy 2.x，而始终只在1.x，甚至更小的范围内进行升级。
+
+!!! Info
+    SQLAlchemy的错误并非孤例。一个更有影响的例子涉及到python的cryptography库。这是一个广泛使用的密码学相关的python库。为了提升性能，许多代码最初是使用c写的。有一天作者意识到，使用c会存在很多安全问题，而安全性又是cryptography的核心。于是，在2021年2月8日前后，他改用rust来进行实现。这导致安装cryptography库的人，必须在本机上有rust的编译工具链 -- 事实是，rust与c和python相比，还是相当小众的，很多人的机器上显然不会有这套工具链。
+
+    需要指出的是，cryptography改用rust实现，并没有改变它的python接口。相反，其python接口完全保持着一致。因此，cryptography的作者也既没有重命名cryptography，也没有变更主版本号。
+
+    但是这一小小的改动，掀起了轩然大波。一夜之间，它摧毁了无数的CI系统，无数docker镜像必须被重构，抱怨声如潮水般涌向作者。在短短几个小时，作者就收到了100条激烈的评论，最终作者不得不关掉了这个[issue](https://github.com/pyca/cryptography/issues/5771)
+
 
 一个正确地使用semantic versioning的例子是aioredis从1.x升级到2.0。尽管aioredis升级到2.0时，大多数API并没有发生改变--只是在内部进行了性能增强，但它的确改变了初始化aioredis的方式，从而使得你的应用程序，不可能不加修改就直接更新到2.0版本。因此，aioredis在这种情况下，将版本号更新为2.0是非常正确的。
 
@@ -416,9 +427,7 @@ poetry暂时还没有提供从alpha转到beta版本系列的命令。如果有�
 除了poetry version prerelease之外，我们还注意到上面列出的premajor, preminor和prepatch选项。它们的作用也是将版本号修改为alpha版本系列，但无论你运行多少次，它们并不会象prerelease选项一样，递增alpha版本号。所以在实际的alpha版本管理中，似乎只使用``poetry version prerelease``就可以了。
 ## 依赖管理
 ### 实现依赖管理的意义
-Poetry的自我定位就是"Poetry is a tool for dependency management and packaging in Python"。Poetry最重要的功能就是依赖解析和管理，也是迄今为止，依赖解析做得最成功的工具。类似的工具还是pipenv和PDM，但根据[这篇文章](https://frostming.com/2021/03-26/pm-review-2021/)，pipenv在依赖解析的正确性上以及在不同安装环境（比如不同的操作系统或者python版本上）下的一致性不太能得到保证。而Poetry与PDM则正确性上都能得到保证，但PDM还比较新，社区认可度还没有Poetry高。
-
-依赖管理就是要在各方软件都保证正确的版本声明的基础上，通过Poetry正确地声明第三方依赖版本的上下界，并且在Pip安装时，只在声明的上下界之间寻找合适的版本。在前面我们已经看到了，如果第三方库不正确在声明自己的版本号，就会导致升级错误。如果第三方库正确在声明了自己的版本号，那么通过Poetry的依赖管理，我们就可以正确锁定依赖的版本，使之既能无须发布新的版本，就能自动升级依赖的最新的小的更新，同时又永远拒绝破坏性的更新。
+我们已经通过大量的例子说明了依赖管理的作用。总结起来，依赖管理不仅要检查项目中声明的直接依赖之间的冲突，还要检查它们各自的传递依赖之间的彼此兼容性。
 ### Poetry进行依赖管理的相关命令
 在Poetry管理的工程中，当我们向工程中加入（或者更新）依赖时，总是使用``poetry add``命令，比如：``poetry add pytest``
 
@@ -542,9 +551,119 @@ optional = true
 
 在上一节，我们简单地介绍了如何使用poetry来向我们的项目中增加依赖。我们强调了依赖解析的困难，但并没有解释poetry是如何进行依赖解析的，它会遇到哪些困难，可能遭遇什么样的失败，以及应该如何排错。对于初学者来说，这往往是配置poetry项目时最困难和最耗时间的部分。
 
+现在，我们往项目中增加一个新的依赖，通常我们使用``poetry add xxx``来往项目中增加依赖。为了一窥poetry依赖解析的究竟，这次我们加上详细信息输出:
 
+```text
+poetry add gino -vvv
+```
+输出会很长。我们摘要读一下跟gino相关的一些解析过程：
 
+首先，poetry注意到sample 0.1.0依赖到gino(>=1.0.1, < 2.0.0)，以及其它一些依赖，生成了第一步的解析结果：
+```text
+   1: fact: sample is 0.1.0
+   1: derived: sample
+   1: selecting sample (0.1.0)
+   1: derived: gino (>=1.0.1,<2.0.0)
+   1: derived: mike (>=1.1.2,<2.0.0)
+    ...
+```text
+接下来，下载gino，解析出下面的依赖:
+```text
+1 packages found for gino >=1.0.1,<2.0.0
+   1: fact: gino (1.0.1) depends on SQLAlchemy (>=1.2.16,<1.4)
+   1: fact: gino (1.0.1) depends on asyncpg (>=0.18,<1.0)
+   1: selecting gino (1.0.1)
+   1: derived: asyncpg (>=0.18,<1.0)
+   1: derived: SQLAlchemy (>=1.2.16,<1.4)
+```
+再接下来，它找到sqlalchemy的29个版本：
+```text
+Source (ali): 14 packages found for asyncpg >=0.18,<1.0
+Source (ali): 29 packages found for sqlalchemy >=1.2.16,<1.4
+```
+接下来比较幸运，当poetry查找asyncpg和sqlalchemy的传递依赖时，没有找到它们有更多的传递依赖，解析结束，这样，poetry就顺利地选择了29个版本中，最新的一个，即SQLAlchemy-1.3.24。这个版本又有linux, windows和mac等好几个包，poetry最终选择跟当前环境中操作系统版本一致、python版本一致的那个进行安装。
 
+现在让我们看一看poetry最终解析出来的依赖树：
+```text
+poetry show -t
+# --- output ---
+black 22.12.0 The uncompromising code formatter.
+├── click >=8.0.0
+│   ├── colorama * 
+│   └── importlib-metadata * 
+│       ├── typing-extensions >=3.6.4 
+│       └── zipp >=0.5 
+├── mypy-extensions >=0.4.3
+├── pathspec >=0.9.0
+├── platformdirs >=2
+│   └── typing-extensions >=4.4 
+├── tomli >=1.1.0
+├── typed-ast >=1.4.2
+└── typing-extensions >=3.10.0.0
+gino 1.0.1 GINO Is Not ORM - a Python asyncio ORM on SQLAlchemy core.
+├── asyncpg >=0.18,<1.0
+└── sqlalchemy >=1.2.16,<1.4
+mkdocs 1.2.4 Project documentation with Markdown.
+├── click >=3.3
+│   ├── colorama * 
+│   └── importlib-metadata * 
+│       ├── typing-extensions >=3.6.4 
+│       └── zipp >=0.5 
+├── ghp-import >=1.0
+│   └── python-dateutil >=2.8.1 
+│       └── six >=1.5 
+├── importlib-metadata >=3.10
+│   ├── typing-extensions >=3.6.4 
+│   └── zipp >=0.5 
+├── jinja2 >=2.10.1
+│   └── markupsafe >=2.0 
+├── markdown >=3.2.1
+│   └── importlib-metadata * 
+│       ├── typing-extensions >=3.6.4 
+│       └── zipp >=0.5 
+├── mergedeep >=1.3.4
+├── packaging >=20.5
+├── pyyaml >=3.10
+├── pyyaml-env-tag >=0.1
+│   └── pyyaml * 
+└── watchdog >=2.0
+```
+这个依赖树很长，这里只截取了一小部分，但大致上可以帮助我们了解poetry的工作原理。我们可以看到`black`和`mkdocs`都依赖了`click`，但`black`要求更新到8.0以上，而`mkdocs`则认为只要是3.3以上都可以。两者版本要求差距如此之大，也不免让人担心，8.0的`click`与3.3的`click`还会是同一个`click`吗？
+
+最终，关于gino和sqlalchemy，poetry安装的分别是1.0.1和1.3.24，但是，上述解析树表明，如果存在sqlalchemy的1.3.25版本，它是可以自动升级的。我们许的愿，poetry帮助实现了。
+
+One more thing: 生成这棵依赖树可能要比你想像的困难得多。首先，PyPi在多数情况下，无法给出它上面的某一个package的依赖树（这也是为什么你在pypi.org上没有看到类似上面的依赖树的原因），这意味着poetry要知道`black`依赖哪些库，它必须先把`black`下载下来，打开它并解析才能知道。然后它从`black`中发现更多的依赖，这往往就需要它把这些依赖也下载下来，依次递归下去。
+
+更为糟糕的是，在这个过程中，某个库的好几个版本可能都需要依次下载下来 -- 因为它们的传递依赖不能兼容。我记得在某次解析中，poetry把numpy的版本从1.2.x一直下载到了0.1！
+
+所以，如果你在添加某个依赖时，发现poetry耗时过长，不要慌张，很多人都有与你一样的经历。这种情况主要是poetry无法快速锁定某个package的正确版本，不得不向后一个个版本搜索下载所致。我们能做的，就是加快poetry下载的速度。
+
+poetry正常情况下，是从pypi.org上下载package。如果遇到解析速度问题，我们可以临时添加一个源：
+```
+poetry source add ali https://mirrors.aliyun.com/pypi/simple --default
+```
+再次运行`poetry add`，这次你会发现解析速度快了很多。
+
+!!! Info
+    早期poetry的依赖解析可以慢到10多个小时都做不完。这有两方面的原因，一是早期poetry的依赖解析还没有启用多线程下载优化；二是在特殊情况下，poetry需要把某些package在pypi上所有的版本全部下载一次，才能得出无法（或者可以）加入该依赖的结论。随着python生态的变化，现在这种需要数小时的依赖解析的时代基本结束了。在添加国内源的情况下，慢的时候也往往是不到一刻钟就能完成解析。
+
+现在我们来移除gino：
+```text
+poetry remove gino
+
+# --- output ---
+Updating dependencies
+Resolving dependencies... (1.2s)
+
+Writing lock file
+
+Package operations: 0 installs, 0 updates, 3 removals
+
+  • Removing asyncpg (0.27.0)
+  • Removing gino (1.0.1)
+  • Removing sqlalchemy (1.3.24)
+```
+从输出可以看出，不仅是gino本身被卸载，它的传递依赖 -- asyncpg和sqlalchemy也被移除掉了。这是pip做不到的。
 ## 虚拟运行时
 
 Poetry自己管理着虚拟运行时环境。当你执行``poetry install``命令时，Poetry就会安装一个基于venv的虚拟环境，然后把项目依赖都安装到这个虚拟的运行环境中去。此后，当你通过poetry来执行其它命令时，比如``poetry pytest``，也会在这个虚拟环境中执行。反之，如果你直接执行``pytest``，则会报告一些模块无法导入，因为你的工程依赖并没有安装在当前的环境下。
@@ -555,6 +674,9 @@ Poetry自己管理着虚拟运行时环境。当你执行``poetry install``命�
 
 ## 构建发行包
 ### Python构建标准和工具的变化
+在poetry 1.0发布之前，打包一个python项目，需要准备MANIFEST.in, setup.cfg, setup.py，makefile等文件。这是PyPA(python packaging authority)的要求，只有遵循这些要求打出来的包，才可以上传到pypi.org，从而向全世界发布。
+
+但是这一套系统也有不少问题，比如缺少构建时依赖声明，自动配置，版本管理。因此，[PEP 517](https://peps.python.org/pep-0517/)被提出，然后基于PEP 517, PEP 518等一系列新的标准，Sébastien Eustace开发了poetry。
 ### 基于Poetry进行发行包的构建
 
 我们通过运行``poetry build``来打包，打包的文件约定俗成地放在dist目录下。
@@ -574,12 +696,31 @@ poetry publish
 上面的命令分别对发布到test pypi和pypi进行了演示。由于默认地Poetry支持PyPI发布，所以有些参数就不需要提供了。当然，一般情况下，我们都不应该直接运行`poetry publish`命令来发布版本。版本的发布，都应该通过CI机制来进行。这样的好处时，可以保证每次发布，都经过了完整的测试，并且，构建环境是始终一致的，不会出现因构建环境不一致，导致打出来的包有问题的情况。
 
 ## 其它重要的Poetry命令
+我们已经介绍了poetry add, poetry remove, poetry show, poetry build, poetry publish, poetry version等命令。还有一些命令也值得介绍。
+### poetry lock
+该命令将进行依赖解析，锁定所有的依赖到最新的兼容版本，并将结果写入到poetry.lock文件中。通常，运行poetry add时也会生成新的锁定文件。
+
+在对代码执行测试、CI或者发布之前，务必要确保poetry.lock存在，并且这个文件也应该提交到代码仓库中，这样所有的测试，CI服务器，你的同侪开发者构建的环境才会是完全一致的。
+
+### poetry export
+极少数情况下，你可能希望将依赖导出为requirements:
+```
+poetry export -f requirements.txt --output requirements.txt
+```
+### poetry config
+我们可以通过poetry config --list来查看当前配置项：
+```
+cache-dir = "/path/to/cache/directory"
+virtualenvs.create = true
+virtualenvs.in-project = null
+virtualenvs.options.always-copy = true
+virtualenvs.options.no-pip = false
+virtualenvs.options.no-setuptools = false
+virtualenvs.options.system-site-packages = false
+virtualenvs.path = "{cache-dir}/virtualenvs"  # /path/to/cache/directory/virtualenvs
+virtualenvs.prefer-active-python = false
+virtualenvs.prompt = "{project_name}-py{python_version}"
+```
+这里面比较重要的有配置pypi-token，以便发布你的项目。
 ## 案例： 基于Poetry创建并发布一个项目
-
-1. 为何要使用Semantic Version?
-2. 当前版本是``0.1``,执行``poetry version pre-release``，新的版本号是?
-3. 为何要尽可能精确地锁定依赖的版本号？锁定版本号后，依赖失去自动升级能力，这样做是好是坏？
-4. 如何查看项目安装的依赖库（使用Poetry)?
-5. 如果在使用Poetry过程中，依赖解析和安装较慢，如何修改Poetry源？
-
-[semantic version]: https://semver.org/
+移除掉？
