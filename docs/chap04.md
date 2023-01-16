@@ -358,6 +358,7 @@ CI已设置为自动发布文档到git pages。但您需要在您的项目中启
 ├── sample
 │   ├── __init__.py
 │   ├── app.py
+│   ├── py.typed
 │   └── cli.py
 ├── tests
 │   ├── __init__.py
