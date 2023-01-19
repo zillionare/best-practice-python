@@ -140,37 +140,49 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 one two
 ```
 
-但Python的确缺少静态类型检查的能力，这是Python一直以来为人诟病的地方。毕竟，错误发现的越早，修复成本就越低。但这正在成为历史。
+但Python过去的确缺少静态类型检查的能力，这是Python一直以来为人诟病的地方。毕竟，错误发现的越早，修复成本就越低。但这正在成为历史。
 
-类型注释从python 3.0（2006年，PEP 3107，当时还叫着function annotations）时被引入，但它的用法和语义并没有得到清晰定义，因此，也没有引起广泛关注和运用。数年之后，PEP 484被提出，定义了如何给python代码加上类型提示，这样，type annotation就成为实现type hint的主要手段。因此，当今天人们提到type annotation和type hint时，两者基本上是同一含义。
+类型注释从python 3.0（2006年，PEP 3107，当时还叫着function annotations）时被引入，但它的用法和语义并没有得到清晰定义，也没有引起广泛关注和运用。数年之后，PEP 484（type hints including generics）被提出，定义了如何给python代码加上类型提示，这样，type annotation就成为实现type hint的主要手段。因此，当今天人们提到type annotation和type hint时，两者基本上是同一含义。
 
-PEP 484主要是基于Jukka Lehtosalo在mypy项目上的工作，由Jukka、Guido和Łukasz三人提出。这个提案的最大意义，是在继承了PEP 3107奠定的语法和基调之上，将Python的类型系统进行了合理的抽象，从而发展出来标准库中的typing模块（从python 3.5起引入）。但PEP 484也遗留了两个重要问题没有解决，一是无法对变量进行标，比如下面的语法是不允许的：
+PEP 484是类型检查的奠基石。但是，仍然有一些问题没有得到解决，比如如何对变量进行类型注解？比如下面的语法在当时还是不支持的：
 ```python
 class Node:
         left: str
 ```
-这样类型标注仍然没有实现闭环。因此，PEP 526(syntax for variable annotations)在2016年8月被提出，并在不到1月的时间里被接受成为正式标准，可能创下被接受最快的PEP纪录。从此，象上文中这样对变量进行标也是允许的了。
 
-循环引用问题的解决，则留给了提案PEP 563(Postponed Evaluation of Annotations)。在这个提案之后，我们可以这样写代码：
+2016年8月，PEP 526(syntax for variable annotations)提出，从此，象上文中的注解也是允许的了。
+
+!!! Info
+    PEP 526从提出到被接受为正式标准不到1月的时间，可能是最快被接受的PEP之一。
+
+PEP 563(Postponed Evaluation of Annotations)解决了循环引用的问题。在这个提案之后，我们可以这样写代码：
 ```
 from typing import Optional
 
 class Node:
+    # left: Optional[Node]  # 这会引起循环引用
     left: Optional["Node"]
     right: Optional["Node"]
 ```
 注意到我们在类型Node还没有完成其定义时，就要使用它（即要使用Node来定义自己的一个成员变量的类型），这将引起循环引用。PEP 563的语法，通过在注释中使用字符串，而不是类型本身，解决了这个问题。
 
-这两个问题解决之后，随着Python 3.7的正式发布，社区也开始围绕Type Hint去构建一套生态体系，type checking工具除了mypy之外，一些大公司也跟进开发，比如微软推出了pyright（现在是pylance的核心）来给vscode提供类型检查功能。google推出了pytype，facebook则推出了pyre。在类型注释的基础上，代码自动完成的功能也因此变得更容易、准确，推断速度也更快了。代码重构也变得更加容易。
+在这几个重要的PEP之后，随着Python 3.7的正式发布，社区也开始围绕Type Hint去构建一套生态体系，一些非常流行的python库开始补齐类型注解，在类型检查工具方面，除了最早的mypy之外，一些大公司也跟进开发，比如微软推出了pyright（现在是pylance的核心）来给vscode提供类型检查功能。google推出了pytype，facebook则推出了pyre。在类型注释的基础上，代码自动完成的功能也因此变得更容易、准确，推断速度也更快了。代码重构也变得更加容易。
 
-!!! Info
-    Jukka Lehtosalo出生和成长于芬兰，当他在剑桥大学计算机攻读博士时，在他的博士论文中，他提出了一种名为“类型注释”的语法，这种语法可以让Python的类型系统更加完善，并基于这种思想，开发了mypy的最初几个版本。
+类型检查功能将对Python的未来发展起到深远的影响，可能足够与typescript对js的影响类比。围绕类型检查，除了上面提到的几个最重要的PEP之外，还有：
+    1. PEP 483（解释了python中类型系统的设计原理，非常值得一读）
+    2. PEP 544 (定义了对结构类型系统的支持)
+    3. PEP 591 (提出了final限定符)
+   以及PEP 561等另外18个PEP。此外，还有PEP 692等5个PEP目前还未被正式接受。
 
-    这里也可以看出顶尖大学对待学术研究上的开放 和不拘一格。大概在2016年前后，我看到斯坦福的网络公开课上还有讲授ios编程的课，当时也是同样的震撼。一是他们选课之新，二是这种应用型的课程，在国内的顶尖大学里，是不会有开设的。
+Python的类型检查可能最早由Jukka Lehtosalo推动，Guido，Łukasz Langa和Ivan Levkivskyi也是最重要的几个贡献者之一。Jukka Lehtosalo出生和成长于芬兰，当他在剑桥大学计算机攻读博士时，在他的博士论文中，他提出了一种名为“类型注释”的语法，从而一统静态语言和动态语言。最初的实验是在一种名为Alore的语言上实现的，然后移植到Python上，开发了mypy的最初几个版本。不过很快，他的工作重心就完全转移到Python上面来，毕竟，Python庞大的用户群和开源库才能提供丰富的案例以供实践。
+   
+2013年，在圣克拉拉举行的PyCon会议上，他公布了这个项目，并且得到了与Guido交谈的机会。Guido说服他放弃之前的自定义语法，完全遵循Python 3的语法，即PEP 3107提出的函数注解）。在随后他与Guido进行了大量的邮件讨论，并提出了通过注释来对变量进行注解的方案（不过后来的PEP 526提出了更好的方案）。
 
-    也正是这样的包容让Jukka Lehtosalo能拿到博士学位，顺利开启他的python之旅，也被Guido邀请到Dropbox，他现在不仅仅是mypy的首席开发，还是许多个PEP的提出者，和pycon的演讲者。
+在Jukka Lehtosalo从剑桥毕业后，受Guido邀请，加入了Dropbox，领导了mypy的开发工作。
 
-现在你应该这样定义一个函数：
+这里也可以看出顶尖大学对待学术研究上的开放和不拘一格。大概在2016年前后，我看到斯坦福的网络公开课上还有讲授ios编程的课，当时也是同样的震撼。一是他们选课之新，二是这种应用型的课程，在国内的顶尖大学里，是不会有开设的。
+
+在有了类型注解之后，现在我们应该这样定义一个函数：
 ```
 def foo(name: str) -> int:
     score = 20
@@ -269,7 +281,7 @@ def retry(url: Url, retry_count: int) ->None:
     pass
 
 ```
-此外，type hint还支持一些高级用法，比如TypeVar, Generics, Covariance和contravariance等，这些概念在[PEP484](https://peps.python.org/pep-0484)中有定义，另外，[PEP483](https://peps.python.org/pep-0483/)可以帮助读者更好地理解PEP484，请读者自行阅读。
+此外，type hint还支持一些高级用法，比如TypeVar, Generics, Covariance和contravariance等，这些概念在[PEP484](https://peps.python.org/pep-0484)中有定义，另外，[PEP483](https://peps.python.org/pep-0483/)和[understanding typing](https://github.com/microsoft/pyright/blob/main/docs/type-concepts.md)可以帮助读者更好地理解类型提示，建议感兴趣的读者深入研读。
 
 ## PEP8 - python代码风格指南
 PEP8是2001年由Guido等人拟定的关于python代码风格的一份提案。PEP8的目的是为了提高python代码的可读性，使得python代码在不同的开发者之间保持一致的风格。PEP8的内容包括：代码布局，命名规范，代码注释，编码规范等。PEP8的内容非常多，在实践中，我们不需要专门去记忆它的规则，只要用对正确的代码格式化工具，最终呈现的代码就一定是符合PEP8标准的。在后面的小节里，我们会介绍这一工具 -- black，因此，我们不打算在此处过多着墨。
@@ -378,6 +390,11 @@ flake8承担了代码风格、部分语法错误和代码复杂度检查的工�
 
 ppw中已经集成了mypy模块，并会在tox运行时，自动进行类型检查。看上去，只要我们按照PEP484及几个关联的PEP来做好类型注释，然后简单地运行mypy，似乎就应该万事大吉？然而，实践总是比理论要丰富得多，深刻得多。mypy在运行检查时，常常会遇到第三方库还不支持类型注释的情况，或者因为配置错误，导致mypy得不到预期的结果。遇到这些问题时，就需要我们理解mypy的工作原理，并且对mypy进行一些配置，以便让它能够更好地工作。
 
+!!! Info
+    为什么ppw选择了mypy？如果你使用vscode编程，那么很可能已经使用了pyright作为类型检查器。因为pylance给出的类型检查错误，都来自于pyright。那么ppw为什么还要推荐另一个类型检查器呢？
+
+    这是因为，pyright并不是一个纯粹的python解决方案。要安装pyright，还必须安装node。我们认为，在开发环境下，一般只需要安装一次，而且vscode可以帮我们完成安装。但在由tox驱动的矩阵测试环境中，任何非纯python的解决方案都可能带来额外的复杂性。
+
 首先，让我们从`Any`这个特殊的类型说起。`Any`类型用来表明某个变量/值具有动态类型。在代码中，如果存在过多的`Any`类型，将降低mypy进行代码检查的有效性。
 
 难点在于，`Any`类型的指定，并不一定来源于我们自己代码中的显式声明（对这一部分，我们可以自行修改，只在非常必要时才小心使用`Any`）。在mypy中，它还会自动获得和传播。mypy的规则是，在函数体内的局部变量，如果它们没有被显式地声明为某种类型，无论它们是否被赋初值，mypy都会将其推导为`Any`。而在函数体外的变量，mypy则会依据其初值将其推导为某种类型。mypy这样处理的原因，可能是因为它无法在检查时真正运行这个函数。
@@ -445,34 +462,43 @@ def f(x: Any) -> None:
 
 Mypy提供了大量的配置项来解决这个问题。这些配置项既可以通过命令行参数传入，也可以通过配置文件传入。
 
-默认地，mypy使用工程目录下的mypy.ini作为其配置文件；如果这个文件找不到，则会依次寻找.mypy.ini（注意前面多一个'.')，pyproject.toml, setup.cfg, $XDG_CONFIG_HOME/mypy/config， ~/.config/mypy/config，最后是~/.mypy.ini。
+默认地，mypy使用工程目录下的mypy.ini作为其配置文件；如果这个文件找不到，则会依次寻找.mypy.ini（注意前面多一个'.')，pyproject.toml, setup.cfg, $XDG_CONFIG_HOME/mypy/config， \~/.config/mypy/config，最后是\~/.mypy.ini。
 
 一个典型的mypy配置文件包括全局配置和针对特定模块、库的设置，示例如下：
-```
+```ini {class='line-numbers'}
 [mypy]
-# 这一部分是全局设置
-disallow_untyped_defs = True
-disallow_any_unimported = True
-no_implicit_optional = True
-warn_return_any = True
-show_errors_codes = True
-warn_unused_ignores = True
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unused_configs = true
 
-# 以下是对特定模块、库的设置
-[mypy-mycode.foo.*]
+disallow_any_unimported = true
+ignore_missing_imports = false
 
-[mypy-mycode.bar]
-warn_return_any = False
+# 禁止未注解的函数、或者注解不完全的函数。
+disallow_untyped_defs = true
+# 当disallow_untyped_defs为真时，下面的配置无意义
+#disallow_incomplete_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+# 不允许使用`x: List[Any]` 或者 x: List`
+disallow_any_generics = true
 
-[mypy-somelibrary]
-# 全局配置为True，但对somelibrary,我们将其更改为False。
-disallow_untyped_defs = False
+# 显示错误代码
+show_error_codes = true
+
+# 如果函数返回值声明不为Any，但实际返回Any，则发出警告
+warn_return_any = true
+
+[mypy-fire]
+# cli.py中引入了python-fire库，但它没有py.typed文件，这里我们要对该库单独设置允许导入缺失
+ignore_missing_imports = true
+
 ```
 
-mypy配置项目及其含义可以参考[官方文档](https://mypy.readthedocs.io/en/stable/config_file.html)。这里我们择要举例介绍几个，以便读者了解最基本的配置以及mypy的惯例。在举例时，为简洁起见，我们都通过命令行传入配置项，但它们的作用，与配置文件中是一模一样的。
+示例中给出的配置项目是我们认为较为重要，并且与默认值不同的那些。关于mypy所有配置项目及其含义可以参考[官方文档](https://mypy.readthedocs.io/en/stable/config_file.html)。这些配置项，既可以通过配置文件设置，也可以通过命令行方式直接传递给mypy。当然，使用命令行方式传递时，这些配置将在全局范围内发生作用。
 
 #### disallow_untyped_defs
-默认情况下，mypy的类型检查相当宽松，它允许你在函数中使用任何类型的参数，即使你没有指定参数的类型。如果你想要更严格的类型检查，可以将disallow_untyped_defs设置为True。我们可以来测试一下：
+默认情况下，mypy的类型检查相当宽松，以便兼容一些陈旧的项目。如果我们想要更严格的类型检查，可以将disallow_untyped_defs设置为true。我们可以来测试一下：
 ```
 # test.py
 def bar(name):
@@ -490,37 +516,14 @@ mypy --disallow-untyped-defs test.py
 ```
 test.py:7: error: Function is missing a type annotation  [no-untyped-def]
 ```
-如果是通过配置文件来设置disallow_untyped_defs，象这种布尔量，分别设置为True或False即可。通过命令行传入参数一定是全局生效，而通过配置文件，则可以在更细致的粒度上进行配置。
+如果是通过配置文件来设置disallow_untyped_defs，象这种布尔量，分别设置为true或false即可。通过命令行传入参数一定是全局生效，而通过配置文件，则可以在更细致的粒度上进行配置。
 
-#### disallow_any_unimported和ignore_missing_imports
-我们在前面介绍过，如果mypy无法追踪一个导入库，就会将该模块的类型推断为`Any`，从而进一步传播到我们的代码里，使得更多的类型检查无法进行。如果我们想要禁止这种情况，可以将disallow_any_unimported设置为True。该参数的缺省值是False。
-
-一般地，我们应该在全局范围内将disallow_any_unimported设置为True，然后针对mypy报告出来的无法处理导入的错误，逐个解决。比如遇到以下情况：
+在上面的配置中，还存在一个名为allow-incomplete-defs的选项，它针对的是函数参数只完成了部分注解的情况。有时候我们需要允许这种情况发生。此时，我们需要mypy仅针对个别场合进行以下配置：
 ```
-error: Skipping analyzing 'my-dependency': found module but no type hints or library stubs  [import]
+[mypy-special_module]
+disallow_untyped_defs = false
+allow_incomplete_defs = true
 ```
-一般情况下，如果是知名的第三方库，往往在typeshed上注册过类型存根文件，类型检查器（比如mypy)应该能自动找到。如果是不知名的第三方库，我们可以升级它，看最新版本是否支持，或者在pypi上搜索它的存根库。比如，对`my-dependency`，如果pypi上存在它的存根库，则它的名字一定是`types-my-dependency`，于是我们可以这样纠正上述问题：
-```
-pip install types-my-dependency
-```
-如果pypi上没有它的存根库，我们可以自己写一个`my_dependency.pyi`文件，然后将它放到项目的根目录下。关于如何写.pyi文件，请读者自行搜索。
-
-但如果既找不到合适的存根库，我们也没时间来写pyi文件，那么，我们可以将ignore_missing_imports设置为True，这样mypy就不会报错了。不过，我们应该尽量避免这种情况。
-
-显然，我们应该通过ini文件，来针对每个第三方库来设置ignore_missing_imports。比如：
-```
-[my-dependency]
-ignore_missing_imports = True
-```
-
-#### no_implicit_optional
-如果有以下的代码：
-```
-def foo(arg: str = None) -> None:
-    reveal_type(arg)  # Revealed type is "Union[builtins.str, None]"
-```
-我们通过reveal_type得知，mypy将`arg`的类型推导为Optional[str]。这个推导本身没有错，但是，考虑到zen of python的要求， explicit is better than implicit，我们应该将arg的类型声明为`arg: Optional[str]`。如果我们想要禁止这种隐式的Optional类型，可以将no_implicit_optional设置为True，以要求程序员显式地声明Optional类型。
-
 #### check_untyped_defs
 在下面的代码中，我们把字符串与一个整数相加。这显然并不合理。
 ```python
@@ -532,6 +535,28 @@ def bar()->None:
 error: Unsupported operand types for + ("str" and "int")  [operator]
 ```
 但事事有例外。在例外情况下，我们也可以退而求其次，通过设置check_untyped_defs = True将可以检查出上述问题。
+#### disallow_any_unimported和ignore_missing_imports
+我们在前面介绍过，如果mypy无法追踪一个导入库，就会将该模块的类型推断为`Any`，从而进一步传播到我们的代码里，使得更多的类型检查无法进行。如果我们想要禁止这种情况，可以将disallow_any_unimported设置为True。该参数的缺省值是false。
+
+一般地，我们应该在全局范围内将disallow_any_unimported设置为True，然后针对mypy报告出来的无法处理导入的错误，逐个解决。在ppw生成的项目中，如果我们选择了fire作为命令行工具，则会遇到以下错误：
+```
+error: Skipping analyzing 'fire': found module but no type hints or library stubs  [import]
+```
+一般情况下，如果是知名的第三方库，往往在typeshed上注册过类型存根文件，类型检查器（比如mypy)应该能自动找到。如果是不知名的第三方库，我们可以升级它，看最新版本是否支持，或者在pypi上搜索它的存根库。比如，对`fire`，如果pypi上存在它的存根库，则它的名字一定是`types-fire`，于是我们可以这样纠正上述问题：
+```
+pip install types-fire
+```
+到成书时为止，fire的开发者并没有上传存根文件。在这种情况下，我们还可以自己写一个`fire.pyi`文件，然后将它放到项目的根目录下。关于如何写.pyi文件，请读者自行搜索。
+
+但如果既找不到合适的存根库，我们也没时间来写pyi文件，那么，我们可以将ignore_missing_imports设置为True，这样mypy就不会报错了。请参考上面的配置文件中的第24~26行，不过，我们应该尽力避免使用这个选项。
+
+#### implicit_optional
+如果有以下的代码：
+```
+def foo(arg: str = None) -> None:
+    reveal_type(arg)  # Revealed type is "Union[builtins.str, None]"
+```
+我们通过reveal_type得知，mypy将`arg`的类型推导为Optional[str]。这个推导本身没有错，但是，考虑到zen of python的要求， explicit is better than implicit，我们应该将arg的类型声明为`arg: Optional[str]`。从0.980起，mypy默认将implicit_optional设置为Flase（即禁止这样使用），因此，这个选项也没有出现在我们的示例中。
 
 #### warn_return_any
 一般情况下，我们不应该让函数返回类型为`Any`（如果真有类型不确定的情况，应该使用泛型）。因此，mypy应该检查这种情况并报告为错误。但是，mypy的缺省配置并不会禁止这种行为，我们需要自行修改。
@@ -540,10 +565,8 @@ error: Unsupported operand types for + ("str" and "int")  [operator]
 ```
 from typing import Any
 
-
 def baz() -> str:
     return something_that_returns_any()
-
 
 def something_that_returns_any() -> Any:
     ...
@@ -553,15 +576,16 @@ def something_that_returns_any() -> Any:
 error: Returning Any from function declared to return "str"  [no-any-return]
 ```
 
+#### show_errors_codes and warn_unused_ignores
+当我们使用了type ignore时，我们一般仍然希望mypy能够报告出错误消息（但不会使类型检查失败）。这可以通过设置show_errors_codes = True来实现，显示错误代码。这对于理解错误原因很有帮助。
+
+随着代码的不断演进，有时候type ignore会变得不再必要。比如，我们依赖的某个第三方库，随着新版本的发布，补全了类型注解。这种情况下，针对它的type ignore就不再必要。及时清理这些陈旧的设置是一种良好习惯。
+
 #### inline comment
 我们还可以通过在代码中添加注释来控制mypy的行为。比如，我们可以通过在代码中添加`# type: ignore`来忽略mypy的检查。如果该注释添加在文件的第一行，那么它将会忽略整个文件的检查。如果添加在某一行的末尾，那么它将会忽略该行的检查。
 
 一般我们更倾向于指定忽略某个具体的错误，而不是忽略整行检查。其语法是 `# type: ignore[<error-code>]`。
 
-#### show_errors_codes and warn_unused_ignores
-当我们使用了type ignore时，我们一般仍然希望mypy能够报告出错误消息（但不会使类型检查失败）。这可以通过设置show_errors_codes = True来实现，显示错误代码。这对于理解错误原因很有帮助。
-
-随着代码的不断演进，有时候type ignore会变得不再必要。比如，我们依赖的某个第三方库，随着新版本的发布，补全了类型注解。这种情况下，针对它的type ignore就不再必要。及时清理这些陈旧的设置是一种良好习惯。
 ## Formatter工具
 Formatter工具也有很多种，但是我们几乎不用去考查其它的formatter,就选择了black,只因为它的logo:
 <figure>
@@ -574,6 +598,7 @@ Formatter工具也有很多种，但是我们几乎不用去考查其它的forma
 当然Black还是开了一个小窗口，允许你定义代码行的换行长度，Black的推荐是88字符。有的团队会把这个更改为120字符宽，按照阴谋论的观点，幕后的推手可能是生产带鱼屏的资本力量。
 
 在ppw生成的项目中，我们把black的设置放在pyproject.toml中：
+```
 [tool.black]
 line-length = 88
 include = '\.pyi?$'
@@ -597,29 +622,87 @@ profile = "black"
 
 我们把[pre-commit hooks](https://pre-commit.com)放在这一章里。
 
-这个工具的作用，是为了防止你签入不符合规范的代码，从而污染代码库。如果使用向导生成项目的话，向导已经为您安装了pre-commit hooks,当您运行``git commit``命令时，就会看到这样的输出：
+pre-commit是一个python包，可以通过pip安装：
+```
+pip install pre-commit
+```
+pre-commit安装后，会在你的项目目录下创建一个.git/hooks目录，里面有一个pre-commit文件。这个文件是一个shell脚本，它会在你执行git commit命令时被调用。pre-commit hooks的作用是在你提交代码之前，对代码进行检查，如果有错误，就会阻止你提交代码，从而保证代码库不被这些错误的、不合规范的代码污染。
+
+如果使用向导生成项目的话，向导已经为您安装了pre-commit hooks,当您运行``git commit``命令时，就会看到这样的输出：
 
 ![](http://images.jieyu.ai/images/202104/20210413181638.png)
 
 可以看出，pre-commit hooks对换行符进行了检查和修复，调用black进行了格式化，以及调用flake8进行了查错，并报告对f-string的错误使用。
 
-当出现错误进，您必须进行修复，才能进行再次提交。
+当出现错误时，您必须进行修复后，才能进行再次提交。
 
 这一章的主题是高效编码。我们先是介绍了代码自动完成工具，然后讲述了如何利用语法检查工具尽早发现并修复错误，避免把这些错误带入到测试甚至生产环境中。在我们介绍的方案中，语法检查是随着您的coding实时展开的，并在向代码库提交时，强制执行一次检查。后面您还会看到，在运行测试时，还会再做一次检查。
 
-## 运用Lint工具
-### Lint工具的作用
-### Python Lint工具比较
-### Flake8的配置和使用
-### 案例：Flake8查错功能演示及错误解析
-## Formatter工具
-### 什么样的代码，才符合Zen of Python
-### Python formatter工具比较
-### Black：不妥协的代码格式化工具
-### iSort：导入格式化工具
-### 案例：基于Black和iSort进行代码格式化
-## 代码提交钩子：把不规范的代码挡在门外
-### 为什么要使用代码提交钩子？
-### 安装和配置常用的代码提交钩子
-### 案例：代码钩子阻止不合规范的代码入库
+### pre-commit hooks的配置
+在ppw生成的项目中，我们已经集成了这些配置：
+```yaml
+repos:
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.13
+    hooks:
+    -   id: forbid-crlf
+    -   id: remove-crlf
+    -   id: forbid-tabs
+        exclude_types: [csv]
+    -   id: remove-tabs
+        exclude_types: [csv]
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+    - id: trailing-whitespace
+    - id: check-merge-conflict
+    - id: check-yaml
+      args: [--unsafe]
+    - id: end-of-file-fixer
+-   repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+    - id: isort
+-   repo: https://github.com/ambv/black
+    rev: 22.3.0
+    hooks:
+    - id: black
+      language_version: python3.8
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+    -  id: flake8
+       additional_dependencies: [flake8-typing-imports==1.10.0]
+       exclude: ^tests
+-   repo: local
+    hooks:
+    -   id: mypy
+        name: mypy
+        entry: mypy
+        exclude: ^tests
+        language: python
+        types: [python]
+        require_serial: true
+        verbose: true
+```
+第一组是pre-commit提供的开箱即用的钩子。首先，它禁止使用windows的换行符，并且将windows的换行符都替换为unix/linux下的换行符。这么做的原因是，如果文件使用unix/linux下的换行符，这些文件基本上都能被windows下的编辑软件正确处理；反之则不然。比如，如果你有一个bash或者perl脚本，但使用了windows换行符，那么，它将不能在unix/linux下运行。
 
+其次，它禁止在文件中使用tab键，并且将tab键替换为空格。从语法上看，只要不混合使用tab键和空格键，这两种方式都是可以的。但是，不同的编辑器（特别是unix/linux下）在对文件进行视觉呈现时，会将tab键展开成不同的宽度，这使得同一份文件，在不同的编辑器里，看上去并不一致，而如果使用space，则不会有这个问题。此外，只使用空格还有另外一个好处，就是赚钱更多：根据stackoverflow对2.8万名专业开发者（排除了学生）的调查，使用空格的开发者的薪资总体上要比使用Tab键的开发都高8.6%。这项报告发表在stackoverflow的2017年6月5日的[博客](https://stackoverflow.blog/2017/06/15/developers-use-spaces-make-money-use-tabs/)。
+
+需要注意的是，并非所有的文件中的tab键被需要被替换。典型的例子是在csv文件中，我们可能使用Tab键作为字段之间的分隔符，因此它们必须被保留。因此在上述配置中，我们将csv文件排除在外。
+
+第二组仍然是pre-commit提供的开箱即用的钩子。它首先移除了行尾的多余的空格。关于为什么要移除行尾多余的空格，在PEP8中有简要地说明。然后它检查是否存在未完成合并的代码文件，检查yaml文件是否合乎规范。
+    
+注意到这里有一个end-of-file-fixer钩子，这个钩子的作用是，在文件末尾添加一个仅含换行符的空行。相信很少有人真正理解它的含义。实际上，相关的问题在quora和stackoverflow上有很多提问，答案也莫衷一是。
+
+其中一个说法是，POSIX标准中，对一行文本的定义就是零个或多个非换行符加上终止换行符的序列。因此，如果一行文本不以换行符结尾，它就可能被各种工具当成二进制文件。但这并不能解释为什么我们需要给文件末尾添加一个空行。
+    
+作者更倾向于这种观点：这主要是为了照顾使用Unix和Linux的人。如果你用vi打开一个文件，想在后面添加一些新的内容，如果该文件以一个空行结尾，那么Ctrl+G就可以直接跳转到文件结尾，立即开始工作。反之，Ctrl+G只能跳到最后一行的开头。
+
+另外一个原因是，如果你想使用cat拼接几个文件文件，如果文件都不是以空行（带换行符）结尾，那么前一个文件的最后一行将会与后一个文件的第一行混合在一起，而不是象期待的那样，各占一行。
+    
+在文件尾加上一个空行并不是什么重要的功能，只是unix/linux生态圈里几乎所有的工具都是这么运作的。我们尊重这个习惯就好。
+
+接下来都是在pre-commit中调用第三方工具实现相关功能的配置。我们配置了isort，black， flake8和mypy。
+
+mypy的配置有点与众不同。它没有使用远程的repo，而是使用了local。mypy官方并没有提供与pre-commit的集成，所以我们采用了直接在pre-commit中调用本地mypy命令的方法。
