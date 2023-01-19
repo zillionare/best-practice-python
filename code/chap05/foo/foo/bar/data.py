@@ -9,11 +9,12 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer(), primary_key=True)
-    nickname = db.Column(db.Unicode(), default="noname")
+    name = db.Column(db.Unicode(), default="noname")
+    dob = db.Column(db.Date(), nullable=False)
 
 
 async def main():
-    await db.set_bind("postgresql://zillionare:123456@localhost/gino")
+    await db.set_bind("postgresql://zillionare:123456@localhost/bpp")
     await db.gino.create_all()
 
     # further code goes here
