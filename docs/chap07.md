@@ -5,14 +5,7 @@
 ### 如何使用Mock（内含案例）
 ### 使用断言（内含案例）
 ## Pytest测试库
-## 衡量测试的覆盖率
-### 配置Pycoverage
-### 发布覆盖率报告
-### 案例：提高测试覆盖率
-## Tox环境矩阵加速测试
-### 什么是Tox？
-### Tox的工作原理
-### 如何配置Tox
+
 
 # 单元测试
 
@@ -227,6 +220,8 @@ from sample.app import add_user
 import pytest_asyncio
 import asyncio
 
+# pytest-asyncio已经提供了一个event_loop的fixture,但它是function级别的
+# 这里我们需要一个session级别的fixture，所以我们需要自己实现
 @pytest.fixture(scope="session")
 def event_loop():
     policy = asyncio.get_event_loop_policy()
@@ -268,6 +263,56 @@ fixture是一些函数，pytest会在执行测试函数之前（或之后）加�
     如果我们使用unittest来对异步代码进行测试，要注意首先测试类要从unittest.IsolatedAsyncioTestCase继承，然后测试函数要以async def定义。并且setup和teardown都要换成它们的异步版本asyncSetup、asyncTeardown。
     
     注意只有从python 3.8开始，unittest才直接支持异步测试。在python 3.7及之前的版本中，我们需要使用第三方库aiounittest。
+
+我们通过上面的例子演示了fixture。与markers类似，我们可以通过pytest --fixtures来显示当前环境中所有的fixture。
+```bash
+pytest --fixtures
+
+------------- fixtures defined from faker.contrib.pytest.plugin --------------
+faker -- .../faker/contrib/pytest/plugin.py:24
+    Fixture that returns a seeded and suitable ``Faker`` instance.
+
+------------- fixtures defined from pytest_asyncio.plugin -----------------
+event_loop -- .../pytest_asyncio/plugin.py:511
+    Create an instance of the default event loop for each test case.
+
+...
+
+------------- fixtures defined from tests.test_app ----------------
+event_loop [session scope] -- tests/test_app.py:45
+
+db [session scope] -- tests/test_app.py:52
+```
+
+这里我们看到faker.contrib提供了一个名为faker的fixture, 我们之前安装的、支持异步测试的pytest_asyncio也提供了名为event_loop的fixture(为节省篇幅，其它几个省略了)，以及我们自己测试代码中定义的event_loop和db这两个fixture。
+
+为了后面讲解方便，我们现在来安装pytest-mock这个插件，看看它提供的fixture。
+```bash
+pip install pytest-mock
+pytest --fixture
+
+------- fixtures defined from pytest_mock.plugin --------
+class_mocker [class scope] -- .../pytest_mock/plugin.py:419
+    Return an object that has the same interface to the `mock` module, but
+    takes care of automatically undoing all patches after each test method.
+
+mocker -- .../pytest_mock/plugin.py:419
+    Return an object that has the same interface to the `mock` module, but
+    takes care of automatically undoing all patches after each test method.
+
+module_mocker [module scope] -- .../pytest_mock/plugin.py:419
+    Return an object that has the same interface to the `mock` module, but
+    takes care of automatically undoing all patches after each test method.
+
+package_mocker [package scope] -- .../pytest_mock/plugin.py:419
+    Return an object that has the same interface to the `mock` module, but
+    takes care of automatically undoing all patches after each test method.
+
+session_mocker [session scope] -- .../pytest_mock/plugin.py:419
+    Return an object that has the same interface to the `mock` module, but
+    takes care of automatically undoing all patches after each test method.
+```
+可以看到pytest-mock提供了5个fixture。后面我们会较多地介绍其中的mocker这个fixture。
 ## Mock
 在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接数据库或者真实的第三方微服务等。这时候，我们需要通mock来模拟这些外部接口。mock可能是单元测试中最核心的技术。
 
@@ -279,38 +324,128 @@ fixture是一些函数，pytest会在执行测试函数之前（或之后）加�
 !!! info
     python从3.8起，才对async模式下的mock有比较完备的支持。幸好，在本书发布之前，python 3.7就应该已经走到生命的尽头了。
 
+最常用的mock对象有Mock, MagicMock和patch。MagicMock是Mock的子类。如果你之前接触过其它mock框架的话，可能需要注意，python中的mock是’action -> assertion‘模式，而不是其它语言中常见的'record -> replay’模式。
+
+在unittest中要使用mock, 我们需要手动导入mock模块。在pytest中，我们可以直接使用mocker这个fixture。
 ```python
+# unittest example
 import unittest
 from unittest import mock
 
-class TestModuleA(unitest.TestCase):
-    def test_foo(self):
+class Test(unittest.TestCase):
+    def test_mock(self):
+        # 在unittest中，我们通过mock模块来调用patch方法
         with mock.patch('builtins.input', return_value = 'Y') as m:
             self.assertEqual('Y', input('continure or not? [Y]/n'))
+
+# pytest example
+def test_mock(mocker):
+    # 在pytest中，我们通过mocker这个fixture来调用patch方法
+    mocker.patch('builtins.input', return_value = 'Y')
+    assert 'Y' == input('continure or not? [Y]/n')
+```
+上面的例子清楚地演示了两个框架中应该如何调用patch方法。如果我们要使用Mock或者MagicMock这两个类，也是一样，只不过在pytest中，我们需要通过mocker这个对象来引用它们。
+
+现在我们来介绍一下patch方法。patch是一个context manager（也可以当装饰器用），它可以用来mock一个对象。上面的例子已经演示了如何mock一个内置函数。内置函数是指象open、print、input这样的方法，我们可以在程序中无须导入即可直接使用，但是在mock它们时，我们必须通过'builtins'这个名字空间来引用它们，这也是我们在这里特别举例的原因。另一个需要特别说明的内置库是datetime，当你需要mock这个库时，我们的建议是使用freezegun这个库，而不是使用patch。
+```python {class = 'line-numbers'}
+@freeze_time("2021-01-01")
+def test_freezegun():
+    now = datetime.datetime(2021, 1, 1)
+    assert now == datetime.datetime.now()
 ```
 
-上面的代码中，我们通过mock拦截了内置的input函数，使得下面对input的调用，变成对mock的调用。又由于我们通过return_value为其指定了返回值为"Y"，所以这个测试可以通过。
+mock自己代码中的方法，或者第三方库中的方法一般来讲是比较容易的，关键是要找到正确的引用方法。在第7章的示例代码中，有这样一小段程序：
 
-我们通过context manager语法，在执行完上面的测试之后，将input调用还原成系统内置函数，从而不影响其它部分的功能。
+```python {class='line-numbers'}
+# from sample\core\foo.py
+def is_windows():
+    return True
 
-??? Readmore
-    作为一句题外话，象Python这种动态语言要做mock，要比java,c这样的语言容易太多了。对Python使用越多，你就会对单元测试越熟练，从而使得代码质量大为提高。
 
-mock不仅仅能模拟函数调用的返回值，还能模拟异常，这时要通过`side_effect`来指定：
+def get_operating_system():
+    return "Windows" if is_windows() else "Linux"
 
-```python
 
-with mock.patch('builtins.input', side_effect = ValueError) as m:
-    self.assertRaises(ValueError)
+class Foo:
+    def bark(self):
+        return "bark"
+
+# from sample\tests\core\test_foo.py
+def test_get_operating_system(mocker):
+    mocker.patch("sample.core.foo.is_windows", return_value=False)
+    assert get_operating_system() == "Linux"
+```
+第16行中的"sample.core.foo.is_windows"被称作target，return_value则是我们调用target方法时，所期望返回的值。
+
+上面的例子中，我们mock了一个普通方法，如果我们要mock一个类的方法呢？此时target的写法应该是'package.package.module.Class.method'。以第10~12行定义的Foo对象的bark方法为例，target的写法应该是'sample.core.foo.Foo.bark'。
+
+这里我们要指出一个初学者很容易掉进去的坑，就是明明target正确，但是却无法mock成功。在unittest的文档中有这样一句话
+
+!!! quote
+    The basic principle is that you patch where an object is looked up, which is not necessarily the same place as where it is defined. 
+
+也就是，patch应用于哪个target对象，取决于被mock对象是在哪里被引用的，而不是在哪里被定义的。
+
+我们通过一个例子来详细说明这个问题。假设在前面的foo.py之外，还有一个sample\bar.py文件，定义如下：
+```python {class='line-numbers'}
+# sample\bar.py
+from sample.core.foo import Foo, is_windows
+
+def my_bark() -> str:
+    foo = Foo()
+    return foo.bark()
+
+def get_operating_system() -> str:
+    return "Windows" if is_windows() else "Linux"
+```
+
+对应的测试文件tests\test_bar.py定义如下：
+```python {class='line-numbers'}
+from sample.bar import get_operating_system, my_bark
+
+def test_my_bark(mocker):
+    with mocker.patch("sample.core.foo.Foo.bark", return_value="mock_bark"):
+        assert my_bark() == "mock_bark"
+
+def test_get_operation_system(mocker):
+    target_will_fail = "sample.core.foo.is_windows"
+    target_will_succeed = "sample.bar.is_windows"
+    with mocker.patch(target_will_fail, return_value=False):
+        assert get_operating_system() == "Linux"
+```
+运行测试，发现test_my_bark测试通过，而test_get_operation_system测试失败。说明其中一个mock成功，另一个mock失败。这是为什么呢？
+
+在test_get_operation_system中，导致测试失败的target是target_will_fail，即sample.core.foo.is_windows，被测试函数get_operating_system来自由bar.py，在它调用is_windows之前，这个is_windows已经被导入到sample.bar这个名字空间里，sample.bar持有了这个引用（应该是以传值的方式），因此当patch方法对sample.core.foo.is_windows进行修改时，这个改动并不会传递给sample.bar中的is_windows。这就是unittest文档中所说的，patch应用于哪个target对象，取决于被mock对象是在哪里被引用的（sample.bar)，而不是在哪里被定义的(sample.core.foo)。
+
+但上面的理论无法解释为什么test_my_bark测试通过。原因可能还是传值引用的原因。在my_bark中，当调用foo.bark()时，foo对象并没有自己的bark方法，因此它还是会去寻找sample.core.foo.Foo中的bark方法，而这个方法已经被patch了，因此test_my_bark测试通过。
+
+前面我们讨论了patch的一个用法，即patch一个函数的返回值。有时候我们不关心函数的返回值，而是希望函数在被调用时，能够无条件地抛出某个异常，这时就需要用到`side_effect`参数。
+
+```python {class='line-numbers'}
+# tests\test_bar.py
+import pytest
+def test_mock_side_effect(mocker):
+    with mocker.patch('builtins.input', side_effect = ValueError):
+        with pytest.raises(ValueError) as e:
+            input()
 ```
 上述代码不仅模拟出了一个ValueError，还检测这个异常是否抛出。通过这种方式，异常处理代码现在也可以轻松覆盖到了。
 
-如果我们对mock函数要执行多次调用，则可以分别用``return_values``和``side_effects``来代替``return_value``和``side_effect``。
-
-上面的方法中，我们是完全拦截了某个方法。如果我们只想拦截某个对象的某个方法，而对同类型的其它对象的方法不做拦截，又该怎么做呢？请看下面的示例代码：
-
+side_effect不仅可以用来模拟异常，还可以用来模拟多次调用的返回值。比如，我们希望某个函数在第一次调用时返回1，第二次调用时返回2，第三次调用时返回3，以此类推。这时可以这样写：
+```python {class='line-numbers'}
+# tests\test_bar.py
+def def test_mock_multiple_return(mocker):
+    with mocker.patch('builtins.input', side_effect = [1, 2, 3]):
+        assert input() == 1
+        assert input() == 2
+        assert input() == 3
 ```
-# foo.py
+我们一共调用了input三次，每次mock都按期望返回了不同的数值。
+
+上面的例子中，我们给patch传入的target是一个字符串，显然，在patch作用域内，所有的新生成的对象都会被patch。如果在patch之前，对象已经生成了，我们则需要使用`patch.object`来完成patch。
+
+```python {class='line-numbers'}
+# sample\core\foo.py
 
 def bar():
     logger = logging.getLogger(__name__)
@@ -319,16 +454,24 @@ def bar():
     root_logger = logging.getLogger()
     root_logger.info("this is not intercepted")
 
-# test_bar.py
-from foo import bar
+# test_foo.py
+from sample.core.foo import bar
 
-logger = logging.getLogger('foo')
+logger = logging.getLogger('sample.core.foo')
 with mock.patch.object(logger, 'info') as m:
     bar()
     m.assert_called_once_with("please check if I was called")
 ```
-两个logger都被调用，但我们只拦截了对应于'foo'的那个logger的`info`方法，结果验证它被调用，且仅被调用一次。
 
-如果被mock的函数是异步的，情况则要复杂一些。在Python 3.8之前，我们使用第三方的库来完成mock，比如[asynctest](https://github.com/Martiusweb/asynctest).在3.8及之后的版本中，引入了AsyncMock。当我们无法判断被mock的对象是异步还是同步时，可以仅使用Mock，3.8版本之后的Mock有能力自己判断应该使用同步的Mock，还是异步的Mock。
+两个logger(root_logger和'sample.core.foo'对应的logger)都被调用，但我们只拦截了后一个logger的`info`方法，结果验证它被调用，且仅被调用一次。
 
-对异步的Mock对象，当你通过`await`调用它之后，将获得`return_value`和`side_effect`，然后就可以用上面同样的方法来判断执行结果。
+这里要提及pytest中mocker.patch与unitest.mock.patch的一个细微差别。后者进行patch时，可以返回mock对象，我们可以通过它进行更多的检查（见上面示例代码中的第14，16行）；但mocker.patch的返回值是None。
+
+## 衡量测试的覆盖率
+### 配置Pycoverage
+### 发布覆盖率报告
+### 案例：提高测试覆盖率
+## Tox环境矩阵加速测试
+### 什么是Tox？
+### Tox的工作原理
+### 如何配置Tox
