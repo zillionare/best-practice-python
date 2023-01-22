@@ -468,10 +468,233 @@ with mock.patch.object(logger, 'info') as m:
 这里要提及pytest中mocker.patch与unitest.mock.patch的一个细微差别。后者进行patch时，可以返回mock对象，我们可以通过它进行更多的检查（见上面示例代码中的第14，16行）；但mocker.patch的返回值是None。
 
 ## 衡量测试的覆盖率
+我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。coverage.py是最常用的测量Python程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别可能已执行但未执行的代码。
+
+覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分正在被测试执行，哪些没有。
+
+我们可以通过下面的方法来安装coverage.py：
+```bash
+pip install coverage
+```
+要收集测试覆盖率数据，我们只需要在原来的测试命令前加上coverage run即可。比如，如果我们之前是使用`pytest arg1 arg2 arg3`来进行测试，则现在我们使用:
+```bash
+coverage run -m pytest arg1 arg2 arg3
+```
+不过，更多人选择使用pytest-cov插件来进行测试覆盖率的收集。这也是ppw的选择。通过ppw生成的工程，pytest-cov已被加入到测试依赖中，因此也就自然安装到环境中去了。
+
+当测试运行完成后，我们可以通过`coverage report -m`来查看测试覆盖率的报告:
+```
+Name                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------
+my_program.py                20      4    80%   33-35, 39
+my_other_module.py           56      6    89%   17-23
+-------------------------------------------------------
+TOTAL                        76     10    87%
+```
+如果希望得到更好的视觉效果，也可以使用coverage html命令来生成带注释的HTML报告，然后在浏览器中打开htmlcov/index.html。
+![](https://images.jieyu.ai/images/20230120230120204634.png)
+
+不过，通过ppw配置的工程，我们一般不需要直接调用coverage命令，而是使用pytest命令来进行测试。pytest-cov插件会自动收集测试覆盖率数据，然后在测试完成后，自动将测试覆盖率报告打印到控制台上。如果希望生成带注释的HTML报告，可以使用`pytest --cov-report=html`命令。对pytest我们一般也不需要直接调用，而是通过tox来调用。
+
+默认情况下，coverage.py将测试行（语句）覆盖率，但通过配置，还可以测量分支覆盖率。这需要一些配置。
+
 ### 配置Pycoverage
+配置文件的默认名称是.coveragerc，在ppw生成的工程中，这个文件处在项目根目录下（读者可以回到第4章的结束部分查看ppw生成的文件列表）。
+
+如果没有使用其他配置文件，Coverage.py 将从其他常用配置文件中读取设置。如果存在，它将自动从“setup.cfg”或“tox.ini”中读取。如果节(section)名称有“coverage:”前缀，则会当成是coverage的配置，比如.coveragerc中有一节名为run，当它出现在tox.ini中，节名字就应该是[coverage:run]。
+
+我们也可以在pyproject.toml中配置coverage。如果要使用这种方式，需要在pyproject.toml中添加一个名为tool.coverage的节，然后在这个节中添加配置项。
+
+coverage的配置项遵循ini语法，示例如下：
+```ini {class='line-numbers'}
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if __name__ == .__main__.:
+
+    # Don't complain about abstract methods, they aren't run:
+    @(abc\.)?abstractmethod
+
+ignore_errors = True
+
+[html]
+directory = coverage_html_report
+```
+我们前面提到过可以让coverage.py按分支覆盖率来统计，这可以按照第3行一样进行配置。[report]这一节中的配置项可以让coverage.py忽略一些不需要统计的代码，比如debug代码。[html]这一节配置了如果生成的html文件存放在何处。如果没有指定，将存放在htmlcov目录下。
+
+[run]这一节比较常用的配置项有include和omit，用来特别把某个文件或者目录加入到测试覆盖，或者排除掉。在[report]这一节中，也有相同的配置项，两者有所区别。在[report]中指定omit或者include，都仅适用于报告的生成，但不影响实际的测试覆盖率统计。
 ### 发布覆盖率报告
-### 案例：提高测试覆盖率
+如果我们的项目是开源项目，你可能希望把覆盖率报告发布到网上，这样其他人就可以看到你的项目的覆盖率了。这里我们使用codecov.io来发布覆盖率报告。
+
+codecov是一个在线的代码覆盖率报告服务，它可以从GitHub、Bitbucket、GitLab等代码托管平台上获取代码覆盖率报告，然后生成一个在线的报告。这个报告可以让其他人看到你的项目的覆盖率情况。
+
+在github中设置codecov集成很简单，在浏览器中打开https://github.com/apps/codecov页面，点击完成安装，然后在CI过程中增加一个上传动作就可以了。在通过ppw创建的项目中，我们已经集成了这一步。如果你想在自己的项目中手动执行，则是：
+```
+# linux
+curl -Os https://uploader.codecov.io/latest/linux/codecov 
+chmod +x codecov 
+./codecov
+
+# windows
+$ProgressPreference = 'SilentlyContinue' 
+Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe 
+.\codecov.exe
+
+# macOS
+curl -Os https://uploader.codecov.io/latest/macos/codecov
+chmod +x codecov
+./codecov
+```
+我们强烈建议仅通过CI来上传覆盖率报告，而不是在本地执行。因为本地执行的覆盖率报告，可能会因为本地环境的不同而产生差异。另一方面，在CI中执行后，我们还能在pull request之后，得到这样的状态报告：
+![](https://images.jieyu.ai/images/20230120230120213255.png)
+并且还能在pull request的注释中看到覆盖率的变化：
+![](https://images.jieyu.ai/images/20230120230120213318.png)
+这会让你的开源项目看上去非常专业，不是吗？更重要的是，让你的潜在用户更加信任这是一个高质量的项目。
+
 ## Tox环境矩阵加速测试
+如果我们的软件支持3种操作系统，4个python版本，我们就必须在3种操作系统上，分别创建4个虚拟环境，安装上我们的软件和依赖，再执行测试，上传测试报告。这个动作不仅相当繁琐，还很容易引入错误。
+
+tox与CI结合，就可以帮助我们自动化完成这些环境的创建与测试执行。
 ### 什么是Tox？
+tox是一个通用的 virtualenv 管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。
+
+实际上，tox主要完成以下工作：
+1. 根据配置创建基于多个版本的python虚拟环境，并且保证这些虚拟环境的可复制性（需要与poetry或者其它依赖管理工具一起）。
+2. 运行测试和代码检查工具，比如pytest和flake8, black, mypy等。
+3. 隔离环境变量。tox不会从系统传递任何环境变量到虚拟环境中，这样可以保证测试的可重复性。
 ### Tox的工作原理
+下图是tox文档显示的工作原理图：
+![](https://images.jieyu.ai/images/20230120230120223442.png)
+
+根据这张图，tox读取配置文件，打包待测试软件，按照配置文件创建虚拟环境，并安装待测试软件和依赖，然后依次执行测试命令。最终，当所有虚拟环境下的测试都通过后，tox会生成测试报告。
+
+下面，我们主要通过一个典型的配置文件来介绍tox是如何配置和工作的。
 ### 如何配置Tox
+在ppw生成的项目中，存在以下tox.ini文件：
+```ini {class = 'line-numbers'}
+[tox]
+isolated_build = true
+envlist = py38, py39, py310, lint
+skipsdist = false
+
+[gh-actions]
+python =
+    3.10: py310
+    3.9: py39
+    3.8: py38
+
+[testenv:lint]
+extras =
+    dev
+    doc
+deps =
+    poetry
+commands =
+    poetry run isort {{ cookiecutter.project_slug }}
+    poetry run black {{ cookiecutter.project_slug }} tests
+    poetry run flake8 {{ cookiecutter.project_slug }}
+    poetry build
+    poetry run mkdocs build
+    poetry run twine check dist/*
+
+[testenv]
+passenv = *
+setenv =
+    PYTHONPATH = {toxinidir}
+    PYTHONWARNINGS = ignore
+deps = 
+    poetry
+extras =
+    test
+commands =
+    poetry run pytest -s --cov={{ cookiecutter.project_slug }} --cov-append --cov-report=xml --cov-report term-missing tests
+```
+
+配置文件仍然是标准的ini文件格式（tox也支持通过pyproject.toml来进行配置）。我们主要关注以下几个部分：
+#### [tox]节
+在测试一个package之前，tox首先需要构建一个sdit分发包。在打包这件事上，python走过了很长的一段历程，打包工具和标准也经历了很多变化，这些我们将用专门的一章来介绍。现在我们需要知道的是，最新的标准是PEP517和PEP518，tox已经支持这两个标准。但是，如果项目本身不支持这两个PEP，那么tox必须回到之前的打包方式。
+
+因此，tox引入了isolated_build这个选项，如果设置为true，tox会使用PEP517和PEP518的方式来打包项目。如果设置为false，tox会使用传统的方式(setup.py)来打包项目。如果通过poetry创建项目，并且在pyproject.toml中设置了requires和build-backend项的话，那么我们是需要设置isolated_build为true的。
+
+在所有ppw创建的项目中，我们都设置了isolated_build为true，这样才与pyproject.toml的设置一致。
+
+envlist选项的含义正如它的名字所示。这里我们指定了py38, py39, p310和lint这4个环境。它们也是虚拟环境的名字，其中py38, py39, py310对应的python的版本是3.8, 3.9, 3.10。这里我们还指定了一个lint环境，它是用来执行代码检查的。我们没有为它专门指定python的版本，因此它会使用当前的python版本。
+
+默认地，tox会在项目根目录下创建.tox目录，上述虚拟环境就创建在这个目录下：
+```bash
+$ll .tox
+
+total 36
+drwxrwxr-x  9 aaron aaron 4096 Jan 20 23:48 ./
+drwxrwxr-x 12 aaron aaron 4096 Jan 20 23:48 ../
+drwxrwxr-x  5 aaron aaron 4096 Jan 20 23:47 .package/
+-rwxrwxr-x  1 aaron aaron    0 Jan 20 23:47 .package.lock*
+drwxrwxr-x  3 aaron aaron 4096 Jan 20 23:47 .tmp/
+drwxrwxr-x  2 aaron aaron 4096 Jan 20 23:47 dist/
+drwxrwxr-x  6 aaron aaron 4096 Jan 20 23:48 lint/
+drwxrwxr-x  2 aaron aaron 4096 Jan 20 23:47 log/
+drwxrwxr-x  7 aaron aaron 4096 Jan 20 23:47 py38/
+drwxrwxr-x  7 aaron aaron 4096 Jan 20 23:48 py39/
+```
+列目录时，显示出来存在lint, py38和py39，我们可以进一步查看这些虚拟环境下的python版本。但是，我们没有看到py310，这里因为在我测试时，系统还没有安装python 3.10这个版本，因此tox会跳过这个版本。
+
+skipsdist选项用来指示tox是否要跳过构建sdist分发包的步骤。这个设置主要是为了兼容python应用程序，因为tox的测试对象除了library之外，还可能是服务或者简单的脚本集，这些服务或者脚本集是没有setup.py文件，也无法构建sdist分发包的。如果没有一个标志让tox来跳过构建sdist分发包的步骤，那么tox会报错：
+```
+ERROR: No pyproject.toml or setup.py file found. The expected locations are:
+  /Users/christophersamiullah/repos/tox_examples/basic/pyproject.toml or /Users/christophersamiullah/repos/tox_examples/basic/setup.py
+You can
+  1. Create one:
+     https://tox.readthedocs.io/en/latest/example/package.html
+  2. Configure tox to avoid running sdist:
+     https://tox.readthedocs.io/en/latest/example/general.html
+  3. Configure tox to use an isolated_build
+```
+这个选项在tox中是默认为false的，多数情况下无须配置。我们出于帮助大家理解tox工作原理的目的介绍它
+
+#### [testenv]
+这一节的配置项适用于所有的虚拟环境。如果在某个虚拟环境下存在特别的选项和动作，需要象[testenv:lint]那样定义在自己的节中。
+
+这里我们还额外设置了一些环境变量字段。比如设置了PYTHONPATH，另外也忽略了一些警告信息。如果我们使用的一些库没有更新，那么将在测试过程中打印大量的deprecation警告，从而干扰我们检查测试过程中的错误信息。当然，我们也应该至少在测试中打开一次这种警告，以便知道哪些用法已经需要更新。
+
+一般情况下，tox是不会把宿主机上的环境变量传递给测试环境的。但有一些情况，比如重要服务的账号和口令，并不适合写在配置文件中，只能配置在宿主机的环境变量中。在这种情况下，我们需要通过passenv选项来指定需要传递的环境变量。这个选项的值是一个逗号分隔的字符串，可以是单个的环境变量，也可以象示例中那样，是一个通配符。
+
+!!! Info
+    在团队开发中，并不是所有的开发者都有权接触到重要服务的账号与口令。如果这些秘密信息配置在代码文件或者相关的配置文件中，就会导致这些秘密暴露给了所有的开发者。此外，如果代码仓库使用的是gitlab，还可能导致这些信息泄露到互联网上。正确的作法是将这些重要信息仅仅配置在宿主机的环境变量中，这样一来，就只有有权限访问那台机器的人才能接触到这些秘密。
+
+    这是一种标准的做法，也得到了github CI的支持。在github CI中，可以通过在workflow文件中使用env选项来读取环境变量，再经由tox把这些环境变量传递给测试环境。
+
+deps选项声明了要在虚拟环境中需要安装的python库。不同的测试需要的依赖可能各不相同，但在ppw生成的项目中，一般我们只需要一个共同的依赖，即poetry。因为后面的测试命令，我们都会通过poetry来调用。
+
+tox在安装被测试包时，一般是不安装声明为extra依赖的。但是，为了运行测试和进行lint，我们必须安装pytest, flake8这些库。在ppw生成的工程中，这些依赖被归类为dev, test和doc这些extra依赖。因此，我们也必须在测试中安装。其中test依赖是所有的环境都需要的，而dev和doc则是lint时所需要的，因此，我们在[testenv]中声明依赖到test，而只在[testenv:lint]中依赖到dev和doc。
+
+接下来就是commands字段。这是真正执行测试或者lint的地方。这里的命令是：
+
+```
+commands =
+    poetry run pytest -s --cov=%package_under_test% --cov-append --cov-report=xml --cov-report term-missing tests
+```
+"-s" 是告诉pytest不要捕获控制台输入输出。
+
+在ppw生成的工程里，我们已经集成了pytest-coverage插件，因此，通过适当的配置，我们就可以在测试时同时完成测试覆盖率的统计。--cov用来指示代码覆盖的范围，这里%package_under_test%需要替换成为我们的库名字。--cov-append表明此次测试的结果，将追加到之前的统计数据中，而不是完全替换之前的数据。--cov-report将测试数据输出为xml格式。--cov-report表明应该如何生成报告。
+
+最后，tests是我们测试代码所在的文件夹。
+
+#### [testenv.lint]
+这一节的语法与[testenv]并无二致。只不过要运行的命令不一样。这里就不再一一解释。
