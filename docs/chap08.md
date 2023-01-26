@@ -348,7 +348,7 @@ Git的分支管理能做到如此优秀，根源还在于它的底层设计。�
 
 直到现在，我们都没有赋予分支一个清晰完整的定义。我们可以这样来理解分支：假设我们正在开发一个博客网站。开发小组有4个人，功能有持久化与缓存模块、文档对象抽象模块、主题与展示模块、评论管理模块等功能。如果每个人负责一个功能，那么效率最高的开发模式应该是每个人都在自己的分支上独立开发，完成自己模块的单元测试，再合并到一个共同的分支（比如称作develop)上进行集成测试。当集成测试完成时，再合并到main分支上完成版本发布，接下来进入下一个功能迭代。同时，我们也可能遇到网站的1.0版本发布后，已经开始了新的功能开发，但有紧急的bug需要修复，这时，我们需要切换到线上的分支（即main上面的某一个标签），创建一个hotfix分支，修复bug，测试和发布，最后合并到main分支，以及集成分支(develop)上。
 
-上述开发场景是比较典型的一个场景。2010年，Vincent Driessen将其抽象成了一个工作流模型，在此后的10多年中，该模型得到了广泛的认可。Vincent还基于这个模型，开发了git的扩展[gitflow](https://github.com/nvie/gitflow)，以帮助人们更好地运用这个模型。到目前为止，这个项目在github上获得了26.1k的star。
+上述开发场景是比较典型的一个场景。2010年，Vincent Driessen将其抽象成了一个工作流模型，在此后的10多年中，该模型得到了广泛的认可。bitbucket，由著名的Atlassian公司出品的支持git版本库托管服务，也在其官方文档中推荐了这个模型。Vincent还基于这个模型，开发了git的扩展[gitflow](https://github.com/nvie/gitflow)，以帮助人们更好地运用这个模型。到目前为止，这个项目在github上获得了26.1k的star。
 
 ![](https://images.jieyu.ai/images/2023/01/20230123171234.png)
 
@@ -648,3 +648,145 @@ index 8a5ccfb..2539c76 100644
 8e24fd76 (aaron yang 2023-01-25 20:18:30 +0800  3) this is hotfix 533
 ```
 括号内显示了该行代码的提交者和提交时间。接下来我们会去问问他，当时引入这行代码的考虑是什么。
+
+至此，我们
+## Github
+GitHub是一个在线软件源代码托管服务平台，使用Git作为版本控制软件，由开发者Chris Wanstrath、P. J. Hyett和汤姆·普雷斯顿·沃纳使用Ruby on Rails编写而成。Github开始于2007年10月1日， 2008年4月正式上线。在2018年，GitHub被微软公司收购。
+
+根据在2009年的Git用户调查，GitHub是最流行的Git访问站点。除了允许个人和组织创建和访问保管中的代码以外，它也提供了一些方便社会化共同软件开发的功能，即一般人口中的社群功能，包括允许用户追踪其他用户、组织、软件库的动态，对软件代码的改动和bug提出评论等。GitHub也提供了图表功能，用于概观显示开发者们怎样在代码库上工作以及软件的开发活跃程度。
+
+截至2022年6月，GitHub已经有超过5700万注册用户和1.9亿代码库（包括至少2800万开源代码库），事实上已经成为了世界上最大的代码托管网站和开源社区。它托管的巨大源代码库，也成为copilot的训练数据集。
+
+除了作为Git的托管服务平台外，github还提供了github pages网页托管服务（可存放静态网页，包括博客、项目文档甚至整本书）；codespace在线开发环境和github actions CI等服务。 
+
+据统计，github用户中，男性群体高达95%以上，因此github也常被网友戏称为Gayhub，全球最大同性交友网站。
+
+Github网页版的功能留给读者自己探索。这里主要讲解下github cli的功能和用法。
+
+除了网页之外，Github还提供了一些REST风格的API供大家使用，现在可以使用的API版本称为V3。通过这些API，我们可以管理仓库、访问用户、构建和触发CI、管理issue等。
+
+这些API，使得我们可以通过curl来完成上述功能。Github则基于这些API，开发了一个命令行工具，github cli，简称gh。
+
+### 安装
+在mac下安装gh，可以使用brew安装：
+```bash
+$ brew install gh
+```
+
+在linux和bsd下安装，如果是Debian, Ubuntu Linux, Raspberry Pi OS等基于apt的系统，可以使用apt安装：
+```bash {class='line-numbers'}
+type -p curl >/dev/null || sudo apt install curl -y
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+&& sudo apt update \
+&& sudo apt install gh -y
+```
+如果是Fedora, CentOS, Red Hat Enterprise Linux这些操作系统，可以使用dnf:
+```bash
+sudo dnf install 'dnf-command(config-manager)'
+sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+sudo dnf install gh
+```
+如果您使用的操作系统不在此列，可以参考[installing gh on Linux and BSD](https://github.com/cli/cli/blob/trunk/docs/install_linux.md)这篇文章。
+
+如果是windows，可以通过winget, scoop, Chocolatey等包管理工具安装，也可以直接下载[安装包](https://github.com/cli/cli/releases/tag/v2.22.0)安装。
+
+最后，如果在所有的操作系统上，如果您已经安装了conda，则也可以通过conda来安装：
+```bash
+$ conda install -c conda-forge gh
+```
+
+github cli的主要命令有：
+```txt
+auth:        完成gh和git在github上的鉴权
+codespace:   连接并管理codespace
+gist:        管理gists，主要是增删改查的一些动作
+issue:       管理issue，包括查看、编辑、评论、关闭和重新打开、移交等16个子命令
+pr:          管理pull request，包括checkout, close, diff, edit等16个子命令
+release:     管理版本发布，包括增删改查等8个子命令
+repo:        管理存储库，包括克隆、创建、删除、同步等15个子命令
+run:         查看、列出、监控最近执行的github actions
+workflow:    列出、查看、启用和停止定义中的workflow。与run相比，相当于程序与进程的关系。
+alias:       管理命令别名，或者说是命令的快捷方式
+config:      gh的设置命令
+extension:   管理gh的扩展
+label:       管理仓库中跟issue相关的标签。
+search:      搜索仓库，issue和pr。用法举例：搜索python主题下点赞数最多的仓库。
+secret:      管理跟仓库关联的一些机密信息
+ssh-key:     管理ssh秘钥
+status:      显示本账号关联的issue，pr状态和最近的活动
+```
+除上面的命令之外，我们还要专门介绍api这个命令。它可以用来发起一个Github API请求，因为gh已经鉴权了，所以这个请求可以免鉴权。gh支持的命令是有限的，通过api这个命令，我们就可以对gh进行扩展，比如，要获取github用户列表：
+```bash {class='line-numbers'}
+$ gh api users
+[
+  {
+    "login": "mojombo",
+    "id": 1,
+    "node_id": "MDQ6VXNlcjE=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mojombo",
+    "html_url": "https://github.com/mojombo",
+    "followers_url": "https://api.github.com/users/mojombo/followers",
+    "following_url": "https://api.github.com/users/mojombo/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mojombo/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mojombo/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mojombo/subscriptions",
+    "organizations_url": "https://api.github.com/users/mojombo/orgs",
+    "repos_url": "https://api.github.com/users/mojombo/repos",
+    "events_url": "https://api.github.com/users/mojombo/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mojombo/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "defunkt",
+    "id": 2,
+    "node_id": "MDQ6VXNlcjI=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/defunkt",
+    "html_url": "https://github.com/defunkt",
+    "followers_url": "https://api.github.com/users/defunkt/followers",
+    "following_url": "https://api.github.com/users/defunkt/following{/other_user}",
+    "gists_url": "https://api.github.com/users/defunkt/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/defunkt/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/defunkt/subscriptions",
+    "organizations_url": "https://api.github.com/users/defunkt/orgs",
+    "repos_url": "https://api.github.com/users/defunkt/repos",
+    "events_url": "https://api.github.com/users/defunkt/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/defunkt/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  ...
+]
+```
+github cli可以方便我们对账户和仓库执行一些自动化的操作。在ppw创建的项目中，有一个名为repo.sh的脚本，这里面就使用了github cli。
+
+当ppw生成了框架代码之后，我们需要把它提交到github上去。由于此时github上还没有这个仓库，我们必须等用户手动创建，因此这个提交也没法自动化。当我们使用了github cli之后，这个问题就解决了：
+```bash {class='line-numbers'}
+# 调用gh命令创建仓库
+$ gh repo create sample --public
+
+# 由于仓库是gh创建的，因为远程服务器的url也就确定下来了，关联这一步也就自动化了
+$ git remote add origin git@github.com:zillionare/sample.git
+```
+
+另外，通过github的web界面来设置仓库的一些机密信息比较繁琐，耗时较长。假设你管理了10个以上的仓库，还要定期更换这些机密信息的话就更是如此，我们可以通过gh secret命令来解决这个问题。下面的代码摘录自repo.sh：
+```bash {class='line-numbers'}
+gh secret set PERSONAL_TOKEN --body $GH_TOKEN
+gh secret set PYPI_API_TOKEN --body $PYPI_API_TOKEN
+gh secret set TEST_PYPI_API_TOKEN --body $TEST_PYPI_API_TOKEN
+
+gh secret set BUILD_NOTIFY_MAIL_SERVER --body $BUILD_NOTIFY_MAIL_SERVER
+gh secret set BUILD_NOTIFY_MAIL_PORT --body $BUILD_NOTIFY_MAIL_PORT
+gh secret set BUILD_NOTIFY_MAIL_FROM --body $BUILD_NOTIFY_MAIL_FROM
+gh secret set BUILD_NOTIFY_MAIL_PASSWORD --body $BUILD_NOTIFY_MAIL_PASSWORD
+gh secret set BUILD_NOTIFY_MAIL_RCPT --body $BUILD_NOTIFY_MAIL_RCPT
+```
+在ppw生成的项目中, 当CI运行时，需要有pypi和test.pypi的API key, 发布文档时需要github的API key, 以及CI完成时，需要发送邮件通知，这需要配置相关服务器信息及发件人、收件人信息。
+
+通过上述脚本，我们把当前宿主机上的环境变量导入到了仓库的机密信息中，这样在github actions中就可以直接使用了。这个过程中，我们既保证了方便，又保证了机密信息的安全性。
