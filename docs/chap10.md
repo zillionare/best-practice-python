@@ -133,19 +133,16 @@ rst中的表格功能比较强大，支持网格表格、简单表格、csv表�
 +------------------------+------------+---------------------+
 ```
 这样制表显然十分繁琐，不易维护。我们也可以用指令语法来从csv数据制作表格，比如：
-```rst {class='line-numbers'}
-.. csv-table:: Frozen Delights!
-    :header: "Treat", "Quantity", "Description"
-    :widths: 15, 10, 30
+``` {class='line-numbers'}
+.. csv-table:: 物理内存需求表
+    :header: "行情数据","记录数（每品种）","时长（年）","物理内存（GB)"
+    :widths: 12, 15, 10, 15
 
-    "Albatross", 2.99, "On a stick!"
-    "Crunchy Frog", 1.49, "If we took the bones out, it wouldn't be
-    crunchy, now would it?"
-    "Gannet Ripple", 1.99, "On a stick!"
+    日线,1000,4,0.75
 ```
-上面的示例中，1~3是指令，5~8是csv数据，最终我们会得到如下表格：
-![](https://images.jieyu.ai/images/202301/20230126224448.png)
+这里1-3行是指令，第5行则是csv数据。上面的语法将生成下面的表格:
 
+![](http://images.jieyu.ai/images/12/20201207190429.png)
 #### 图片
 在文档中插入图片要使用指令语法，例如：
 ```
@@ -178,12 +175,12 @@ rst中的表格功能比较强大，支持网格表格、简单表格、csv表�
    Beware killer rabbits!
 ```
 显示如下：
-![](https://images.jieyu.ai/images/202301/20230126230014.png)
+![](https://images.jieyu.ai/images/202301/20230126230014.png "警示文本")
 
 此外还有一些常用的语法，比如对字体加粗、斜体显示，显示数学公式、上下标、脚注、引用和超链接等。要介绍完全部rst的语法，已经远远超出了本书的范围，感兴趣的读者可以参考[官方文档](https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)。关于rst，我们要记住的是，它提供了非常强大的排版功能，不仅可以用来写在线文档，还可以直接付印成书。
 
 ### Markdown
-Markdown的起源受到html的影响。HTML是一种具有强大表现力的markup语言，但是过于复杂，不利于文档的维护。Markdown的作者John Gruber希望能够用一种精减语法来书写文档，这种语法可以转换成HTML，但是简单易用，因此取名为Markdown。
+Markdown的起源受到html的影响。HTML是一种具有强大表现力的标记（markup）语言，但是过于复杂，不利于文档的维护。Markdown的作者John Gruber希望能够用一种精减的语法来书写文档，这种语法可以转换成HTML，但是简单易用，因此取名为Markdown（与markup对应）
 
 Markdown的语法非常简单，只有几十个规则，但也支持我们在rst里介绍的那些基础功能，比如多级标题、列表、图片、表格、代码块、超链接、脚注、数学公式等。
 
@@ -208,7 +205,23 @@ Markdown的列表与rst差不多，无序列表使用'-'或者'*'引起，有序
 3. 有序列表2
 ```
 在上面的示例中，我们给有序列表的序号并不是连续的，这是允许的，markdown的渲染工具会自动帮我们调整
+#### 表格
+markdown的表格语法还是稍嫌复杂：
+```
+|Header1 |Header2  | Header3|
+:--- | :---: | ---:|
+|data1|data2|data3|
+|data11|data12|data13|
+```
+语法的特点是，表格的每一行都是以'|'开头和结尾的，每一列的数据之间用'|'分隔，表头和表格的分隔线使用'-'表示，表头和表格的分隔线的数量可以不一致，但是必须大于等于表格的列数。表格的渲染效果如下：
+|Header1 |Header2  | Header3|
+:--- | :---: | ---:|
+|data1|data2|data3|
+|data11|data12|data13|
 
+注意上述表格语法中的冒号。它并不是必须的，在这里的作用是指示该列的对齐方式。当在分隔线的左侧使用一个冒号时，该列为左对齐；如果在分隔线的右侧使用一个冒号时，该列为右对齐；如果在两端同时使用冒号，则该列为居中对齐。在不使用冒号的情况下，该列为左对齐。
+
+markdown没有象rst那样的指令语法，因此对超出核心语法的特性，扩展并不容易。作为一个例子，在markdown中不能直接将csv数据渲染为表格。如果我们对在markdown中制作表格感到困难，一般的作法是通过编辑器的扩展功能，将csv数据转换为markdown的表格。对vscode的用户而言，我们可以使用相关扩展来实现这一功能。
 #### 插入链接
 在markdown中插入链接更简单，语法如下：
 ```
@@ -216,12 +229,26 @@ Markdown的列表与rst差不多，无序列表使用'-'或者'*'引起，有序
 ```
 即由符号[]()定义了一个链接，其中[]中是链接的显示文字，()中则是链接的target。
 #### 插入图片
-插入图片的语法与插入链接类似，只是在前面多了一个'!'，例如：
+插入图片的语法与插入链接类似，它的语法是：
 ```
-![](https://images.jieyu.ai/images/202301/20230126230014.png)
+![alt text](image url "image Title")
 ```
-此时'[]'中是不需要有文字的。
+与链接不同的是，它必须有一个感叹号引起。'[]'中的文字此时成为图像的替代文本，屏幕阅读工具用它来向视觉障碍读者描述图像。'()'中的文字则是图像的URL，可以是相对路径，也可以是绝对路径。最后，还可以加上一个双引号，其中的文字则是图像的标题，鼠标悬停在图像上时会显示出来。
 
+下面是一个示例：
+```
+![这是一段警示文本](img/markdown.png)
+```
+生成效果如下：
+![这是一段警示文本](https://images.jieyu.ai/images/202301/20230127084420.png 
+ "警示文本示例")
+
+ markdown核心语法不能象rst那样支持指定宽度和高度、对齐方式等。如果我们有这些需要，一般有两种方式可以解决。一是可能您使用的markdown编辑器支持扩展语法；二是我们可以使用html语法来实现，例如：
+ ```
+ <img src="img/markdown.png" width="30%">
+ ```
+ 效果如下图所示：
+  <img src="https://images.jieyu.ai/images/202301/20230127084420.png" width="30%">
 #### 代码块
 我们使用三个反引号('`')来定义代码块，例如：
 ```txt {class='line-numbers'}
@@ -251,57 +278,17 @@ markdown本身不支持警示文本，但一些常用的工具已经对此进行
 
 行内数字公式使用一对'\$'包含，例如：\$x\^2\$，效果如下：$x^2$。这里我们还演示了上标，即使用'^'。如果是要生成下标，则可以用'_'，例如：\$x\_2\$，效果如下：$x_2$。
 
-## 两种主要的文档构建工具
-### Sphinx
-### Mkdocs
-## 使用Sphinx构建文档
-### 文档结构与主控文档
-### 工具链
-### 混合使用Markdown
-### 使用Mkdocs构建文档
-### 文档结构
-### API文档
-## 文档在线托管服务
-### Read the Docs
-### Github Pages
-## 案例：基于Mkdocs的文档构建及发布
+我们在介绍插入图片的语法时提到，有一些特性，比如指定宽度，markdown核心语法不支持，我们可以使用html语法。这不仅仅对图片适用。html语法支持上下标，因此，我们也可以用html语法来重写上面的例子:
 
+上下标可以使用html的\<sup\>和\<sub\>标签来实现，比如上标：x\<sup\>2\</sup\>，效果如下：x<sup>2</sup>。下标一例：H\<sub\>2\</sub\>O，效果如下：H<sub>2</sub>O。
 
+## Sphinx vs Mkdocs, 两种主要的构建工具
 
-## 1.2. 文档格式
+rst和markdown都是伟大的发明，它使得我们可以基本上基于文本文件格式来保存信息，即使不依赖任何商业软件，我们也可以编辑、阅读这些文档。我们试想，如果我们把大量的文档信息保存在word这种商业软件中，如果有一天商业软件终止服务、或者提高收费标准，这种技术锁定效应将带来多大的迁移成本？！
 
+但是，rst和markdown毕竟只是简单文本格式，直接阅读，视觉效果并不好。此外，大型文档往往由多篇子文档组成，因此我们也需要把文档组织起来的工具，以便向读者提供目录和导航等功能。这就引出了文档构建工具的需要。
 
-
-我们推荐使用Markdown来作为主要的文档格式，原因是使用Markdown可以节省较多的时间；在Markdown标准语法无法涵盖的一些特殊情况上，可以使用插件或者其它变通方法来补救。
-
-这里我们通过几个例子来比较一下两种格式上的区别。
-在Markdown中，标题使用 `#`来引起，有几个`#`，就意味着是几级标题，非常简明，完全没有上述烦恼。
-
-当然rst也有Markdown力有不逮的地方。它强大的指令(directive)语法使之很容易扩展。Sphinx利用这一特性扩展出很多高效的指令，比如csv-table：
-
-```
-.. csv-table:: 物理内存需求表
-    :header: "行情数据","记录数（每品种）","时长（年）","物理内存（GB)"
-    :widths: 12, 15, 10, 15
-
-    日线,1000,4,0.75
-
-```
-上面的语法将生成下面的表格:
-
-![](http://images.jieyu.ai/images/12/20201207190429.png)
-
-如果你使用过Markdown的表格（实际上Markdown标准语法并不支持表格，表格已经是扩展的语法，但已成为事实上的标准，几乎所有的Markdown viewer都会支持），你就会了解在Markdown中画表格是多么繁琐的一件事！不过，如果你使用vscode，那么也可以用扩展可以将csv数据转换成为Markdown支持的表格格式。下面这个表格，就是先输入csv数据，再转换成Markdown表格的：
-
-下表列出了两种语法各自的能力特征。对rst来说，一些通过Sphinx支持的功能基本上已成事实标准，多数能渲染rst的工具也支持
-
-![](http://images.jieyu.ai/images/12/20201207190709.png)
-
-## 1.3. Sphinx vs Mkdocs, 两种主要的构建工具
-
-rst和Markdown为我们提供了可靠的（即无须任何工具也可阅读）、但是降了级的阅读体验。所以，我们需要文档构建工具，将以这些文档格式写成的文件，转换成富文本格式的文件，比如html，pdf等。此外，在一个较大的工程中，我们的文档也必然是分成多个文档来组织，而决不会是一个单一文档。如何将多个文档统合起来，使之呈现一定的结构，文档各部分能够相互链接，也需要构建工具来实现。
-
-Sphinx和Mkdocs就是两种比较重要的文档构建工具。
+文档构建工具的主要作用，就是将散落在不同地方的文档统合起来，呈现一定的结构，文档各部分能够相互链接和导航，并且将简单文本格式渲染成更加美观的富文本格式。在Python的世界中，最重要的文档构建工具就是Sphinx和Mkdocs。
 
 [Sphinx](https://www.sphinx-doc.org/en/master/)是始于2008年5月的一种文档构建工具，当前版本3.3。其主要功能是通过主控文档来统合各个子文档，生成文档结构(toctree)，自动生成API文档，实现文档内及跨文、跨项目的引用，以及界面主题功能。
 
@@ -309,22 +296,18 @@ Sphinx和Mkdocs就是两种比较重要的文档构建工具。
 
 [intersphinx](https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html)是其特色功能，它允许你在两个不同的文档中相互链接。比如，你在自己的项目中重载了Python标准库中的某个实现，自己提供了新增实现的这部分文档，但对于未做改变的那部分功能，你并不希望将它的帮助文档重写一遍，这样就有了链接到Python标准库文档的需求。比如，通过intersphinx，你可以使用 _*:py:class:\`zipfile.ZipFile\`*_ 来跳转到Python标准库的`ZipFile`类的文档上。虽然也可以直接使用一个外部链接来实现这样的跳转，但毫无疑问，intersphinx的语法更为简洁。
 
-[Mkdocs](https://www.mkdocs.or)出现于2014年，当前版本1.1。其主要功能除了构建项目文档外，还可以用来构建静态站点。在构建项目文档方面，它主要提供文档统合功能（包括 toctree）和界面主题，其它功能（比如API文档）要依靠插件来实现。与Sphinx相比，它提供了**更好的实时预览能力**。Sphinx自身没有提供这一能力，有一些第三方工具（比如vscode中的rst插件，提供了单篇文章的预览功能。很显然Mkdocs无法提供intersphinx的功能，但在项目内的相互引用是完全满足要求的。
+[Mkdocs](https://www.mkdocs.or)出现于2014年，当前版本1.4。其主要功能除了构建项目文档外，还可以用来构建静态站点。在构建项目文档方面，它主要提供文档统合功能（包括 toctree）和界面主题，其它功能（比如API文档）要依靠插件来实现。与Sphinx相比，它提供了**更好的实时预览能力**。Sphinx自身没有提供这一能力，有一些第三方工具（比如vscode中的rst插件，提供了单篇文章的预览功能。由于缺乏指令扩展，很显然Mkdocs无法提供intersphinx的功能，但在项目内的相互引用是完全满足要求的。
 
-这两种文档构建工具都得到了[readthedocs](https://readthedocs.org/)的支持。在多数情况下，我们更推荐使用mkdocs及Markdown语法。
+这两种文档构建工具都得到了文档托管平台[readthedocs](https://readthedocs.org/)和git pages的支持。在多数情况下，作者更推荐使用mkdocs及Markdown语法，这也是ppw正在使用的技术路线。
+## 使用Sphinx构建文档
+### 初始化文档结构
 
-# 3. 使用Sphinx构建文档
-
-## 3.1. 初始化文档结构
-
-您可以使用前面提到的cookiecutter-pypackage来生成项目的框架。它生成的项目框架就包含了Sphinx构建工具及相关配置。
-
-如果您没有使用框架代码生成工具，也可以在安装sphinx之后，运行下面的代码来初始化文档:
+在安装sphinx之后，通过下面的命令来初始化文档:
 
 ``` bash
 pip install sphinx 
 
-# exec this in your project root folder!!!
+# 下面的命令只能在你的项目根目录下执行！
 shpinx-quickstart
 ```
 Sphinx会提示你输入项目名称、作者、版本等信息，最终生成docs目录及以下文件：
@@ -342,7 +325,7 @@ docs/_templates
 
 现在运行 ``make html``就可以生成一份文档。你可以通过浏览器打开``_build/index.html``来阅读，也可以通过``python -m http.server -d _build/index``,然后再通过浏览器来访问阅读。
 
-按照Python的最佳实践，我们一般把README.rst, AUTHOR.rst, HISTORY.rst放在项目的根目录下，即与Sphinx的文档根目录同级。而按Sphinx的要求，文档又必须放置在docs目录下。我们当然不想同样的文件，在两个目录下各放置一份拷贝。为解决这个问题，我们一般使用``include``语法，来将父目录中的同名文件包含进来。比如上述index.rst中的history文件：
+我们一般把README.rst, AUTHOR.rst, HISTORY.rst放在项目的根目录下，即与Sphinx的文档根目录同级。而按Sphinx的要求，文档又必须放置在docs目录下。我们当然不想同样的文件，在两个目录下各放置一份拷贝。为解决这个问题，我们一般使用``include``语法，来将父目录中的同名文件包含进来。比如上述index.rst中的history文件：
 ```
 # content of docs/history.rst
 
@@ -350,7 +333,7 @@ docs/_templates
 ``` 
 这样就避免了同一份文件，出现多个拷贝的情况。
 
-## 3.2. 主控文档和工具链
+### 主控文档和工具链
 
 如果您是通过Sphinx-quickstart来进行初始化的，它的向导会引您进行一些工具链的配置，比如象autodoc(用于生成API文档)。为了完备起见，我们还是再提一下这个话题。
 
@@ -380,6 +363,8 @@ Indices and tables
 
 Sphinx通过主控文档，把单个文档串联起来。 上面的toctree中的每一个入口（比如deployment)，都对应到一篇文档（比如deployment.rst)。此外，还包含了索引和搜索入口。
 
+象deployment, usage这样的文档，我们依照rst的语法来撰写就好，这部分我们已经介绍过了。这里我们需要特别介绍的是api文档，它是通过autodoc来生成的，有自己的特殊语法要求。
+
 ### 3.2.1. 生成API文档
 
 要自动生成API文档，我们需要配置autodoc扩展。Sphinx的配置文档是docs/conf.py：
@@ -397,9 +382,9 @@ extensions = [
   'sphinx.ext.doctest'
 ]
 ```
-注意到在``index.rst``中我们声明了对``api``文档的引用。这个文档用作autodoc的文档入口，其语法入下：
+注意到在``index.rst``中我们声明了对``api``文档的引用。这个文档用作autodoc的文档入口。下面是api.rst的一例：
 
-```
+``` {class='line-numbers'}
 Crawler Python API
 ==================
 
@@ -423,14 +408,22 @@ crawler.utils
 
 .. doctest::
 
-	>>> should_ignore(['blog/$'], 'http://ericholscher.com/blog/')
+	>>> should_ignore(['blog/$'], 'http://example.com/blog/')
 	True
 ```
-这里假设了一个名为Crawler的程序，它共有``main``和``util``两个模块。我们通过``.. automodule:: crawler.main``将``main``模块引入，并使用``..doctest::``来进行测试。
+这里虚构了一个名为Crawler的程序，它共有``main``和``util``两个模块。
 
-在Sphinx进行文档构建时，就会生成这两个模块对应的API文档，并将上述入口绑定到正确的链接上。
+在一篇文档里，普通rst语法、autodoc指令和doctest指令是可以相互混用的，在上面的文档里，我们看到了一些已经熟悉的rst语法，比如一级标题"Crawler Python API"和二级标题"crawler.main"等。此外，我们还看到了autodoc的一些指令和doctest的指令。
 
-Sphinx的功能比较强大，因而其学习曲线也比较陡峭。在学习时，可以将其[渲染好的教程](https://sphinx-tutorial.readthedocs.io/)与[教程的源码](https://github.com/ericholscher/sphinx-tutorial/)对照起来看，这样更容易理解。
+我们通过扩展指令`automodule`将``crawler.main``模块引入, 这样autodoc就会自动提取该模块的docstring。注意这里我们还通过":members:"选项进行了筛选，即将导致main模块中的成员（递归）。我们还可以通过":undoc-members:"来排除那些不进行文档注释的成员。
+
+可以使用的指令除了automodule之外，还有autoclass, autodata, autoattribute, autofunction, automethod等。这些指令的用法与automodule类似，只是它们分别用于类，数据，属性，函数和方法的文档生成。
+
+第16行起，这里混杂了autodoc与doctest指令。testsetup指令用于在doctest中进行测试前的准备工作，这里我们将crawler.utils模块导入。doctest指令用于执行doctest，这里我们执行了一个测试用例，测试了crawler.utils.should_ignore函数的功能。
+
+最后，在Sphinx进行文档构建时，就会在解析api.rst文档时，依次执行autodoc和doctest指令，将相应的文档插入到api.rst文档中。
+
+Sphinx的功能比较强大，因而其学习曲线也比较陡峭。在学习时，可以将其[sphinx教程](https://sphinx-tutorial.readthedocs.io/)与[sphinx教程的源码](https://github.com/ericholscher/sphinx-tutorial/)对照起来看，这样更容易理解。
 
 使用Autodoc生成的API文档，需要我们逐个手动添加入口，就象上面的``.. automodules:: cralwer.main``那样。对比较大的工程，这样无疑会引入一定的工作量。Sphinx的官方推荐使用[sphinx.ext.autosummary](https://www.sphinx-doc.org/en/master/usage/extensions/autosummary.html)扩展来自动化这一任务。前面已经提到，在较早的时候，Sphinx还有一个cli工具，叫sphinx-apidoc可以用来完成这一任务。但根据[这篇文章](https://romanvm.pythonanywhere.com/post/autodocumenting-your-python-code-sphinx-part-ii-6/)，我们应该转而使用``sphinx-ext.autosummary``这个扩展。
 
@@ -438,7 +431,76 @@ Sphinx的功能比较强大，因而其学习曲线也比较陡峭。在学习�
 
 ### 3.2.2. docstring的样式
 
-如果不做任何配置，Sphinx会使用rst的docstring样式。为简洁起见，我们一般使用google style(最简)，或者numpy style(适用于较长的docstring)。
+如果不做任何配置，Sphinx会使用rst的docstring样式。下面是rst风格的docstring示例:
+``` {class='line-numbers'}
+def abc(a: int, c = [1,2]):
+    """_summary_
+
+    :param a: _description_
+    :type a: int
+    :param c: _description_, defaults to [1,2]
+    :type c: list, optional
+    :raises AssertionError: _description_
+    :return: _description_
+    :rtype: _type_
+    """
+    if a > 10:
+        raise AssertionError("a is more than 10")
+
+    return c
+```
+rst风格的docstring显得过于冗长。为简洁起见，我们一般使用google style(最简)，或者numpy style(适用于较长的docstring)。
+
+下面是google style的docstring示例:
+``` {class='line-numbers'}
+def abc(a: int, c = [1,2]):
+    """_summary_
+
+    Args:
+        a (int): _description_
+        c (list, optional): _description_. Defaults to [1,2].
+
+    Raises:
+        AssertionError: _description_
+
+    Returns:
+        _type_: _description_
+    """
+    if a > 10:
+        raise AssertionError("a is more than 10")
+
+    return c
+```
+显然，google style使用的字数更少，视觉上更简洁。google style也是可罕学院（khan academy）的官方推荐风格。
+
+我们再来看看numpy风格的docstring:
+``` {class='line-numbers'}
+def abc(a: int, c = [1,2]):
+    """_summary_
+
+    Parameters
+    ----------
+    a : int
+        _description_
+    c : list, optional
+        _description_, by default [1,2]
+
+    Returns
+    -------
+    _type_
+        _description_
+
+    Raises
+    ------
+    AssertionError
+        _description_
+    """
+    if a > 10:
+        raise AssertionError("a is more than 10")
+
+    return c
+```
+这种风格也比google style要繁复许多。
 
 要在文档中使用这两种样式的docstring，你需要启用[Napolen](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html)扩展。关于这两种样式的示例，我觉得最好的例子来自于[MkApi的文档](https://mkapi.daizutabi.net/examples/google_style/)，这里不再赘述。
 
@@ -598,3 +660,13 @@ mkdocstrings
 
 
 
+### 文档结构与主控文档
+### 工具链
+### 混合使用Markdown
+### 使用Mkdocs构建文档
+### 文档结构
+### API文档
+## 文档在线托管服务
+### Read the Docs
+### Github Pages
+## 案例：基于Mkdocs的文档构建及发布
