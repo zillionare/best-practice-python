@@ -1,4 +1,3 @@
-# 撰写技术文档
 所有好的产品都应该有一份简洁易读的使用说明书，除了苹果。苹果用户天生就知道如何使用他们的产品，因此完全不需要文档。这是真的，几乎所有的苹果产品，都没有用户说明书。
 
 但是对于软件来说，其复杂性往往要求必须有与之配套的详尽的技术文档，使用者才好上手。即使是开源产品，人们通常也是首先借助产品的技术文档快速上手。在一个速食时代，如果不是逼不得已，谁有时间去一行一行地看代码呢？
@@ -21,7 +20,7 @@
 2. 文档构建的两大门派
 3. 如何自动生成API文档
 4. 如何使用git pages进行文档托管
-## 技术文档的组成
+# 1. 技术文档的组成
 一份技术文档通常有两个来源：一是我们在写代码的过程中按照一定风格提供的注释，通过工具将其提取出来形成的所谓API文档，这部分文档深入到细节之中；二是在此之外，我们特别撰写的帮助文档，相比API文档，它们更加宏观概要，涵盖了API文档中不适合提及的部分，比如整个软件的安装指南、设计理念与原则、License信息、版本历史、涵盖全局的示例等等。
 
 时至今日，在Python世界里，大致有两种流行的技术文档构建技术栈，即sphinx和mkdocs。下面的基于sphinx技术栈构建文档的一份文件清单：
@@ -63,11 +62,11 @@
 └── mkdocs.yml
 ```
 可以看出，这条技术路线使用markdown的文件格式，由mkdocs.yml提供主控文档和配置，除此之外，并不需要别的配置。
-## 两种主要的文档格式
+# 2. 两种主要的文档格式
 技术文档一般使用纯文本格式的超集来书写。常见的格式有[reStructuredText](https://docutils.sourceforge.io/rst.html)(以下称为rst)和[Markdown](https://zh.wikipedia.org/zh-hans/Markdown)。前者历史更为久远，语法复杂，但功能强大；后者比较新颖，语法十分简洁，在一些第三方插件的支持下，功能上也已逐渐追赶上来。
-### reStructured Text
+## 2.1. reStructured Text
 这一节我们简要地介绍reStructured Text的常用语法。
-#### 章节标题(section)
+### 2.1.1. 章节标题(section)
 在rst中，章节标题是文本加上下缀标点(限#=-~:'"^_*+<>`)。
 
 ```rst
@@ -101,7 +100,7 @@ restructured text example
 这种语法的繁琐和难用之外在于，首先标题字符数与下面的标点符号数必须匹配。如果使用了非等宽字符，或者使用了中文标题，匹配将十分困难，您可以试下上面的例子。
 
 除了在输入上不够简洁，易出错（主要是指数量匹配）外，标题的级别与符号无关，只与符号出现的顺序有关，也是容易出错的地方。使用者必须记住每个符号与标题级别的对应关系，否则生成的文档就会出现标题级别错误。
-#### 列表(list)
+### 2.1.2. 列表(list)
 在rst中，使用*,-,+做项目符号构成无序列表；有序列表则以数字、字母、罗马数字加上'.'或者括号来构成。请见以下示例：
 ```
 *   无序 1
@@ -116,7 +115,7 @@ c.  有序 three
 ```
 示例中，有序列表可以使用右括号，或者完全包围的括号，但不能只使用左括号。
 
-#### 表格
+### 2.1.3. 表格
 rst中的表格功能比较强大，支持网格表格、简单表格、csv表格和list表格。网格表格就是使用一些符号来构成表格，如下所示：
 ```txt
 +------------------------+------------+----------+----------+
@@ -143,7 +142,7 @@ rst中的表格功能比较强大，支持网格表格、简单表格、csv表�
 这里1-3行是指令，第5行则是csv数据。上面的语法将生成下面的表格:
 
 ![](http://images.jieyu.ai/images/12/20201207190429.png)
-#### 图片
+### 2.1.4. 图片
 在文档中插入图片要使用指令语法，例如：
 ```
 .. image:: img/p0.jpg
@@ -155,7 +154,7 @@ rst中的表格功能比较强大，支持网格表格、简单表格、csv表�
 ```
 示例在文档中插入了img目录下的p0.jpg图片，并且显示为400px高，600px宽，缩放比例为50%，图片居中对齐，点击图片会跳转到指定的链接。
 
-#### 代码块
+### 2.1.5. 代码块
 在文档中插入代码块要使用指令语法，例如：
 ```
 .. code:: python
@@ -165,7 +164,7 @@ rst中的表格功能比较强大，支持网格表格、简单表格、csv表�
       print 8/2
 ```
 
-#### 警示文本
+### 2.1.6. 警示文本
 警示文本通常用于强调一些重要的信息，比如提示错误(error)、重要(important)、小贴士(tip)、警告(warning)、注释(note)等。
 
 同样我们用指令语法来显示警示文本，例如:
@@ -179,13 +178,13 @@ rst中的表格功能比较强大，支持网格表格、简单表格、csv表�
 
 此外还有一些常用的语法，比如对字体加粗、斜体显示，显示数学公式、上下标、脚注、引用和超链接等。要介绍完全部rst的语法，已经远远超出了本书的范围，感兴趣的读者可以参考[官方文档](https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)。关于rst，我们要记住的是，它提供了非常强大的排版功能，不仅可以用来写在线文档，还可以直接付印成书。
 
-### Markdown
+## 2.2. Markdown
 Markdown的起源受到html的影响。HTML是一种具有强大表现力的标记（markup）语言，但是过于复杂，不利于文档的维护。Markdown的作者John Gruber希望能够用一种精减的语法来书写文档，这种语法可以转换成HTML，但是简单易用，因此取名为Markdown（与markup对应）
 
 Markdown的语法非常简单，只有几十个规则，但也支持我们在rst里介绍的那些基础功能，比如多级标题、列表、图片、表格、代码块、超链接、脚注、数学公式等。
 
-#### 章节标题
-Markdown的章节标题使用#来表示，有多少个‘#’就表示多少级标题，例如：
+### 2.2.1. 章节标题
+Markdown的章节标题使用'#'来表示，有多少个‘#’就表示多少级标题，例如：
 ```txt
 # 1. 这是一级标题
 ## 1.1 这是二级标题
@@ -195,9 +194,9 @@ Markdown的章节标题使用#来表示，有多少个‘#’就表示多少级�
 ```
 可以看出，这比rst要容易不少。在示例中，我们给标题进行了手工编号，不过这并不是必须的，markdown的编辑工具和渲染工具往往都能自动帮我们补齐（或者渲染出来）。
 
-#### 列表
+### 2.2.2. 列表
 Markdown的列表与rst差不多，无序列表使用'-'或者'*'引起，有序列表使用数字加'.'引起，例如：
-```markdown {class='line-numbers'}
+``` {linenums="0"}
 - 无序列表1
 - 无序列表2
 
@@ -205,7 +204,7 @@ Markdown的列表与rst差不多，无序列表使用'-'或者'*'引起，有序
 3. 有序列表2
 ```
 在上面的示例中，我们给有序列表的序号并不是连续的，这是允许的，markdown的渲染工具会自动帮我们调整
-#### 表格
+### 2.2.3. 表格
 markdown的表格语法还是稍嫌复杂：
 ```
 |Header1 |Header2  | Header3|
@@ -222,13 +221,13 @@ markdown的表格语法还是稍嫌复杂：
 注意上述表格语法中的冒号。它并不是必须的，在这里的作用是指示该列的对齐方式。当在分隔线的左侧使用一个冒号时，该列为左对齐；如果在分隔线的右侧使用一个冒号时，该列为右对齐；如果在两端同时使用冒号，则该列为居中对齐。在不使用冒号的情况下，该列为左对齐。
 
 markdown没有象rst那样的指令语法，因此对超出核心语法的特性，扩展并不容易。作为一个例子，在markdown中不能直接将csv数据渲染为表格。如果我们对在markdown中制作表格感到困难，一般的作法是通过编辑器的扩展功能，将csv数据转换为markdown的表格。对vscode的用户而言，我们可以使用相关扩展来实现这一功能。
-#### 插入链接
+### 2.2.4. 插入链接
 在markdown中插入链接更简单，语法如下：
 ```
 [链接名](https://example.com)
 ```
 即由符号[]()定义了一个链接，其中[]中是链接的显示文字，()中则是链接的target。
-#### 插入图片
+### 2.2.5. 插入图片
 插入图片的语法与插入链接类似，它的语法是：
 ```
 ![alt text](image url "image Title")
@@ -249,7 +248,7 @@ markdown没有象rst那样的指令语法，因此对超出核心语法的特性
  ```
  效果如下图所示：
   <img src="https://images.jieyu.ai/images/202301/20230127084420.png" width="30%">
-#### 代码块
+### 2.2.6. 代码块
 我们使用三个反引号('`')来定义代码块，例如：
 ```txt {class='line-numbers'}
     ```python
@@ -262,7 +261,7 @@ markdown没有象rst那样的指令语法，因此对超出核心语法的特性
     def foo() -> None:
         print('hello world')
 ```
-#### 警示文本
+### 2.2.7. 警示文本
 markdown本身不支持警示文本，但一些常用的工具已经对此进行了扩展。在markdown中，我们可以用三个感叹号来引起警示文本，其类型则由感叹号后面的文字来决定，比如：
 ```
     !!! quote
@@ -273,7 +272,7 @@ markdown本身不支持警示文本，但一些常用的工具已经对此进行
 !!! quote
     这里引用名人名言
 
-#### 其它语法
+### 2.2.8. 其它语法
 两个'\*\*'之间的文本将显示为加粗，两个'\_'之间的文本将显示为 _斜体_（也可以使用两个'\*'包含文本）。如果文本被包含在两个'\*\*\*'，则文本显示 ***既加粗，也显示为斜体***。
 
 行内数字公式使用一对'\$'包含，例如：\$x\^2\$，效果如下：$x^2$。这里我们还演示了上标，即使用'^'。如果是要生成下标，则可以用'_'，例如：\$x\_2\$，效果如下：$x_2$。
@@ -282,7 +281,7 @@ markdown本身不支持警示文本，但一些常用的工具已经对此进行
 
 上下标可以使用html的\<sup\>和\<sub\>标签来实现，比如上标：x\<sup\>2\</sup\>，效果如下：x<sup>2</sup>。下标一例：H\<sub\>2\</sub\>O，效果如下：H<sub>2</sub>O。
 
-## Sphinx vs Mkdocs, 两种主要的构建工具
+# 3. Sphinx vs Mkdocs, 两种主要的构建工具
 
 rst和markdown都是伟大的发明，它使得我们可以基本上基于文本文件格式来保存信息，即使不依赖任何商业软件，我们也可以编辑、阅读这些文档。我们试想，如果我们把大量的文档信息保存在word这种商业软件中，如果有一天商业软件终止服务、或者提高收费标准，这种技术锁定效应将带来多大的迁移成本？！
 
@@ -299,8 +298,8 @@ rst和markdown都是伟大的发明，它使得我们可以基本上基于文本
 [Mkdocs](https://www.mkdocs.or)出现于2014年，当前版本1.4。其主要功能除了构建项目文档外，还可以用来构建静态站点。在构建项目文档方面，它主要提供文档统合功能（包括 toctree）和界面主题，其它功能（比如API文档）要依靠插件来实现。与Sphinx相比，它提供了**更好的实时预览能力**。Sphinx自身没有提供这一能力，有一些第三方工具（比如vscode中的rst插件，提供了单篇文章的预览功能。由于缺乏指令扩展，很显然Mkdocs无法提供intersphinx的功能，但在项目内的相互引用是完全满足要求的。
 
 这两种文档构建工具都得到了文档托管平台[readthedocs](https://readthedocs.org/)和git pages的支持。在多数情况下，作者更推荐使用mkdocs及Markdown语法，这也是ppw正在使用的技术路线。
-## 使用Sphinx构建文档
-### 初始化文档结构
+# 4. 使用Sphinx构建文档
+## 4.1. 初始化文档结构
 
 在安装sphinx之后，通过下面的命令来初始化文档:
 
@@ -333,7 +332,7 @@ docs/_templates
 ``` 
 这样就避免了同一份文件，出现多个拷贝的情况。
 
-### 主控文档和工具链
+## 4.2. 主控文档和工具链
 
 如果您是通过Sphinx-quickstart来进行初始化的，它的向导会引您进行一些工具链的配置，比如象autodoc(用于生成API文档)。为了完备起见，我们还是再提一下这个话题。
 
@@ -365,7 +364,7 @@ Sphinx通过主控文档，把单个文档串联起来。 上面的toctree中的
 
 象deployment, usage这样的文档，我们依照rst的语法来撰写就好，这部分我们已经介绍过了。这里我们需要特别介绍的是api文档，它是通过autodoc来生成的，有自己的特殊语法要求。
 
-### 3.2.1. 生成API文档
+## 4.3. 生成API文档
 
 要自动生成API文档，我们需要配置autodoc扩展。Sphinx的配置文档是docs/conf.py：
 
@@ -429,7 +428,7 @@ Sphinx的功能比较强大，因而其学习曲线也比较陡峭。在学习�
 
 除此之外，readthedocs官方还开发了一个名为[sphinx-autoapi](https://sphinx-autoapi.readthedocs.io/en/latest/tutorials.html)的扩展。与autosummary不同，它在构建API文档时，并不需要导入我们的项目。目前看，除了不需要导入项目之外，没有人特别提到这个扩展与autosummary相比有何优势，这里也就简单提一下，大家可以持续跟踪这个项目的进展。
 
-### 3.2.2. docstring的样式
+## 4.4. docstring的样式
 
 如果不做任何配置，Sphinx会使用rst的docstring样式。下面是rst风格的docstring示例:
 ``` {class='line-numbers'}
@@ -449,7 +448,7 @@ def abc(a: int, c = [1,2]):
 
     return c
 ```
-rst风格的docstring显得过于冗长。为简洁起见，我们一般使用google style(最简)，或者numpy style(适用于较长的docstring)。
+rst风格的docstring稍显冗长。为简洁起见，我们一般使用google style(最简)，或者numpy style(适用于较长的docstring)。
 
 下面是google style的docstring示例:
 ``` {class='line-numbers'}
@@ -506,7 +505,7 @@ def abc(a: int, c = [1,2]):
 
 注意在Sphinx 3.0以后，如果你使用了Type Hint，则在书写docstring时，不必在参数和返回值上声明类型。扩展将自动为你加上类型声明。
 
-### 3.2.3. 混合使用Markdown
+## 4.5. 混合使用Markdown
 
 多数人会觉得rst的语法过于繁琐，因此很自然地，我们希望部分文档使用Markdown来书写（如果不能全部使用Markdown的话）。大约从2018年起，readthedocs开发了一个名为[recommonmark](https://recommonmark.readthedocs.io/en/latest/)的扩展，以支持在Sphinx构建过程中部分使用Markdown。
 
@@ -515,28 +514,24 @@ def abc(a: int, c = [1,2]):
 在github上还有一个m2r的项目，及其fork m2r2，可以解决这些问题，不过开发者怠于维护，随着Sphinx版本升级，基本上不可用了。
 
 如果您的项目必须使用rst，那么可以在项目中启用recommonmark，实现两种方式的混用。通过在recommonmark中启用一个名为autostructify的子组件，可以将Markdown文件事前编译成rst文件，再传给Sphinx处理；更妙的是，autostructify组件支持在Markdown中嵌入rst语法，所以即使一些功能Markdown不支持，也可以通过局部使用rst来补救。
+# 5. 使用Mkdocs构建文档
 
-如果您对使用Markdown来撰写文档更感兴趣的话，请接着往下看。
-
-# 4. 使用Mkdocs构建文档
-
-Mkdocs支持完全使用Markdown来撰写文档，并且通过社区提供的插件来支持将生成的API文档与手工文档融合。
-
-[mkdocs](https://www.mkdocs.org)自身提供的功能非常简单，粗粗看一眼的话，你会觉得它只能用来构建静态网站，而无法用来撰写项目文档。但社区提供了很多插件，加上本身提供的扩展一起，使得简单快捷地构建项目文档成为可能。
+[mkdocs](https://www.mkdocs.org)是一个高效易用的静态网站构建工具，非常适合构建博客、技术文档站点。它构建的文档站点几乎可以被任意网站托管服务所托管，包括github pages，readthedocs等。它使用Markdown作为文档格式，支持自定义主题，支持实时预览。Mkdocs有强大的自定义功能（通过插件和主题），从而可以生成风格多样的站点。
 
 安装mkdocs之后，可以看一下它的基本命令：
 
 ![](http://images.jieyu.ai/images/12/20201207190824.png)
 
-Mkdocs提供了两种theme，readthedocs和mkdocs。你也可以在社区里寻找更  多的[Theme](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes)。有些主题很适合构建静态网站。[这篇文章](https://www.mkdocs.org/user-guide/writing-your-docs/)给出了一个不错的教程。
+Mkdocs提供了两种开箱即用的主题，readthedocs和mkdocs。你也可以在社区里寻找更多的[主题](https://github.com/mkdocs/mkdocs/wiki/MkDocs-Themes)，比如[material](https://squidfunk.github.io/mkdocs-material/)主题就是当前比较受欢迎的一个主题。有些主题很适合构建静态网站。[这篇文章](https://www.mkdocs.org/user-guide/writing-your-docs/)给出了一个不错的教程。
 
 
-我们来简单地看一下使用：
+首先，我们介绍如何安装。
 
 ```
 pip install --upgrade pip
 pip install mkdocs
-pip install mkdocs-material # 安装material主题，可忽略。技术文档一般使用自带的readthedocs主题
+# 安装material主题。如果忽略，将使用readthedocs默认主题。
+pip install mkdocs-material 
 
 # 创建文档结构，在项目根目录下执行
 mkdocs new PROJECT_NAME
@@ -546,34 +541,146 @@ cd PROJECT_NAME
 现在，在项目根目录下应该多了一个docs目录，和一个名为mkdocs.yaml的文件。docs目录下还有一个名为index.md的文件。如果此时运行``mkdocs serve -a 0.0.0.0:8000``,在浏览器中打开，你会看到如下图所示界面：
 
 ![](http://images.jieyu.ai/images/12/mkdocs_new.png)
+!!! Tip
+    请注意，Mkdocs提供的是实时预览文档，而且有很快的响应速度。因此在您编写文档时，可以打开浏览器，实时预览文档的效果。
 
-***Note：***
-  请注意，Mkdocs提供的是实时预览文档，而且有很快的响应速度。
+下面，我们通过`ppw`生成的mkdocs.yml文件的例子来看看mkdocs的配置文件语法。
 
-现在来看一看mkdocs.yaml的内容:
+```yaml
+site_name: sample
+site_url: http://www.sample.com
+repo_url: "https://github.com/zillionare/sample"
+repo_name: sample
+site_description: A great mkdocs sample site
+site_author: name of the author
 
+nav:
+- home: index.md
+- usage: usage.md
+- modules: api.md
+theme:
+name: material
+language: en
+logo: assets/logo.png
+favicon: assets/favicon.ico
+markdown_extensions:
+- pymdownx.emoji:
+    emoji_index: !!python/name:materialx.emoji.twemoji
+    emoji_generator: !!python/name:materialx.emoji.to_svg
+- pymdownx.critic
+- pymdownx.caret
+- pymdownx.mark
+- pymdownx.tilde
+- pymdownx.tabbed
+- attr_list
+- pymdownx.arithmatex:
+    generic: true
+- pymdownx.highlight:
+    linenums: true
+- pymdownx.superfences
+- pymdownx.details
+- admonition
+- toc:
+    baselevel: 2
+    permalink: true
+    slugify: !!python/name:pymdownx.slugs.uslugify
+- meta
+plugins:
+- include-markdown
+- search:
+    lang: en
+- mkdocstrings:
+    watch:
+        - sample
+extra:
+version:
+    provider: mike
+```
+
+mkdocs.yml的配置大致可以分为站点设置、文档布局、主题设置、构建工具设置和附加信息这么几项。
+
+文档布局以关键字`nav`引起，后面跟随一个yaml的列表，定义了全局站点导航菜单及子菜单结构。列表中的每一项都是一个文档的标题和对应的文件名。这里的文件名是相对于docs目录的。例如，上面的例子中，`home`对应的文件是`docs/index.md`，`usage`对应的文件是`docs/usage.md`，等等。
+
+文档布局支持多级嵌套，比如：
+```
+nav:
+    - Home: 'index.md'
+    - 'User Guide':
+        - 'Writing your docs': 'writing-your-docs.md'
+        - 'Styling your docs': 'styling-your-docs.md'
+    - About:
+        - 'License': 'license.md'
+        - 'Release Notes': 'release-notes.md'
+```
+上述配置定义了三个顶级菜单，分别是Home、User Guide和About。User Guide和About又分别包含两个子菜单。当然，最终如何展示这些内容，由你选择的主题来决定。
+
+示例中的主题配置由关键字'theme'引起，一般包括了主题名、语言、站点logo和图标等通用选项，也有一些主题自定义的配置项。
+
+构建工具设置主要是启用markdown扩展的一些特性和插件。
+
+Mkdocs使用了Python-Markdown来执行markdown到html的转换，而Python-Markdown本身又通过扩展来实现markdown核心语法之外的一些常用功能。因此，如果我们构建技术文档的过程中需要使用这些语法扩展，我们需要在这一节下启用这些特性。
+
+在上述配置示例中，attr_list, admonition, toc, meta是Python-Markdown的内置扩展，我们直接象示例那样启用就可以了。关于Python-Markdown提供了哪些官方扩展，可以参考[这里](https://python-markdown.github.io/extensions/)。
+
+使用第三方的扩展跟使用第三方主题一样，我们必须先安装这些扩展。比如，第22行的pymakdownx.critic就来自于第三方扩展pymdown-extensions，我们需要先安装这个扩展，然后才能在mkdocs.yml中启用它。critics给文档提供了批注功能，比如下面的示例：
+```
+{~~One~~>Only one~~} thing is impossible for God: To find any sense in any
+Don’t go around saying{‐‐ to people that‐‐} the world owes you a living. The
+world owes you nothing. It was here first. {~~One~>Only one~~} thing is
+impossible for God: To find {++any++} sense in any copyright law on the
+planet. {==Truth is stranger than fiction==}{>>true<<}, but it is because
+Fiction is obliged to stick to possibilities; Truth isn’t.
+```
+会被渲染成：
+```
+{~~One~~>Only one~~} thing is impossible for God: To find any sense in any
+Don’t go around saying{‐‐ to people that‐‐} the world owes you a living. The
+world owes you nothing. It was here first. {~~One~>Only one~~} thing is
+impossible for God: To find {++any++} sense in any copyright law on the
+planet. {==Truth is stranger than fiction==}{>>true<<}, but it is because
+Fiction is obliged to stick to possibilities; Truth isn’t.
+```
+
+现在，我们来看看如何定制mkdocs，使之更适合生成技术文档。这些定制主要包括：
+1. 更换主题
+2. 文档重定向
+3. 增强markdown功能
+4. 自动生成API文档
+   
+## 5.1. 更换主题
+mkdocs提供了两种开箱即用的主题，即mkdocs和readthedocs。后者是对readthedocs的主题的复制。Mkdocs的官网使用的主题就是mkdocs，所以，考虑选择这个主题的读者，可以通过它的官网来了解这种主题的风格和样式。
+
+除了这两种主题外，[material](https://squidfunk.github.io/mkdocs-material/)是当前比较受欢迎的一个主题。这个主题也得到了FastAPI开发者的高度评价:
+
+!!! Quote
+    许多人喜欢FastAPI, Typer和SQLModel的原因之一是其文档。我花了很多时间，来使得这些项目的文档易于学习、能被快速理解。这里的关键因素是Material for Mkdocs提供了丰富多样的方法，使得我很容易向读者解释和展示各种各样的内容。同样地，结构化在Material中也很容易。使用简单、天生美观，让读者沉浸其中。
+
+要更换主题为Material，首先我们得安装mkdocs-material包，再在mkdocs.yaml中指定主题为material:
+
+```
+pip install mkdocs-material
+```
+然后我们需要在mkdocs.yml中指定主题为material:
 ```
 site_name: An amazing site!
 
 nav: 
   - Home: index.md
   - 安装: installation.md
-  - History: history.md
-
 theme: readthedocs
 ```
+!!! Info
+    如果您是使用`ppw`创建的工程，则默认主题已经是material，并且依赖都已安装好了。
 
-这里mkdocs.yaml充当了主控文档。nav下面的每一项列表，都成为一级菜单。列表项可以用":"来分割，左边的是显示的文字，右边则是连接的文档。
+Material for Mkdocs还提供了许多定制项，包括更改字体、主题颜色、logo、favicon、导航、页头(header)和页脚(footer)等。如果项目使用Github的话，还可以增加Giscuss作为评论系统。
 
+Material天生支持多版本文档。它的多版本文档是通过[mike](https://github.com/jimporter/mike)来实现的。后面我们还要专门介绍这个工具。
 
-接下来， 我们主要对照文章最初提出的那些要求，看看如何在Mkdocs中通过插件和扩展来实现。
+Material也有它的不足之处。对中文使用者而言，最大的不足之处是其免费版还不支持中文搜索。中文搜索的支持目前只对项目的赞助者开放。
+## 5.2. 文件重定向
+在Sphinx那一节，我们已经面临过同样的问题： READEME, HISTORY, AUTHORS, LICENSE等几个文件，通常必须放在项目根目录下，而sphinx在构建文档时，又只读取docs目录下的文件。
 
-***Note***
-  在Mkdocs中既有扩展，又有插件。
-
-## 4.1. 链接到父目录中的文件
-
-前面提到，我们应该把READEME, HISTORY, AUTHORS, LICENSE等几个文件放在项目根目录下，但又不希望在docs目录中重复它们的拷贝。mkdocs也不能支持这种结构，不过好在有一个好用的插件，[mkdocs-include-mkdown-plugin](https://github.com/mondeja/mkdocs-include-markdown-plugin)，在安装好之后，修改index.md文件，使之指向父目录的README:
+Mkdocs也不能支持这种结构，不过好在有一个好用的插件，[mkdocs-include-mkdown-plugin](https://github.com/mondeja/mkdocs-include-markdown-plugin)，在安装好之后，修改index.md文件，使之指向父目录的README:
 
 ```
 {%
@@ -594,14 +701,14 @@ theme: readthedocs
 plugins:
   - include-markdown
 ```
-
-## 4.2. API文档
+index.md将转换成网站的首页。我们让index.md指向README.md，从而使得README.md成为网站的首页。
+# 6. API文档
 
 前面已经提到过这个插件， [MkApi](https://mkapi.daizutabi.net/)。但在我们试用中，可能[Mkdocstrings](https://github.com/pawamoy/mkdocstrings)的稳定性更好，社区活跃度也更高一些。
 
 这两个插件的配置都不复杂。Mkdocs只支持google style的docstring, 在样式上支持了Material样式。对readthedocs的支持还在测试中，但也将在下一版发布。
 
-## 4.3. 警示标注
+# 7. 警示标注
 
 在rst中你可以用这样的警示语:
 
@@ -618,11 +725,11 @@ plugins:
 
 ![](http://images.jieyu.ai/images/12/mkdocs_tip.jpg)
 
-## 4.4. 其它
+# 8. 其它
 
 链接到文档、文档中的节标题都很容易。在使用了Mkdocstrings这一类的API文档插件之后，也能够直接链接到模块中的函数。如何链接到其它项目（比如Python标准库）中的对象，没有看到文档说明。
 
-# 5. 使用Readthedocs托管文档
+# 9. 使用Readthedocs托管文档
 
 最好的文档分发方式是使用在线托管，并且一旦有新版本发布，文档能立即得到更新；并且，旧的版本对应的文档也能得到保留。这两个功能，都在read the docs网站上得到完美支持。此外，您也可以使用gitpages。如果您使用Mkdocs来构建的话，似乎也支持多个版本同时在线。
 
@@ -636,7 +743,7 @@ plugins:
 4. RTD编译文档时，可能会遇到各种依赖问题。首先应该绑定构建工具(Sphinx和Mkdocs)的版本。RTD提供了readthedocs.yml以供配置（放在项目根目录下）。根据你使用的API文档生成工具，可能还需要导入你的package，这种情况下，可能还需要为你的构建工具指定依赖。[在这里](https://docs.readthedocs.io/en/stable/config-file/v2.html)有这个配置文件的模板。
 5. 在文档构建中可能出现各种问题，为了帮助调试，RTD发布了官方docker image，供大家在本地使用。
 
-# 6. 结论
+# 10. 结论
 
 Sphinx + RST是构建技术文档的事实标准，整个技术栈比较成熟稳定，但学习曲线比较陡峭，RST的一些语法过于繁琐。随着Markdown的应用越来越成熟，Mkdocs正在成为构建静态站点和技术文档的新工具，并得到的Read the docs的支持。在使用Mkdocs进行技术文档构建时，要注意选用的插件在支持的Python版本、docstring样式及主题方面的限制。下面是两种方式的一个比较：
 
@@ -659,14 +766,15 @@ mkdocstrings
 
 
 
-
-### 文档结构与主控文档
-### 工具链
-### 混合使用Markdown
-### 使用Mkdocs构建文档
-### 文档结构
-### API文档
-## 文档在线托管服务
-### Read the Docs
-### Github Pages
-## 案例：基于Mkdocs的文档构建及发布
+```
+### 2.0.1. 文档结构与主控文档
+### 2.0.2. 工具链
+### 2.0.3. 混合使用Markdown
+### 2.0.4. 使用Mkdocs构建文档
+### 2.0.5. 文档结构
+### 2.0.6. API文档
+## 2.1. 文档在线托管服务
+### 2.1.1. Read the Docs
+### 2.1.2. Github Pages
+## 2.2. 案例：基于Mkdocs的文档构建及发布
+```

@@ -5,17 +5,18 @@ repo_name: best-practice-python
 #strict: true
 
 nav:
-  - 一、为什么是Python: chap01.md
-  - 二 Python的编程开发环境: chap02.md
-  - 三 构建Python虚拟环境: chap03.md
-  - 四 项目布局和项目生成向导: chap04.md
-  - 五 管理版本、依赖和构建 -- 基于Poetry: chap05.md
-  - 六 实现高效的Python编码: chap06.md
-  - 七 代码单元测试: chap07.md
-  - 八 代码版本管理: chap08.md
-  - 九 持续集成: chap09.md
-  - 十 撰写技术文档: chap10.md
-  - 十一 发布应用: chap11.md
+  - 大型项目上，Python是个烂语言吗:
+    - 第一章 为什么是Python: chap01.md
+    - 第二章 Python的编程开发环境: chap02.md
+    - 第三章 构建Python虚拟环境: chap03.md
+    - 第四章 项目布局和项目生成向导: chap04.md
+    - 第五章 管理版本、依赖和构建 -- 基于Poetry: chap05.md
+    - 第六章 实现高效的Python编码: chap06.md
+    - 第七章 代码单元测试: chap07.md
+    - 第八章 代码版本管理: chap08.md
+    - 第九章 持续集成: chap09.md
+    - 第十章 撰写技术文档: chap10.md
+    - 第十一章 发布应用: chap11.md
 theme:
   name: material
   language: zh
@@ -26,11 +27,16 @@ theme:
     - navigation.tabs
     - navigation.instant
     - navigation.tabs.sticky
+    - header.autohide
+    - toc.follow
+    - toc.integrate
+    - navigation.top
 markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.critic
+  - pymdownx.critic:
+      mode: view
   - pymdownx.caret
   - pymdownx.mark
   - pymdownx.tilde
@@ -45,21 +51,16 @@ markdown_extensions:
   - pymdownx.details
   - admonition
   - toc:
-      baselevel: 2
+      baselevel: 1
       permalink: true
       slugify: !!python/name:pymdownx.slugs.uslugify
   - meta
 plugins:
   - include-markdown
-  - mknotebooks
   - search:
       lang: ja
-  - awesome-pages
 extra:
   social:
-    - icon: fontawesome/brands/zhihu
-      link: https://www.zhihu.com/club/1243142164264886272
-      name: 知乎圈子
     - icon: fontawesome/brands/qq
       link: https://qm.qq.com/cgi-bin/qm/qr?k=kErrI22lCmhKXN8we_iY7jS2sBPnXk8_&jump_from=webapi
       name: 量化交易群
