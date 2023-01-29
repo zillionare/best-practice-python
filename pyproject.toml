@@ -13,6 +13,7 @@ mkdocs-material = "livereload"
 mkdocstrings = "^0.20.0"
 livereload = "mkdocs-material"
 mkdocs-custom-fences = "^0.1.2"
+mkdocs-print-site-plugin = "^2.3.4"
 
 [tool.poetry.dev-dependencies]
 

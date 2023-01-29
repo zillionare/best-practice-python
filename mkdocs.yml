@@ -59,6 +59,7 @@ plugins:
   - include-markdown
   - search:
       lang: ja
+  - print-site
 extra:
   social:
     - icon: fontawesome/brands/qq
