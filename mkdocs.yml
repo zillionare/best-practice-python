@@ -28,10 +28,14 @@ theme:
     - navigation.instant
     - navigation.tabs.sticky
     - header.autohide
+    - navigation.top
     - toc.follow
     - toc.integrate
-    - navigation.top
 markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 5
+      baselevel: 2
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
@@ -50,23 +54,9 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.details
   - admonition
-  - toc:
-      baselevel: 1
-      permalink: true
-      slugify: !!python/name:pymdownx.slugs.uslugify
   - meta
 plugins:
   - include-markdown
   - search:
       lang: ja
-  - print-site
-extra:
-  social:
-    - icon: fontawesome/brands/qq
-      link: https://qm.qq.com/cgi-bin/qm/qr?k=kErrI22lCmhKXN8we_iY7jS2sBPnXk8_&jump_from=webapi
-      name: 量化交易群
-    - icon: fontawesome/brands/github
-      link: https://github.com/zillionare
-      name: Github
-    - icon: material/email
-      link: "mailto:code@jieyu.ai"
+  #- print-site
