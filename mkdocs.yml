@@ -36,11 +36,14 @@ markdown_extensions:
       permalink: true
       toc_depth: 5
       baselevel: 2
+      slugify: !!python/name:pymdownx.slugs.uslugify
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.critic:
       mode: view
+  - attr_list
+  - md_in_html
   - pymdownx.caret
   - pymdownx.mark
   - pymdownx.tilde
