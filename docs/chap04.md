@@ -318,6 +318,7 @@ CI已设置为自动发布文档到git pages。但您需要在您的项目中启
 1. 安装github cli工具。请参考[安装指南](https://github.com/cli/cli#installation)
 2. 申请一个GitHub的个人token（全部权限），然后将这个token通过环境变量GH_TOKEN暴露给脚本。只有这样，脚本才能创建github仓库，并设置其它token。
 
+### ppw生成的文件列表
 现在，一个规范的新项目就已经创建好，您已经拥有了很多酷炫的功能，比如CI，codecov, git pages，poetry，基于markdown的文档等等。您新生成的项目，应该看起来象这样：
 ```text
 .

@@ -6,6 +6,7 @@ repo_name: best-practice-python
 
 nav:
   - 大型项目上，Python是个烂语言吗:
+    - 序: index.md
     - 第一章 为什么是Python: chap01.md
     - 第二章 Python的编程开发环境: chap02.md
     - 第三章 构建Python虚拟环境: chap03.md
