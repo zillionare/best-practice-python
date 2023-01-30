@@ -1,0 +1,1648 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="http://www.jieyu.ai/chap05/">
+      
+      
+        <link rel="prev" href="../chap04/">
+      
+      
+        <link rel="next" href="../chap06/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>第五章 管理版本、依赖和构建 -- 基于Poetry - 解语科技</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#poetry-简洁清晰的项目管理工具" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="解语科技" class="md-header__button md-logo" aria-label="解语科技" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            解语科技
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第五章 管理版本、依赖和构建 -- 基于Poetry
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/zillionare/best-practice-python" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    best-practice-python
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link md-tabs__link--active">
+        大型项目上，Python是个烂语言吗
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="解语科技" class="md-nav__button md-logo" aria-label="解语科技" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    解语科技
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/zillionare/best-practice-python" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    best-practice-python
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="..">大型项目上，Python是个烂语言吗</a>
+          
+            <label for="__nav_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="大型项目上，Python是个烂语言吗" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          大型项目上，Python是个烂语言吗
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap01/" class="md-nav__link">
+        第一章 为什么是Python
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap02/" class="md-nav__link">
+        第二章 Python的编程开发环境
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap03/" class="md-nav__link">
+        第三章 构建Python虚拟环境
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap04/" class="md-nav__link">
+        第四章 项目布局和项目生成向导
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          第五章 管理版本、依赖和构建 -- 基于Poetry
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        第五章 管理版本、依赖和构建 -- 基于Poetry
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#poetry-简洁清晰的项目管理工具" class="md-nav__link">
+    Poetry： 简洁清晰的项目管理工具
+  </a>
+  
+    <nav class="md-nav" aria-label="Poetry： 简洁清晰的项目管理工具">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#版本管理" class="md-nav__link">
+    版本管理
+  </a>
+  
+    <nav class="md-nav" aria-label="版本管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semantic-versioning基于语义的版本管理" class="md-nav__link">
+    Semantic Versioning（基于语义的版本管理）
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#如何使用poetry进行版本管理" class="md-nav__link">
+    如何使用Poetry进行版本管理
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#依赖管理" class="md-nav__link">
+    依赖管理
+  </a>
+  
+    <nav class="md-nav" aria-label="依赖管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#实现依赖管理的意义" class="md-nav__link">
+    实现依赖管理的意义
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poetry进行依赖管理的相关命令" class="md-nav__link">
+    Poetry进行依赖管理的相关命令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poetry依赖解析的工作原理" class="md-nav__link">
+    poetry依赖解析的工作原理
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#虚拟运行时" class="md-nav__link">
+    虚拟运行时
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#构建发行包" class="md-nav__link">
+    构建发行包
+  </a>
+  
+    <nav class="md-nav" aria-label="构建发行包">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python构建标准和工具的变化" class="md-nav__link">
+    Python构建标准和工具的变化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#基于poetry进行发行包的构建" class="md-nav__link">
+    基于Poetry进行发行包的构建
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#其它重要的poetry命令" class="md-nav__link">
+    其它重要的Poetry命令
+  </a>
+  
+    <nav class="md-nav" aria-label="其它重要的Poetry命令">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#poetry-lock" class="md-nav__link">
+    poetry lock
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poetry-export" class="md-nav__link">
+    poetry export
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poetry-config" class="md-nav__link">
+    poetry config
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#案例-基于poetry创建并发布一个项目" class="md-nav__link">
+    案例： 基于Poetry创建并发布一个项目
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap06/" class="md-nav__link">
+        第六章 实现高效的Python编码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap07/" class="md-nav__link">
+        第七章 代码单元测试
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap08/" class="md-nav__link">
+        第八章 代码版本管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap09/" class="md-nav__link">
+        第九章 持续集成
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap10/" class="md-nav__link">
+        第十章 撰写技术文档
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chap11/" class="md-nav__link">
+        第十一章 发布应用
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+  <h1>第五章 管理版本、依赖和构建 -- 基于Poetry</h1>
+
+<p>上一章里，我们通过ppw生成了一个规范的python项目，对初学者来说，许多闻所未闻、见所未见的概念和名词扑面而来，不免让人一时眼花缭乱，目不睱接。然而，如果我们不从头讲起，可能读者也无从理解，ppw为何需要运用这些技术，又倒底解决了哪些问题。</p>
+<p>在2021年3月的某个孤独的夜晚，我决定创建一个创建一个python项目以打发时间，这个项目有以下文件：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>├── foo
+│   ├── foo
+│   │   ├── bar
+│   │   │   └── data.py
+│   └── README.md
+</code></pre></div></td></tr></table></div>
+<p>当然，作为一个有经验的开发人员，我的机器上已经有了好多个其它的python项目，这些项目往往使用不同的Python版本，彼此相互冲突。所以，从一开始，我就决定通过虚拟开发环境来隔离这些不同的工程。这一次也不例外：我通过conda创建了一个名为foo的虚拟环境，并且始终在这个环境下工作。</p>
+<p>我们的程序将会访问postgres数据库里的users表。一般来说，我们都会使用sqlalchemy来访问数据库，而避免直接使用特定的数据库驱动。这样做的好处是，万一将来我们需要更换数据库，那么这种迁移带来的工作量将轻松不少。</p>
+<p>在2021年3月，python的异步io已经大放异彩。而sqlalchemy依然不支持这一最新特性，这不免让人有些失望 -- 这会导致在进行数据库查询时，python进程会死等数据库返回结果，从而无法有效利用CPU时间。好在有一个名为Gino的项目弥补了这一缺陷：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip install gino
+</code></pre></div></td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>在那个孤独的夜晚，上述命令将安装gino 1.0版本。如果读者想运行这里的程序，请将gino的版本改为1.0.1，即运行 pip install gino==1.0.1</p>
+</div>
+<p>做完这一切准备工作，开始编写代码，其中data.py的内容如下：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># 运行以下代码前，请确保本地已安装postgres数据库，并且创建了名为gino的数据库。</span>
+
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">gino</span> <span class="kn">import</span> <span class="n">Gino</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">Gino</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;users&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">nickname</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Unicode</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;noname&#39;</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># 请根据实际情况，添加用户名和密码</span>
+    <span class="c1"># 示例：postgresql://zillionare:123456@localhost/gino</span>
+    <span class="c1"># 并在本地postgres数据库中，创建gino数据库。</span>
+    <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">set_bind</span><span class="p">(</span><span class="s1">&#39;postgresql://localhost/gino&#39;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">gino</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+    <span class="c1"># further code goes here</span>
+
+    <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">pop_bind</span><span class="p">()</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div></td></tr></table></div></p>
+<p>作为一个对代码有洁癖的人，我坚持始终使用<code>black</code>来格式化代码：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>black
+black<span class="w"> </span>.
+</code></pre></div></td></tr></table></div></p>
+<p>现在一切ok，运行一下:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>python<span class="w"> </span>foo/bar/data.py
+</code></pre></div></td></tr></table></div>
+检查数据库，发现users表已经创建。一切正常。</p>
+<p>我希望这个程序在macos, windows和linux等操作系统上都能运行，并且可以运行在从python 3.6到3.9的所有版本上。</p>
+<p>这里出现第一个问题。你需要准备12个环境: 三个操作系统，每个操作系统上4个python版本，而且还要考虑如何进行"可复现的部署"的问题。在通过ppw创建的项目中，这些仅仅是通过修改tox.ini和.github\dev.yaml中相关配置就可以做到了。但在没有使用ppw之前，我只能这么做：</p>
+<p>在三台分别安装有macos， windows和ubuntu的机器上，分别创建python 3.8到python 3.11的虚拟环境，然后安装相同的依赖。首先，我通过<code>pip freeze</code>把开发机器上的依赖抓取出来:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+</code></pre></div></td></tr></table></div>
+<p>然后在另一台机器准备好的虚拟环境中，运行安装命令：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div></td></tr></table></div></p>
+<p>这里又出现了第二个问题。<code>black</code>纯粹是只用于开发目的，为什么也需要在测试/部署环境上安装呢？因此，在制作<code>requirements.txt</code>之前，我决定将<code>black</code>卸载掉：</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>uninstall<span class="w"> </span>-y<span class="w"> </span>black<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+</code></pre></div></td></tr></table></div>
+然而，仔细检查requirements.txt之后发现，<code>black</code>是被移除了，但仅仅是它自己。它的一些依赖，比如<code>click</code>， <code>tomli</code>等等，仍然出现在这个文件中。</p>
+<p>于是，我不得不抛弃<code>pip freeze</code>这种作法，只在requirements.txt中加上直接依赖，并且，将这个文件一分为二，将<code>black</code>放在requirements_dev.txt中。
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code># requirements.txt
+gino==1.0
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code># requirements_dev.txt
+black==18.0
+</code></pre></div></td></tr></table></div></p>
+<p>现在，在测试环境下，将只安装requirements.txt中的那些依赖。不出所料，项目运行得很流畅，目标达成，放心地去睡觉了。但是，gino还依赖于sqlalchemy和asyncpg。后二者被称为传递依赖。我们锁定了gino的版本，但是gino是否正确锁定了sqlalchemy和asyncpg的版本呢？这一切仍然不得而知。</p>
+<p>第二天早晨醒来，sqlalchemy 1.4版本发布了。突然地，当我再安装新的测试环境并进行测试时，程序报出了以下错误：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code>Traceback (most recent call last):
+  File &quot;/Users/aaronyang/workspace/best-practice-python/code/05/foo/foo/bar/data.py&quot;, line 3, in &lt;module&gt;
+    from gino import Gino
+  File &quot;/Users/aaronyang/miniforge3/envs/bpp/lib/python3.9/site-packages/gino/__init__.py&quot;, line 2, in &lt;module&gt;
+    from .engine import GinoEngine, GinoConnection  # NOQA
+  File &quot;/Users/aaronyang/miniforge3/envs/bpp/lib/python3.9/site-packages/gino/engine.py&quot;, line 181, in &lt;module&gt;
+    class GinoConnection:
+  File &quot;/Users/aaronyang/miniforge3/envs/bpp/lib/python3.9/site-packages/gino/engine.py&quot;, line 211, in GinoConnection
+    schema_for_object = schema._schema_getter(None)
+AttributeError: module &#39;sqlalchemy.sql.schema&#39; has no attribute &#39;_schema_getter&#39;
+</code></pre></div></td></tr></table></div></p>
+<p>我差不多花了整整两天才弄明白发生了什么。我的程序依赖于gino,而gino又依赖于著名的SQLAlchemy。gino 1.0是这样锁定SQLAlchemy的版本的：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">gino</span><span class="o">==</span><span class="m">1</span>.0
+Looking<span class="w"> </span><span class="k">in</span><span class="w"> </span>indexes:<span class="w"> </span>https://pypi.jieyu.ai/simple,<span class="w"> </span>https://pypi.org/simple
+Collecting<span class="w"> </span><span class="nv">gino</span><span class="o">==</span><span class="m">1</span>.0
+<span class="w">  </span>Downloading<span class="w"> </span>gino-1.0.0-py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">48</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">48</span><span class="w"> </span>kB<span class="w"> </span><span class="m">129</span><span class="w"> </span>kB/s<span class="w"> </span>
+Collecting<span class="w"> </span>SQLAlchemy&lt;<span class="m">2</span>.0,&gt;<span class="o">=</span><span class="m">1</span>.2
+<span class="w">  </span>Downloading<span class="w"> </span>SQLAlchemy-1.4.0.tar.gz<span class="w"> </span><span class="o">(</span><span class="m">8</span>.5<span class="w"> </span>MB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">8</span>.5<span class="w"> </span>MB<span class="w"> </span><span class="m">2</span>.3<span class="w"> </span>MB/s<span class="w"> </span>
+</code></pre></div></td></tr></table></div></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>上述文本是在2021年3月安装gino 1.0时的输出。如果您现在运行<code>pip install gino==1.0</code>，会安装SQLAlchemy 1.4.46版本，这是它在1.x下的最后一个版本。</p>
+</div>
+<p>从pip的安装日志可以看到，gino声明能接受的SQLAlchemy的最小版本是1.2，最大版本则不到2.0。因此，当我们安装gino 1.0时，只要SQLAlchemy存在超过1.2，且小于2.0的最新版本，它就一定会选择安装这个最新版本，最终，SQLAlchemy 1.4.0被安装到环境中。</p>
+<p>SQLAlchemy在2020年也意识到了asyncio的重要性，并计划在1.4版本时转向asyncio。然而，这样一来，调用接口就必须发生改变 -- 也就是，之前依赖于SQLAlchemy的那些程序，不进行修改是无法直接使用SQLAlchemy 1.4的。1.4.0这个版本发布于2021年3月16日。</p>
+<p>原因找到了，最终问题也解决了。最终，我把这个错误报告给了gino，gino的开发者承担了责任，发布了1.0.1,将SQLAlchemy的版本锁定在"&gt;1.2,&lt;1.4"这个范围内。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">gino</span><span class="o">==</span><span class="m">1</span>.0.1
+Looking<span class="w"> </span><span class="k">in</span><span class="w"> </span>indexes:<span class="w"> </span>https://pypi.jieyu.ai/simple,<span class="w"> </span>https://pypi.org/simple
+Collecting<span class="w"> </span><span class="nv">gino</span><span class="o">==</span><span class="m">1</span>.0.1
+<span class="w">  </span>Using<span class="w"> </span>cached<span class="w"> </span>gino-1.0.1-py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">49</span><span class="w"> </span>kB<span class="o">)</span>
+Collecting<span class="w"> </span>SQLAlchemy&lt;<span class="m">1</span>.4,&gt;<span class="o">=</span><span class="m">1</span>.2.16
+<span class="w">  </span>Using<span class="w"> </span>cached<span class="w"> </span>SQLAlchemy-1.3.24-cp39-cp39-macosx_11_0_arm64.whl
+</code></pre></div></td></tr></table></div>
+<p>在这个案例中，我并没有要求升级并使用SQLAlchemy的新功能，因此，新的安装本不应该去升级这样一个破坏性的版本；但是如果SQLAlchemy出了新的安全更新，或者bug修复，显然，我们也希望我们的程序在不进行更新发布的情况下，就能对依赖进行更新（否则，如果任何一个依赖发布安全更新，都将导致主程序不得不发布更新的话，这种耦合也是很难接受的）。因此，是否存在一种机制，使得我们的应用在指定直接依赖时，也可以恰当地锁定传递依赖的版本，并且允许传递依赖进行合理的更新？这是我们这个案例提出来的第三个问题。</p>
+<p>现在，似乎是我们将产品发布的时候了。我们看到其它人开发的开源项目发布在pypi上，这很酷。我也希望我的程序能被千百万人使用。这就需要编写MANINFEST.in, setup.cfg, setup.py等文件。</p>
+<p>MANIFEST.in用来告诉setup tools哪些额外的文件应该被包含在发行包里，以及哪些文件则应该被排除掉。当然在我们这个简单的例子中，这个文件是可以被忽略的。</p>
+<p>setup.py中需要指明依赖项、版本号等等信息。由于我们已经使用了requirements.txt和requirements_dev.txt来管理依赖，所以，我们并不希望在setup.py中重复指定 -- 我们希望只更新requirements.txt，就可以自动更新setup.py：</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;requirements.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">install_requires</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;requirements_dev.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">extras_dev_requires</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+
+<span class="c1"># setup是一个有着庞大参数体的函数，这里只显示了部分相关参数</span>
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.0.1&#39;</span><span class="p">,</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="n">install_requires</span><span class="p">,</span>
+    <span class="n">extras_require</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dev&#39;</span><span class="p">:</span> <span class="n">extras_dev_requires</span><span class="p">},</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+看上去还算完美。但实际上，我们每一次发布时，还会涉及到修改版本号等问题，这都是容易出错的地方。而且，它还不涉及打包和发布。通常，我们还需要编写一个makefile，通过makefile命令来实现打包和发布。</p>
+<p>这些看上去都是很常规的操作，为什么不将它自动化呢？这是第四个问题，即如何简化打包和发布。</p>
+<p>这就是我们这一章要讨论的主题。我们将以Poetry为主要工具，结合semantic versioning来串起这一话题的讨论。</p>
+<h2 id="poetry-简洁清晰的项目管理工具">Poetry： 简洁清晰的项目管理工具<a class="headerlink" href="#poetry-简洁清晰的项目管理工具" title="Permanent link">&para;</a></h2>
+<p><img alt="" src="http://images.jieyu.ai/images/202104/1-BUUIee-t1I2eqTm0RtDNHQ.jpeg" /></p>
+<p>[Poetry]是一个依赖管理和打包工具。Poetry的作者解释开发Poetry的初衷时说：</p>
+<div class="admonition quote">
+<p class="admonition-title">Quote</p>
+<p>Packaging systems and dependency management in Python are rather convoluted and hard to understand for newcomers. Even for seasoned developers it might be cumbersome at times to create all files needed in a Python project: setup.py, requirements.txt, setup.cfg, MANIFEST.in and the newly added Pipfile. So I wanted a tool that would limit everything to a single configuration file to do: dependency management, packaging and publishing.</p>
+<p>翻译：Python的打包系统和依赖管理相当复杂，对新人来讲尤其费解。要正确地创建Python项目所需要的文件:setup.py, requirements.txt, setup.cfg, MANIFEST.in和新加入的pipfile，有时候即使对一个有经验的老手，也是有一些困难的。因此，我希望创建一种工具，只用一个文件就实现依赖管理、打包和发布。</p>
+</div>
+<p>通过前面的案例，我们已经提出了一些问题。但不止于此。</p>
+<p>当您将依赖加入到requirements.txt时，没有人帮你确定它是否与既存的依赖能够和平共处，这个过程要比我们想象的复杂许多，不仅仅是直接依赖，还需要考虑彼此的传递依赖是否也能彼此兼容；所以一般的做法是，先将它们加进来，完成开发和测试，在打包之前，运行<code>pip freeze &gt; requirements.txt</code>来锁定依赖库的版本。但我们也在前面的案例中提到，这种方法可能会将不必要的开发依赖打入到发行版中；此外，它也会过度锁定版本，从而使得一些活跃的第三方库失去自动更新热修复和安全更新的机会。</p>
+<p>项目的版本管理也是一个问题。在老旧的Python项目中，一般我们使用bumpversion来管理版本，它需要使用三个文件。在我的日常使用时，它常常会出现各种问题，最常见的是单双引号导致把<code>__version__=0.1</code>当成一个版本号，而不是<code>0.1</code>。这样打出来的包名也会奇怪地多一个无意义的version字样。单双引号则是因为你的format工具对字符串常量应该使用什么样的引号规则有自己的意见。</p>
+<p>项目进行打包和发布需要准备太多的文件，正如Poetry的开发者所说，要确保这些文件的内容完全正确，对一个有经验的开发者来说，也不是轻而易举的事。</p>
+<p>Poetry解决了所有这些问题（除了案例中的第一个，该问题要通过tox和CI来解决）。它提供了版本管理、依赖解析、构建和发布的一站式服务，并将所有的配置，集中到一个文件中，即pyproject.toml。此外，Poetry还提供了一个简单的工程创建向导。不过这个向导的功能仍然过于简单，我们的推荐则是使用上一章介绍的python project wizard。</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>实际上Poetry还会用到另一个文件，即poetry.lock。这个文件并非独立文件，而是Poetry根据pyproject.toml生成的、锁定了依赖版本的最终文件。</p>
+</div>
+<p>现在，让我们看一眼sample项目中的pyproject.toml文件:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span>
+<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">[tool]</span>
+<span class="k">[tool.poetry]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;sample&quot;</span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.1.0&quot;</span>
+<span class="n">homepage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://github.com/zillionare/sample&quot;</span>
+<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Skeleton project created by Python Project Wizard (ppw).&quot;</span>
+<span class="n">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;aaron yang &lt;aaron_yang@jieyu.ai&gt;&quot;</span><span class="p">]</span>
+<span class="n">readme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;README.md&quot;</span>
+<span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="s">&quot;MIT&quot;</span>
+<span class="n">classifiers</span><span class="o">=</span><span class="p">[</span>
+<span class="w">    </span><span class="s">&#39;Development Status :: 2 - Pre-Alpha&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Intended Audience :: Developers&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;License :: OSI Approved :: MIT License&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Natural Language :: English&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Programming Language :: Python :: 3&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Programming Language :: Python :: 3.7&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Programming Language :: Python :: 3.8&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Programming Language :: Python :: 3.9&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;Programming Language :: Python :: 3.10&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">packages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;sample&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;tests&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;sdist&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="k">[tool.poetry.dependencies]</span>
+<span class="n">python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&gt;=3.7.1,&lt;4.0&quot;</span>
+<span class="n">fire</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.4.0&quot;</span>
+
+<span class="n">black</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^22.3.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">isort</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;5.10.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">flake8</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;4.0.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">flake8-docstrings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^1.6.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="p">}</span>
+<span class="n">pytest</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^7.0.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">pytest-cov</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^3.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">tox</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^3.24.5&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">virtualenv</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^20.13.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">pip</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^22.0.3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mkdocs</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^1.2.3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mkdocs-include-markdown-plugin</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^3.2.3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mkdocs-material</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^8.1.11&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mkdocstrings</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^0.18.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mkdocs-material-extensions</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^1.0.3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">twine</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^3.8.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mkdocs-autorefs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^0.3.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">pre-commit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^2.17.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">toml</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^0.10.2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">livereload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^2.6.3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">pyreadline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;^2.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">true</span><span class="p">}</span>
+<span class="n">mike</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">version</span><span class="o">=</span><span class="s">&quot;^1.1.2&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">optional</span><span class="o">=</span><span class="n">true</span><span class="p">}</span>
+
+<span class="k">[tool.poetry.extras]</span>
+<span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s">&quot;pytest&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;black&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;isort&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;flake8&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;flake8-docstrings&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;pytest-cov&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+
+<span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;tox&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pre-commit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;virtualenv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pip&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;twine&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;toml&quot;</span><span class="p">]</span>
+
+<span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s">&quot;mkdocs&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;mkdocs-include-markdown-plugin&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;mkdocs-material&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;mkdocstrings&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;mkdocs-material-extension&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;mkdocs-autorefs&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;mike&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+
+<span class="k">[tool.poetry.scripts]</span>
+<span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;sample.cli:main&#39;</span>
+
+<span class="k">[build-system]</span>
+<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;poetry-core&gt;=1.0.0&quot;</span><span class="p">]</span>
+<span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;poetry.core.masonry.api&quot;</span>
+
+<span class="k">[tool.black]</span>
+<span class="n">line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">88</span>
+<span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;\.pyi?$&#39;</span>
+<span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">/(</span>
+<span class="s">    \.eggs</span>
+<span class="s">  | \.git</span>
+<span class="s">  | \.hg</span>
+<span class="s">  | \.mypy_cache</span>
+<span class="s">  | \.tox</span>
+<span class="s">  | \.venv</span>
+<span class="s">  | _build</span>
+<span class="s">  | buck-out</span>
+<span class="s">  | build</span>
+<span class="s">  | dist</span>
+<span class="s">)/</span>
+<span class="s">&#39;&#39;&#39;</span>
+<span class="k">[tool.isort]</span>
+<span class="n">profile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;black&quot;</span>
+</code></pre></div></td></tr></table></div>
+我们简单地解读一下这个文件：
+在[tool.poetry]那一节，定义了包的名字（这里是sample)、版本号(这里是0.1.0)，其它的一些字段，比如classifiers，这是打包和发布时需要的。如果您熟悉python setup tools，那么对这些字段将不会陌生。packages字段指明了打包时需要包含的文件。在示例中，我们要求在以.whl格式发布的包中，将sample目录下的所有文件打包发布；而以sdist格式(即.tar.gz)发布的包中，还要包含tests目录下的文件。</p>
+<p>接下来是[tool.poetry.dependencies]一节，这是我们声明项目依赖的地方。首先是项目要求的python版本声明。这里我们要求必须在3.7.1以上，4.0以下的python环境中运行。因此，python 3.7.1，3.8， 3.9， 3.10都是恰当的python版本，但4.0则不允许。</p>
+<p>接下来就是工程中需要用到的其它第三方依赖，有运行时的（即当最终用户使用我们的程序时，必须安装的那些第三方依赖），也有开发时的（即只在开发和测试过程中使用到的，比如文档工具类mkdocs，测试类tox, pytest等）。</p>
+<p>我们对运行时和开发时需要的依赖进行了分组。对开发时需要的依赖，我们分成dev, test和doc三组，通过[tool.poetry.extras]中进行分组声明。对于归入到dev, test和doc分组中的依赖，我们在[tool.poetry.dependencies]中，将其声明为optional的，这样在安装最终分发包时，这些声明为optional的第三方依赖将不会安装到用户环境中。</p>
+<p>再接下来，[tool.poetry.scripts]声明了一个console script入口。Console script是一种特殊的Python脚本，它使得您可以象调用普通的shell命令一样来调用这个脚本。
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">[tool.poetry.scripts]</span>
+<span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;sample.cli:main&#39;</span>
+</code></pre></div></td></tr></table></div>
+当sample包被安装后，就往安装环境里注入了一个<code>sample</code> shell命令。它可以接受各种参数，最终将交给sample\cli.py中的main函数来执行。</p>
+<p>接下来就是关于如何构建的相关指示，在[build-system]中。如果你的程序中只包含纯粹的Python代码，那么这部分可不做任何修改。如果你的程序包含了一些原生的代码（比如c的），那么就需要自己定义构建脚本。</p>
+<p>在示例代码中，还有[tool.black]和[tool.isort]两个小节，分别是black（代码格式化工具）和isort（将导入进行排序的工具）的配置文件。它们是对pyproject.toml的扩展，并不是poetry所要求的。</p>
+<h3 id="版本管理">版本管理<a class="headerlink" href="#版本管理" title="Permanent link">&para;</a></h3>
+<p>poetry为我们的package提供了基于语义(semantic version)的版本管理功能。它通过<code>poetry version</code>这个命令，让我们查看package的版本，并且实现版本号的升级。</p>
+<h4 id="semantic-versioning基于语义的版本管理">Semantic Versioning（基于语义的版本管理）<a class="headerlink" href="#semantic-versioning基于语义的版本管理" title="Permanent link">&para;</a></h4>
+<p>说到版本管理，我不禁想起忒修斯之船（The Ship of Theseus）问题，该问题是最为古老的思想实验之一，最早出自公元一世纪普鲁塔克的记载。它描述的是一艘可以在海上航行几百年的船，归功于不间断的维修和替换部件。只要一块木板腐烂了，它就会被替换掉，以此类推，直到所有的功能部件都不是最开始的那些了。问题是，最终产生的这艘船是否还是原来的那艘特修斯之船，还是一艘完全不同的船？如果不是原来的船，那么在什么时候它不再是原来的船了？</p>
+<p>在软件开发领域中，我们也常常对同一软件进行不断的修补和更新。但是，随着这种修补和替换越来越多，软件会不会也出现忒修斯船之问：现在的软件还是不是当初的软件，如果不是，那它是在什么时候不再是原来的软件了呢？该软件应该如何向外界表明它已发生了实质性的变化；生态内依赖于该软件的其它软件，又应该如何识别软件的蜕变呢？</p>
+<p>为了解决上述问题，Tom Preston-Werner（Github的共同创始人）提出Semantic versioniong方案，即基于语义的版本管理。Semantic version表示法提出的初衷是：</p>
+<div class="admonition quote">
+<p class="admonition-title">Quote</p>
+<p>在软件管理的领域里存在着被称作“依赖地狱”的死亡之谷，系统规模越大，加入的包越多，你就越有可能在未来的某一天发现自己已深陷绝望之中。</p>
+<p>在依赖高的系统中发布新版本包可能很快会成为噩梦。如果依赖关系过高，可能面临版本控制被锁死的风险（必须对每一个依赖包改版才能完成某次升级）。而如果依赖关系过于松散，又将无法避免版本的混乱（假设兼容于未来的多个版本已超出了合理数量）。当你专案的进展因为版本依赖被锁死或版本混乱变得不够简便和可靠，就意味着你正处于依赖地狱之中。</p>
+</div>
+<p>Semantic versioning简单地说，就是用版本号的变化向外界表明软件变更的剧烈程度。要理解Semantic versioning，我们首先得了解软件的版本号。</p>
+<p>当我们说起软件的版本号时，我们通常会意识到，软件的版本号一般由主版本号(major)，次版本号(minor)，修订号(patch)和构建编号(build no.)四部分组成。由于Python程序没有其它语言通常意义上的构建，所以，对Python程序而言，一般只用三段，即major.minor.patch来表示。</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>实际上，出于内部开发的需要，我们仍然可能给Python程序的版本用上build no，特别是在CI集成中。当我们向仓库推送一个commit时，CI都需要进行一轮构建和自动验证，此时并不会修改正式版本号，因此，一般倾向于使用构建号来区分不同的提交导致的版本上的不同。在python project wizard生成的项目中，其CI就实现了这个逻辑。</p>
+</div>
+<p>上述版本表示法没有反映出任何规则。在什么情况下，你的软件应该定义为0.x，什么时候又应该定义为1.x，什么时候递增主版本号，什么时候则只需要递增修订号呢？如果不同的软件生产商对以这些问题没有共识的话，会产生什么问题吗？</p>
+<p>实际上，由于随意定义版本号引起的问题很多。在前面我们提到过SQLAlchemy的升级导致许多Python软件不能正常工作的例子。在讲述那个例子时，我指出，是gino的开发者承担了责任，发行了新的gino版本，解决了这个问题。但实际上，责任的根源在SQLAlchemy的开发者那里。从1.3.x到1.4.x,出现了接口的变更，这是一种破坏性的更新，会导致使用者如果不修改他们的调用方式，就无法使用SQLAlchemy的问题。gino的开发者认为（这也是符合semantic versioning思想的），SQLAlchemy从1.2到2.0之间的版本，可以增加接口，增强性能，修复安全漏洞，但不应该变更接口；因此，它声明为依赖SQLAlchemy小于2.0的版本是安全的。但可惜的是，SQLAlchemy并没有遵循这个约定。</p>
+<p>Sematic versioning提议用一组简单的规则及条件来约束版本号的配置和增长。首先，你规划好公共API，在此后的新版本发布中，透过修改相应的版本号来向大家说明你的修改的特性。考虑使用这样的版本号格式：X.Y.Z （主版本号.次版本号.修订号）：修复问题但不影响API 时，递增修订号；API 保持向下兼容的新增及修改时，递增次版本号；进行不向下兼容的修改时，递增主版本号。</p>
+<p>在前面我们提到过SQLAlchemy从1.x升级到1.4的例子。实际上，这是个不能向下兼容的修改，引入了异步机制，因此，SQLAlchemy本应该启用2.x的全新版本序列号，而把1.4留作1.x的后续修补发布版本号使用。如此以来，SQLAlchemy的使用者就很容易明白，如果要使用最新的SQLAlchemy版本，则必须对他们的应用程序进行完全的适配和测试，而不能象之前的升级一样，简单地把最新版本安装上，仍然期望它能象之前一样工作。不仅如此，一个定义了良好依赖关系的软件，还能自动从升级中排除掉升级到SQLAlchemy 2.x，而始终只在1.x，甚至更小的范围内进行升级。</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>SQLAlchemy的错误并非孤例。一个更有影响的例子涉及到python的cryptography库。这是一个广泛使用的密码学相关的python库。为了提升性能，许多代码最初是使用c写的。有一天作者意识到，使用c会存在很多安全问题，而安全性又是cryptography的核心。于是，在2021年2月8日前后，他改用rust来进行实现。这导致安装cryptography库的人，必须在本机上有rust的编译工具链 -- 事实是，rust与c和python相比，还是相当小众的，很多人的机器上显然不会有这套工具链。</p>
+<p>需要指出的是，cryptography改用rust实现，并没有改变它的python接口。相反，其python接口完全保持着一致。因此，cryptography的作者也既没有重命名cryptography，也没有变更主版本号。</p>
+<p>但是这一小小的改动，掀起了轩然大波。一夜之间，它摧毁了无数的CI系统，无数docker镜像必须被重构，抱怨声如潮水般涌向作者。在短短几个小时，作者就收到了100条激烈的评论，最终作者不得不关掉了这个<a href="https://github.com/pyca/cryptography/issues/5771">issue</a></p>
+</div>
+<p>一个正确地使用semantic versioning的例子是aioredis从1.x升级到2.0。尽管aioredis升级到2.0时，大多数API并没有发生改变--只是在内部进行了性能增强，但它的确改变了初始化aioredis的方式，从而使得你的应用程序，不可能不加修改就直接更新到2.0版本。因此，aioredis在这种情况下，将版本号更新为2.0是非常正确的。</p>
+<p>事实上，如果你的程序的API发生了变化（函数签名发生改变），或者会导致旧版的数据无法继续使用，你都应该考虑主版本号的递增。</p>
+<p>此外，从0.1到1.0之前的每一个minor版本，都被认为在API上是不稳定的，都可能是破坏性的更新。因此，如果你的程序使用了还未定型到1.0版本的第三方库，你需要谨慎声明其依赖关系。</p>
+<h4 id="如何使用poetry进行版本管理">如何使用Poetry进行版本管理<a class="headerlink" href="#如何使用poetry进行版本管理" title="Permanent link">&para;</a></h4>
+<p>假设您已经使用[python project wizard]生成了一个工程框架，那么应该可以在根目录下找到pyproject.toml文件，其中有一项：</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>version = 0.1
+</code></pre></div></td></tr></table></div>
+如果您现在运行<code>poetry version</code>这个命令，就会显示<code>0.1</code>这个版本号。</p>
+<p>Poetry使用基于语义的版本(semantic version)表示法。 </p>
+<p>在Poetry中，当我们需要修改版本号时，并不是直接指定新的版本号，而是通过<code>poetry version semver</code>来修改版本。<code>semver</code>可以是<code>patch</code>, <code>minor</code>, <code>major</code>, <code>prepatch</code>, <code>preminor</code>, <code>premajor</code>和 <code>prerelease</code>中的一个。这些关键字定义在规范<a href="https://peps.python.org/pep-0440/">PEP 440</a>中。</p>
+<p><code>semver</code>结合您当前的版本号，通过运算，就得出了新的版本号：</p>
+<table>
+<thead>
+<tr>
+<th>rule</th>
+<th>before</th>
+<th>after</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>major</td>
+<td>1.3.0</td>
+<td>2.0.0</td>
+</tr>
+<tr>
+<td>minor</td>
+<td>2.1.4</td>
+<td>2.2.0</td>
+</tr>
+<tr>
+<td>patch</td>
+<td>4.1.1</td>
+<td>4.1.2</td>
+</tr>
+<tr>
+<td>premajor</td>
+<td>1.0.2</td>
+<td>2.0.0-alpha.0</td>
+</tr>
+<tr>
+<td>preminor</td>
+<td>1.0.2</td>
+<td>1.1.0-alpha.0</td>
+</tr>
+<tr>
+<td>prepatch</td>
+<td>1.0.2</td>
+<td>1.0.3-alpha.0</td>
+</tr>
+<tr>
+<td>prerelease</td>
+<td>1.0.2</td>
+<td>1.0.3-alpha.0</td>
+</tr>
+<tr>
+<td>prerelease</td>
+<td>1.0.3-alpha.0</td>
+<td>1.0.3-alpha.1</td>
+</tr>
+<tr>
+<td>prerelease</td>
+<td>1.0.3-beta.0</td>
+<td>1.0.3-beta.1</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出，poetry对版本号的管理是完全符合semantic version的要求的。当你完成了一个小的修订（比如修复了一个bug，或者增强了性能，或者修复了安全漏洞)，此时只应该递增package的修订号，即x.y.z中的'z'，这时我们就应该使用命令:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry version patch
+</code></pre></div></td></tr></table></div>
+如果之前的版本是0.1.0，那么运行上述命令后，版本号将变更为0.1.1。
+如果我们的package新增加了一些功能，而之前提供的功能（API）都还能不加修改，继续使用，那么我们应该递增次版本号，即x.y.z中的'y'。这时我们应该使用命令：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry version minor
+</code></pre></div></td></tr></table></div>
+如果之前的版本是0.1.1，那么运行上述命令后，版本号将变更为0.2.0</p>
+<p>如果我们的package进行了大幅的修改，并且之前提供的功能（API）的签名已经变掉，从而使得调用者必须修改他们的程序才能继续使用这些API，又或者新的版本不再能兼容老版本的数据格式，用户必须对数据进行额外的迁移，那么，我们就认为这是一次破坏性的更新，必须升级主版本号：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry version major
+</code></pre></div></td></tr></table></div>
+如果之前的版本号是0.3.1,那么运行上述命令之后，版本号将变更为1.0.0；如果之前的版本号是1.2.1，那么运行上述命令之后，版本号将变更为2.0.0。</p>
+<p>除此之外，poetry还提供了预发布版本号的支持。比如，上一个发布的版本是0.1.0，那么我们在正式发布0.1.1这个修订之前，可以使用0.1.1.a0这个版本号：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry version prerelease
+# output:
+Bumping version from 0.1.0 to 0.1.1a0
+</code></pre></div></td></tr></table></div>
+如果需要再出一个alpha版本，则可以再次运行上述命令：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry version prerelease
+# output:
+Bumping version from 0.1.1a0 to 0.1.1a1
+</code></pre></div></td></tr></table></div>
+如果alpha版本已经完成，可以正式发布，运行下面的命令：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry version patch
+# output:
+Bumping version from 0.1.1a1 to 0.1.1
+</code></pre></div></td></tr></table></div>
+poetry暂时还没有提供从alpha转到beta版本系列的命令。如果有此需要，您需要手工编辑pyproject.toml文件。</p>
+<p>除了poetry version prerelease之外，我们还注意到上面列出的premajor, preminor和prepatch选项。它们的作用也是将版本号修改为alpha版本系列，但无论你运行多少次，它们并不会象prerelease选项一样，递增alpha版本号。所以在实际的alpha版本管理中，似乎只使用<code>poetry version prerelease</code>就可以了。</p>
+<h3 id="依赖管理">依赖管理<a class="headerlink" href="#依赖管理" title="Permanent link">&para;</a></h3>
+<h4 id="实现依赖管理的意义">实现依赖管理的意义<a class="headerlink" href="#实现依赖管理的意义" title="Permanent link">&para;</a></h4>
+<p>我们已经通过大量的例子说明了依赖管理的作用。总结起来，依赖管理不仅要检查项目中声明的直接依赖之间的冲突，还要检查它们各自的传递依赖之间的彼此兼容性。</p>
+<h4 id="poetry进行依赖管理的相关命令">Poetry进行依赖管理的相关命令<a class="headerlink" href="#poetry进行依赖管理的相关命令" title="Permanent link">&para;</a></h4>
+<p>在Poetry管理的工程中，当我们向工程中加入（或者更新）依赖时，总是使用<code>poetry add</code>命令，比如：<code>poetry add pytest</code></p>
+<p>这里可以指定，也可以不指定版本号。命令在执行时，会对<code>pytest</code>所依赖的库进行解析，直到找到合适的版本为止。如果您指定了版本号，该版本与工程里已有的其它库不兼容的话，命令将会失败。</p>
+<p>我们在添加依赖时，一般要指定较为准确的版本号，界定上下界，从而避免意外升级带来的各种风险。在指定依赖库的版本范围时，有以下各种语法：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add SQLAlchemy               # 使用最新的版本
+</code></pre></div></td></tr></table></div>
+使用通配符语法:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add SQLAlchemy=*             # 使用&gt;=0.0.0的版本，无法锁定上界，不推荐
+poetry add SQLAlchemy=1.*           # 使用&gt;=1.0.0, &lt;2.0.0的版本
+</code></pre></div></td></tr></table></div>
+使用插字符(caret)语法:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add SQLAlchemy^1.2.3         # 使用&gt;=1.2.3, &lt;2.0.0的版本
+poetry add SQLAlchemy^1.2           # 使用&gt;=1.2.0, &lt;2.0.0的版本
+poetry add SQLAlchemy^1             # 使用&gt;=1.0.0, &lt;2.0.0的版本
+</code></pre></div></td></tr></table></div>
+使用波浪符(Tilde)语法:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add SQLAlchemy~1.2           # 使用&gt;=1.2.0,&lt;1.3的版本
+poetry add SQLAlchemy~1.2.3         # 使用&gt;=1.2.3，&lt;1.3的版本
+</code></pre></div></td></tr></table></div>
+使用不等式语法(及多个不等式):
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add SQLAlchemy&gt;=1.2,&lt;1.4     # 使用&gt;=1.2,&lt;1.4的版本
+</code></pre></div></td></tr></table></div>
+最后，精确匹配语法：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add SQLAlchemy==1.2.3        # 使用1.2.3版本
+</code></pre></div></td></tr></table></div></p>
+<p>如果有可能，我们推荐总是使用波浪符或者不等式语法。它们有助于在可升级性和可匹配性上取得较好的平衡。比如，如果在增加对SQLAlchemy的依赖时，如果使用了插字符语法，你已经发行出去的安装包，则会在安装时自动采用直到2.0.0之前的SQLAlchemy的最新版本。因此，如果你的安装包是在SQLAlchemy 1.4之前被安装，此后用户不再升级，则它们将可以正常运行；而如果是在SQLAlchemy 1.4发布之后被安装，pip将自动使用1.4及以后最新的SQLAlchemy，于是1.4这个跟之前版本不兼容的版本就被安装上了，导致你的程序崩溃;而你将不会有任何办法（除非发行新的升级包）来解决这一问题。</p>
+<p>这也看出来SQLAlchemy的发行并不符合Semantic的标准。一旦出现API不兼容的情况，是需要对主版本升级的。如果SQLAlchemy不是将版本升级到1.4，则是升级到2.0，则不会导致程序出现问题。</p>
+<p>始终遵循社区规范进行开发，这是每一个开源程序开发者都应该重视的问题。</p>
+<p>但是，指定具体的版本也会有它的问题。在向工程中增加依赖时，如果我们直接指定了具体的版本，有可能因为依赖冲突的原因，无法指定成功。此时可以指定一个较宽泛一点的版本范围，待解析成功和测试通过后，再改为固定版本。另外，如果该依赖发布了一个紧急的安全更新，通常会使用递增修订号的方式来递增版本。使用指定的版本号会导致你的应用无法快速获得此安全更新。</p>
+<p>在上一章里，我们已经提到了依赖分组。我们的应用程序会依赖许多第三方库，这些第三方库中，有的是运行时依赖，因此它们必须随我们的程序一同被分发到终端用户那里；有的则只是开发过程中需要，比如象pytest，black，mkdocs等等。因此，我们应该将依赖分组，并且只向终端用户分发必要的依赖。</p>
+<p>这样做的益处是显而易见的。一方面，依赖解析并不容易，一个程序同时依赖的第三方库越多，依赖解析就越困难，耗时越长，也越容易失败；另一方面，我们向终端用户的环境里注入的依赖越多，他们的环境中就越容易遇到依赖冲突问题。</p>
+<p>最新的Python规范允许你的程序使用发行依赖（在最新的poetry版本中，被归类为main依赖）和extra requirements。在上一章向导创建的工程中，我们把extra reuqirement分为了三个组，即dev, test, doc。</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code>[tool.poetry.dependencies]
+black  = { version = &quot;20.8b1&quot;, optional = true}
+isort  = { version = &quot;5.6.4&quot;, optional = true}
+flake8  = { version = &quot;3.8.4&quot;, optional = true}
+flake8-docstrings = { version = &quot;^1.6.0&quot;, optional = true }
+pytest  = { version = &quot;6.1.2&quot;, optional = true}
+pytest-cov  = { version = &quot;2.10.1&quot;, optional = true}
+tox  = { version = &quot;^3.20.1&quot;, optional = true}
+virtualenv  = { version = &quot;^20.2.2&quot;, optional = true}
+pip  = { version = &quot;^20.3.1&quot;, optional = true}
+mkdocs  = { version = &quot;^1.1.2&quot;, optional = true}
+mkdocs-include-markdown-plugin  = { version = &quot;^1.0.0&quot;, optional = true}
+mkdocs-material  = { version = &quot;^6.1.7&quot;, optional = true}
+mkdocstrings  = { version = &quot;^0.13.6&quot;, optional = true}
+mkdocs-material-extensions  = { version = &quot;^1.0.1&quot;, optional = true}
+twine  = { version = &quot;^3.3.0&quot;, optional = true}
+mkdocs-autorefs = {version = &quot;0.1.1&quot;, optional = true}
+pre-commit = {version = &quot;^2.12.0&quot;, optional = true}
+toml = {version = &quot;^0.10.2&quot;, optional = true}
+
+[tool.poetry.extras]
+test = [
+    &quot;pytest&quot;,
+    &quot;black&quot;,
+    &quot;isort&quot;,
+    &quot;flake8&quot;,
+    &quot;flake8-docstrings&quot;,
+    &quot;pytest-cov&quot;，
+    &quot;twine&quot;
+    ]
+
+dev = [&quot;tox&quot;, &quot;pre-commit&quot;, &quot;virtualenv&quot;, &quot;pip&quot;,  &quot;toml&quot;]
+
+doc = [
+    &quot;mkdocs&quot;,
+    &quot;mkdocs-include-markdown-plugin&quot;,
+    &quot;mkdocs-material&quot;,
+    &quot;mkdocstrings&quot;,
+    &quot;mkdocs-material-extension&quot;,
+    &quot;mkdocs-autorefs&quot;
+    ]
+</code></pre></div></td></tr></table></div>
+这里tox， pre-commit等是我们开发过程中使用的工具；pytest等是测试时需要的依赖；而doc则是构建文档时需要的工具。通过这样划分，可以使CI或者文档托管平台只安装必要的依赖；同时也容易让开发者分清每个依赖的具体作用。</p>
+<p>当你使用poetry add命令，不加任何选项时，该依赖将被添加为发行依赖（在1.3以上的poetry中，被归为main组），即安装你的包的最终用户，他们也将安装该依赖。但有一些依赖只是开发者需要，比如象mkdocs， pytest等，它们不应该被分发到最终用户那里。</p>
+<p>在python proejct wizard开发时，poetry还只支持一个dev分组，这样的粒度当然是不够的，因此，python project wizard借用了extras字段来向项目添加可选依赖分组，其它工具，比如tox也支持这样的语法。</p>
+<p>现在最新的poetry已经完全支持分组模式，并且从文档可以看出，它建议至少使用main, docs和test三个分组。后续python project wizard生成的项目框架，也将完全使用最新的语法，但仍然保留四个分组，即main, dev, docs和test。</p>
+<p>通过poetry向项目增加分组及依赖，语法是：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add pytest --group test
+</code></pre></div></td></tr></table></div>
+这样，生成的pyproject.toml片段如下：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>[tool.poetry.group.test.dependencies]
+pytest = &quot;*&quot;
+</code></pre></div></td></tr></table></div></p>
+<p>一般地，我们应该将其指定为optional。目前最新版本的poetry仍然不支持通过命令行直接将group指定为optional，您可能需要手工编辑这个文件。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>[tool.poetry.group.test]
+optional = true
+</code></pre></div></td></tr></table></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>注意，通过上述命令生成的toml文件的内容可能与python project wizard当前版本生成的有所不同。但python project wizard的未来版本最终将使用同样的语法。</p>
+</div>
+<h4 id="poetry依赖解析的工作原理">poetry依赖解析的工作原理<a class="headerlink" href="#poetry依赖解析的工作原理" title="Permanent link">&para;</a></h4>
+<p>在上一节，我们简单地介绍了如何使用poetry来向我们的项目中增加依赖。我们强调了依赖解析的困难，但并没有解释poetry是如何进行依赖解析的，它会遇到哪些困难，可能遭遇什么样的失败，以及应该如何排错。对于初学者来说，这往往是配置poetry项目时最困难和最耗时间的部分。</p>
+<p>现在，我们往项目中增加一个新的依赖，通常我们使用<code>poetry add xxx</code>来往项目中增加依赖。为了一窥poetry依赖解析的究竟，这次我们加上详细信息输出:</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry add gino -vvv
+</code></pre></div></td></tr></table></div>
+输出会很长。我们摘要读一下跟gino相关的一些解析过程：</p>
+<p>首先，poetry注意到sample 0.1.0依赖到gino(&gt;=1.0.1, &lt; 2.0.0)，以及其它一些依赖，生成了第一步的解析结果：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code>   1: fact: sample is 0.1.0
+   1: derived: sample
+   1: selecting sample (0.1.0)
+   1: derived: gino (&gt;=1.0.1,&lt;2.0.0)
+   1: derived: mike (&gt;=1.1.2,&lt;2.0.0)
+    ...
+```text
+接下来，下载gino，解析出下面的依赖:
+```text
+1 packages found for gino &gt;=1.0.1,&lt;2.0.0
+   1: fact: gino (1.0.1) depends on SQLAlchemy (&gt;=1.2.16,&lt;1.4)
+   1: fact: gino (1.0.1) depends on asyncpg (&gt;=0.18,&lt;1.0)
+   1: selecting gino (1.0.1)
+   1: derived: asyncpg (&gt;=0.18,&lt;1.0)
+   1: derived: SQLAlchemy (&gt;=1.2.16,&lt;1.4)
+</code></pre></div></td></tr></table></div>
+再接下来，它找到sqlalchemy的29个版本：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>Source (ali): 14 packages found for asyncpg &gt;=0.18,&lt;1.0
+Source (ali): 29 packages found for sqlalchemy &gt;=1.2.16,&lt;1.4
+</code></pre></div></td></tr></table></div>
+接下来比较幸运，当poetry查找asyncpg和sqlalchemy的传递依赖时，没有找到它们有更多的传递依赖，解析结束，这样，poetry就顺利地选择了29个版本中，最新的一个，即SQLAlchemy-1.3.24。这个版本又有linux, windows和mac等好几个包，poetry最终选择跟当前环境中操作系统版本一致、python版本一致的那个进行安装。</p>
+<p>现在让我们看一看poetry最终解析出来的依赖树：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry show -t
+# --- output ---
+black 22.12.0 The uncompromising code formatter.
+├── click &gt;=8.0.0
+│   ├── colorama * 
+│   └── importlib-metadata * 
+│       ├── typing-extensions &gt;=3.6.4 
+│       └── zipp &gt;=0.5 
+├── mypy-extensions &gt;=0.4.3
+├── pathspec &gt;=0.9.0
+├── platformdirs &gt;=2
+│   └── typing-extensions &gt;=4.4 
+├── tomli &gt;=1.1.0
+├── typed-ast &gt;=1.4.2
+└── typing-extensions &gt;=3.10.0.0
+gino 1.0.1 GINO Is Not ORM - a Python asyncio ORM on SQLAlchemy core.
+├── asyncpg &gt;=0.18,&lt;1.0
+└── sqlalchemy &gt;=1.2.16,&lt;1.4
+mkdocs 1.2.4 Project documentation with Markdown.
+├── click &gt;=3.3
+│   ├── colorama * 
+│   └── importlib-metadata * 
+│       ├── typing-extensions &gt;=3.6.4 
+│       └── zipp &gt;=0.5 
+├── ghp-import &gt;=1.0
+│   └── python-dateutil &gt;=2.8.1 
+│       └── six &gt;=1.5 
+├── importlib-metadata &gt;=3.10
+│   ├── typing-extensions &gt;=3.6.4 
+│   └── zipp &gt;=0.5 
+├── jinja2 &gt;=2.10.1
+│   └── markupsafe &gt;=2.0 
+├── markdown &gt;=3.2.1
+│   └── importlib-metadata * 
+│       ├── typing-extensions &gt;=3.6.4 
+│       └── zipp &gt;=0.5 
+├── mergedeep &gt;=1.3.4
+├── packaging &gt;=20.5
+├── pyyaml &gt;=3.10
+├── pyyaml-env-tag &gt;=0.1
+│   └── pyyaml * 
+└── watchdog &gt;=2.0
+</code></pre></div></td></tr></table></div>
+这个依赖树很长，这里只截取了一小部分，但大致上可以帮助我们了解poetry的工作原理。我们可以看到<code>black</code>和<code>mkdocs</code>都依赖了<code>click</code>，但<code>black</code>要求更新到8.0以上，而<code>mkdocs</code>则认为只要是3.3以上都可以。两者版本要求差距如此之大，也不免让人担心，8.0的<code>click</code>与3.3的<code>click</code>还会是同一个<code>click</code>吗？</p>
+<p>最终，关于gino和sqlalchemy，poetry安装的分别是1.0.1和1.3.24，但是，上述解析树表明，如果存在sqlalchemy的1.3.25版本，它是可以自动升级的。我们许的愿，poetry帮助实现了。</p>
+<p>One more thing: 生成这棵依赖树可能要比你想像的困难得多。首先，PyPi在多数情况下，无法给出它上面的某一个package的依赖树（这也是为什么你在pypi.org上没有看到类似上面的依赖树的原因），这意味着poetry要知道<code>black</code>依赖哪些库，它必须先把<code>black</code>下载下来，打开它并解析才能知道。然后它从<code>black</code>中发现更多的依赖，这往往就需要它把这些依赖也下载下来，依次递归下去。</p>
+<p>更为糟糕的是，在这个过程中，某个库的好几个版本可能都需要依次下载下来 -- 因为它们的传递依赖不能兼容。我记得在某次解析中，poetry把numpy的版本从1.2.x一直下载到了0.1！</p>
+<p>所以，如果你在添加某个依赖时，发现poetry耗时过长，不要慌张，很多人都有与你一样的经历。这种情况主要是poetry无法快速锁定某个package的正确版本，不得不向后一个个版本搜索下载所致。我们能做的，就是加快poetry下载的速度。</p>
+<p>poetry正常情况下，是从pypi.org上下载package。如果遇到解析速度问题，我们可以临时添加一个源：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry source add ali https://mirrors.aliyun.com/pypi/simple --default
+</code></pre></div></td></tr></table></div>
+再次运行<code>poetry add</code>，这次你会发现解析速度快了很多。</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>早期poetry的依赖解析可以慢到10多个小时都做不完。这有两方面的原因，一是早期poetry的依赖解析还没有启用多线程下载优化；二是在特殊情况下，poetry需要把某些package在pypi上所有的版本全部下载一次，才能得出无法（或者可以）加入该依赖的结论。随着python生态的变化，现在这种需要数小时的依赖解析的时代基本结束了。在添加国内源的情况下，慢的时候也往往是不到一刻钟就能完成解析。</p>
+</div>
+<p>现在我们来移除gino：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry remove gino
+
+# --- output ---
+Updating dependencies
+Resolving dependencies... (1.2s)
+
+Writing lock file
+
+Package operations: 0 installs, 0 updates, 3 removals
+
+  • Removing asyncpg (0.27.0)
+  • Removing gino (1.0.1)
+  • Removing sqlalchemy (1.3.24)
+</code></pre></div></td></tr></table></div>
+从输出可以看出，不仅是gino本身被卸载，它的传递依赖 -- asyncpg和sqlalchemy也被移除掉了。这是pip做不到的。</p>
+<h3 id="虚拟运行时">虚拟运行时<a class="headerlink" href="#虚拟运行时" title="Permanent link">&para;</a></h3>
+<p>Poetry自己管理着虚拟运行时环境。当你执行<code>poetry install</code>命令时，Poetry就会安装一个基于venv的虚拟环境，然后把项目依赖都安装到这个虚拟的运行环境中去。此后，当你通过poetry来执行其它命令时，比如<code>poetry pytest</code>，也会在这个虚拟环境中执行。反之，如果你直接执行<code>pytest</code>，则会报告一些模块无法导入，因为你的工程依赖并没有安装在当前的环境下。</p>
+<p>我们推荐在开发过程中，使用conda来创建集中式管理的运行时。在调试Python程序时，都要事先给IDE指定解析器，这里使用集中式管理的运行时，可能更方便一点。Poetry也允许这种做法。当Poetry检测到当前是运行在虚拟运行时环境下时，它是不会创建新的虚拟环境的。</p>
+<p>但是Poetry的创建虚拟环境的功能也是有用的，主要是在测试时，通过virtualenv/venv创建虚拟环境速度非常快。</p>
+<h3 id="构建发行包">构建发行包<a class="headerlink" href="#构建发行包" title="Permanent link">&para;</a></h3>
+<h4 id="python构建标准和工具的变化">Python构建标准和工具的变化<a class="headerlink" href="#python构建标准和工具的变化" title="Permanent link">&para;</a></h4>
+<p>在poetry 1.0发布之前，打包一个python项目，需要准备MANIFEST.in, setup.cfg, setup.py，makefile等文件。这是PyPA(python packaging authority)的要求，只有遵循这些要求打出来的包，才可以上传到pypi.org，从而向全世界发布。</p>
+<p>但是这一套系统也有不少问题，比如缺少构建时依赖声明，自动配置，版本管理。因此，<a href="https://peps.python.org/pep-0517/">PEP 517</a>被提出，然后基于PEP 517, PEP 518等一系列新的标准，Sébastien Eustace开发了poetry。</p>
+<h4 id="基于poetry进行发行包的构建">基于Poetry进行发行包的构建<a class="headerlink" href="#基于poetry进行发行包的构建" title="Permanent link">&para;</a></h4>
+<p>我们通过运行<code>poetry build</code>来打包，打包的文件约定俗成地放在dist目录下。</p>
+<p>poetry支持向pypi进行发布，其命令是<code>poetry publish</code>。不过，在运行该命令之前，我们需要对poetry进行一些配置，主要是repo和token。</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code># publish to test pypi
+poetry config repositories.testpypi https://test.pypi.org/legacy/
+poetry config testpypi-token.pypi my-token
+poetry publish -r testpypi
+
+# publish to pypi
+poetry config pypi-token.pypi my-token
+poetry publish
+</code></pre></div></td></tr></table></div>
+上面的命令分别对发布到test pypi和pypi进行了演示。由于默认地Poetry支持PyPI发布，所以有些参数就不需要提供了。当然，一般情况下，我们都不应该直接运行<code>poetry publish</code>命令来发布版本。版本的发布，都应该通过CI机制来进行。这样的好处时，可以保证每次发布，都经过了完整的测试，并且，构建环境是始终一致的，不会出现因构建环境不一致，导致打出来的包有问题的情况。</p>
+<h3 id="其它重要的poetry命令">其它重要的Poetry命令<a class="headerlink" href="#其它重要的poetry命令" title="Permanent link">&para;</a></h3>
+<p>我们已经介绍了poetry add, poetry remove, poetry show, poetry build, poetry publish, poetry version等命令。还有一些命令也值得介绍。</p>
+<h4 id="poetry-lock">poetry lock<a class="headerlink" href="#poetry-lock" title="Permanent link">&para;</a></h4>
+<p>该命令将进行依赖解析，锁定所有的依赖到最新的兼容版本，并将结果写入到poetry.lock文件中。通常，运行poetry add时也会生成新的锁定文件。</p>
+<p>在对代码执行测试、CI或者发布之前，务必要确保poetry.lock存在，并且这个文件也应该提交到代码仓库中，这样所有的测试，CI服务器，你的同侪开发者构建的环境才会是完全一致的。</p>
+<h4 id="poetry-export">poetry export<a class="headerlink" href="#poetry-export" title="Permanent link">&para;</a></h4>
+<p>极少数情况下，你可能希望将依赖导出为requirements:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>poetry export -f requirements.txt --output requirements.txt
+</code></pre></div></td></tr></table></div></p>
+<h4 id="poetry-config">poetry config<a class="headerlink" href="#poetry-config" title="Permanent link">&para;</a></h4>
+<p>我们可以通过poetry config --list来查看当前配置项：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code>cache-dir = &quot;/path/to/cache/directory&quot;
+virtualenvs.create = true
+virtualenvs.in-project = null
+virtualenvs.options.always-copy = true
+virtualenvs.options.no-pip = false
+virtualenvs.options.no-setuptools = false
+virtualenvs.options.system-site-packages = false
+virtualenvs.path = &quot;{cache-dir}/virtualenvs&quot;  # /path/to/cache/directory/virtualenvs
+virtualenvs.prefer-active-python = false
+virtualenvs.prompt = &quot;{project_name}-py{python_version}&quot;
+</code></pre></div></td></tr></table></div>
+这里面比较重要的有配置pypi-token，以便发布你的项目。</p>
+<h3 id="案例-基于poetry创建并发布一个项目">案例： 基于Poetry创建并发布一个项目<a class="headerlink" href="#案例-基于poetry创建并发布一个项目" title="Permanent link">&para;</a></h3>
+<p>移除掉？</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes", "navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "header.autohide", "navigation.top", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+    
+  </body>
+</html>
