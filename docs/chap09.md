@@ -61,36 +61,34 @@ Github Actions由工作流(workflow)、事件(Event)、作业(job)、操作(Acti
 ```yaml
 name: dev build CI
 
-# Controls when the action will run.
+# 定义哪些事件可以触发工作流，以及筛选条件
 on:
-  # Triggers the workflow on push or pull request events
+  # 当存储库有push或者pull_request事件时触发
   push:
     branches:
       - '*'
   pull_request:
     branches:
       - '*'
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# 定义作业集
 jobs:
   # 工作流包含三个作业，分别是test, publish_dev_build, notification
   test:
-    # The type of runner that the job will run on
+    # 定义作业的运行环境，这里使用了矩阵式定义
     strategy:
       matrix:
         python-versions: ['3.8', '3.9', '3.10']
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    # map step outputs to job outputs so they can be share among jobs
+    # 将步骤的输出提升为作业的输出，以便它们可以在作业之间共享
     outputs:
       package_version: ${{ steps.variables_step.outputs.package_version }}
       package_name: ${{ steps.variables_step.outputs.package_name }}
       repo_name: ${{ steps.variables_step.outputs.repo_name }}
       repo_owner: ${{ steps.variables_step.outputs.repo_owner }}
 
-    # uncomment the following to pickup services
+    # 这是启用外部服务的一个示例
     # services:
     #   redis:
     #     image: redis
@@ -102,9 +100,9 @@ jobs:
     #     ports:
     #       - 6379:6379
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # 步骤集代表了一系列的任务，这些任务将作为作业的一部分执行
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 作业是在容器里执行的，我们需要先将代码检出到这个干净的容器里
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
@@ -115,7 +113,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions poetry
 
-      # declare package_version, repo_owner, repo_name, package_name so you may use it in web hooks.
+      # 这一步里，我们设置了一些变量，将其输出到控制台，从而可以在第85行提升为job的输出
       - name: Declare variables for convenient use
         id: variables_step
         run: |
@@ -125,22 +123,25 @@ jobs:
           echo "::set-output name=package_version::`poetry version --short`"
         shell: bash
 
+      # 执行单元测试和代码检查。
       - name: test with tox
         run: tox
 
+      # 通过codecov上传测试覆盖率。
       - uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
 
   publish_dev_build:
-    # if test failed, we should not publish
+    # 只有test作业完成，我们才开始本作业
     needs: test
-    # you may need to change os below
+    # 指定本作业运行的操作系统环境。
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
+          # 这一步只需要在任意一个python版本上运行
           python-version: '3.9'
 
       - name: Install dependencies
@@ -225,8 +226,7 @@ jobs:
 
 这是一个名为dev build CI的作业，它将在任一分支发生提交和pull request时触发。它包含三个作业，即test(执行单元测试)、publish_dev_build(构建并发布开发版本到test_pypi)和notification(在构建成功或失败时发送邮件通知)。三者之间有依赖关系，如果test作业失败，publish_dev_build会取消；但是无论test/publish_dev_build作业是否成功，notification作业都会执行，并根据前两个作业的状态发送邮件通知。
 
-这是一个比较简单的、但非常常见的作业，也涉及了我们在CI中需要做的几乎所有事情。下面我们来逐行解读工作流文件及相关语法。
-
+这是一个比较简单的作业，也涉及了我们在CI中需要做的几乎所有事情。在代码中我们加入了较多的注释，建议读者结合下面的讲解，仔细阅读代码。
 ### 定义触发条件
 第4行到第14行配置了工作流的触发条件。触发条件一节由关键字**'on'**引起。在它的下一层，我们可以定义多个触发事件，并为每个触发事件，指定类型和过滤器。一个完整的触发条件配置如下：
 
@@ -258,7 +258,7 @@ on:
 
 每个作业都有自己的id和名字。在上述例子中，test, publish_dev_build和notification都是作业id。作业id是必须的，但是作业名字是可选的。如果没有指定作业名字，那么作业名字将默认为作业id。作业名字可以用来在GitHub Actions的界面上显示作业的名称。
 
-在作业publish_dev_build中，我们通过关键字needs来定义了它对作业test的依赖。这里的test是作业的id，而不是它的名字。我们在第114行还看到，作业还可以依赖到一组作业。
+在作业publish_dev_build中，我们通过关键字`needs`来定义了它对作业`test`的依赖。我们在第114行还看到，作业还可以依赖到一组作业。当我们指定作业依赖时，要注意只能使用作业的id，而不是作业的名字。
 
 接下来我们为作业定义执行环境。执行环境是通过关键字 'runs-on' 来定义的。有些任务只需要在一台机器上执行就可以了，比如构建和发布；有些任务则需要在所有的机器上、并以多个python运行时来运行。
 
@@ -266,5 +266,67 @@ on:
 
 我们通过strategy.matrix来定义测试矩阵。在示例第20~23行定义的矩阵中，我们定义了python版本和操作系统列表。这个定义随后就被使用了，在第24行，我们通过{{matrix.os}}来引用了其中的操作系统定义。第22行的python-versions是一个特殊的关键字，它用来指示我们要使用的python版本。如果我们的开发语言不是python，这里的指定将没有意义。
 
+接下来我们需要为作业定义具体执行哪些任务，它们被归类在步骤集(steps)中。步骤集是一个包含多个步骤的列表。而每一个步骤，要么是一个shell命令（或者一组shell命令），要么是一个action。如果要运行shell命令，我们使用下面的语法：
+```yaml
+- name: <step name>
+  run: <shell command>
+```
+如果要运行一组shell命令，我们使用:
+```yaml
+- name: <step name>
+  run: |
+    <shell command 1>
+    <shell command 2>
+    ...
+```
+注意上述两组语法的不同之处，不能混淆。
 
+至于action，我们前面已经讲过了，它是用于 GitHub Actions 平台的自定义应用程序。您可以自己编写action，也可以在Github的应用市场上查找他人开发的应用。
 
+每一个步骤都可以指定python运行时。我们在第48行看到，这里`{{ matrix.python-versions }}`使用的是矩阵中定义的python版本。而在第84行，我们则直接指定了一个python的版本。这里还要注意，版本号是一个字符串，q我们可以使用`'3.10'`，但不能使用`3.10`，后者将会被yaml解析为`3.1`，从而出现找不到python版本的问题。
+
+最后，我们介绍一下job运行时的条件控制。我们已经介绍过了job之间的依赖关系，这可以算作是一种条件。还有一种情况，比如示例中的notification作业，我们要求它只能在前两个作业都完成后才运行，但无论成功与否，都要运行，但会根据前面作业的状态，发出不同内容的通知邮件，此时，我们就需要引入`if`条件控制。
+
+`if`条件控制可以作用于作业作用域（如第116行所示），也可以作用于步骤作用域（如第123行所示）。在作业作用域中，我们可以使用`success()`、`failure()`、`cancelled()`、`always()`等函数来指定在何种情况下才运行本作业。在步骤作用域中，我们则可以进行简单的条件判断，来指标本步骤是否运行。
+
+在进行条件判断时，我们必然需要使用变量。现在，我们需要全面地介绍一下在工作流中变量的使用。通过变量，结合各种控制条件，我们才能实现一些高级的技巧。
+Github中的变量分为两种，一种是系统变量，一种是作业变量。系统变量是Github平台提供的，作业变量是我们自己定义的。无论那一种变量，我们都通过`${{ }}`来引用。
+
+系统变量按级别可以定义在组织、存储库或者环境上。比如`secrets`就定义在存储库级别上，我们可以通过`${{ secrets.BUILD_NOTIFY_MAIL_RCPT }}`来访问它的值，这需要我们在存储库里事先定义`BUILD_NOTIFY_MAIL_RCPT`这个变量。Github提供了一些默认变量，比如`GITHUB_REPOSITORY`（你在第59行，声明变量那一节可以看到它的使用）等。
+
+作业变量的使用比较特殊，我们看看下面的例子：
+```yaml
+  notification:
+    needs: [test,publish_dev_build]
+    steps:
+      - name: build success notification via email
+        if: ${{ steps.check.outputs.status == 'success' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          subject: ${{ needs.test.outputs.package_name }}.
+```
+例子中，我们通过${{ needs.test.outputs.package_name }}来引用在第24行声明的`package_name`变量。变量是通过`{job_id}.outputs.{variable}`来引用的，这并没有什么奇怪的地方。但是要注意它还有一个`needs`作用域。这表明，如果我们使用变量的地方，其所属的作业如果没有声明依赖到`test`作业，那么这个变量是无法被引用的。
+
+示例中没有展示环境变量的用法，这里我们给一个示例，请读者结合注释自行研究：
+```
+env:
+  # 声明了一个全局上下文的环境变量
+  DAY_OF_WEEK: Monday
+
+jobs:
+  greeting_job:
+    runs-on: ubuntu-latest
+    env:
+      # 声明了一个作业上下文的环境变量
+      Greeting: Hello
+    steps:
+      - name: "Say Hello Mona it's Monday"
+        # 使用时我们在变量前加一个`env.`的约束
+        if: ${{ env.DAY_OF_WEEK == 'Monday' }}
+        # 当使用的环境变量是在作业内声明时，我们可以省略`env.`的约束
+        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+        env:
+          # 声明了步骤上下文的环境变量
+          First_Name: Mona
+```
+### 连接其它服务
