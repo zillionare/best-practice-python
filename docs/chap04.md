@@ -1,20 +1,20 @@
-# 项目布局和项目生成向导
-## 标准项目布局
-### 文档
-### 工程构建配置文件
-### 代码目录
-### 单元测试文件目录
-### 持续集成配置文件
-## 项目生成向导——Python Project Wizard
-### 安装Python Project Wizard
-### 创建虚拟环境
-### 安装开发依赖
-### 创建Github Repo
-### 运行发布测试
-### 设置Github CI
-### 设置Codecov
+# 1. 项目布局和项目生成向导
+## 1.1. 标准项目布局
+### 1.1.1. 文档
+### 1.1.2. 工程构建配置文件
+### 1.1.3. 代码目录
+### 1.1.4. 单元测试文件目录
+### 1.1.5. 持续集成配置文件
+## 1.2. 项目生成向导——Python Project Wizard
+### 1.2.1. 安装Python Project Wizard
+### 1.2.2. 创建虚拟环境
+### 1.2.3. 安装开发依赖
+### 1.2.4. 创建Github Repo
+### 1.2.5. 运行发布测试
+### 1.2.6. 设置Github CI
+### 1.2.7. 设置Codecov
 
-# 项目布局和项目生成向导
+# 2. 项目布局和项目生成向导
 
 通过前三章的学习，我们了解了如何构建开发环境，并且也完成了一个最简单的python程序 -- Hello World。
 
@@ -40,7 +40,7 @@
 
 在工程构建过程中，使用约定俗成的项目文件结构和规范的文件、文件夹名字，而不是通过繁琐的配置项目以允许过度自定义，这种原则被称为惯例优于配置(convention over configuration)，这不仅仅是Python,也是许多其它语言遵循的原则。
 
-## 标准项目布局
+## 2.1. 标准项目布局
 首先，我们介绍一个经典的Python项目布局，由[Kenneth Reitz](https://kennethreitz.org/)推荐。Kenneth Reitz是著名的Python http库[requests](https://github.com/psf/requests)和[pipenv](https://github.com/pypa/pipenv)的作者。
 
 这个布局如下面所示：
@@ -64,12 +64,12 @@
 │   └── tests
 ```
 下面我们来逐一解释。
-### 文档
-#### 项目说明文档
+### 2.1.1. 文档
+#### 2.1.1.1. 项目说明文档
 一般使用README作为文件名，大写。用来向本项目的使用者概括性地介绍这个项目的基本情况，比如主要功能、优势、版本计划等。这里文件的后缀是.rst，这是一种扩展标记文本格式，通过文档构建工具，可以生成富文本格式的文件。现在更流行的格式可能是markdown，以.md作为文件名后缀。我们会在文档构建那一章再详细介绍两者的区别。
-#### 许可证文档
+#### 2.1.1.2. 许可证文档
 一般使用LICENSE作为文件名，大写。开源项目必须配置此文档。此文件一般为纯文本格式，不支持扩展标记。
-#### 版本历史文档
+#### 2.1.1.3. 版本历史文档
 一般使用HISTORY作为文件名，大写。
 
 每一个版本发布，都可能引入新的功能、修复了一些bug和安全性问题，也可能带来一些行为变更，导致使用者必须也要做相应的修改才能使用。
@@ -77,21 +77,21 @@
 如果没有一个清晰的版本说明，程序库的用户就不知道应该选用哪一个版本，或者是否应该升级到最新版本上。使用新的版本可能会有益处，但也带来很多测试的工作。因此，我们在使用其它人开发的程序库时，并不一定要选择最新的，有时候甚至升级到最新的版本会导致程序无法运行。比如SQLAlchemy是一个应用十分广泛的Python ORM框架，它的1.4版本与前面的版本有较多不兼容的问题。如果您的程序不加修改就直接升级到1.4，那么大概率程序会崩溃。
 
 同README一样，可以使用.rst的文件格式，也可以使用.md的文件格式，后面我们不再特别提示。
-#### 开发者介绍文档
+#### 2.1.1.4. 开发者介绍文档
 一般使用AUTHORS作为文件名，大写。其目的是向他人介绍项目的开发者团队。
 
-### 帮助文档
+### 2.1.2. 帮助文档
 一个优秀的项目，还往往会有比较详尽的帮助文档，来告诉使用者如何安装、配置和使用，甚至还会配有一些教程。这些文档在命名上就没有那么严格，最终，它们将通过文档生成工具转换成格式更加美观的在线文档，供使用者阅读。一般地，这些文档都放在docs目录下，由一个主控文档(index.rst)来串联。当然，具体如何做，取决于文档构建工具。
 
-#### API文档
+#### 2.1.2.1. API文档
 还有一类比较特殊的文档，它们不直接出现在上述目录中，而是散落在源代码的各个部分，通过专用工具生成，与帮助文档一起使用。关于帮助文档和API文档，我们将在第10章，撰写技术文档中详细介绍。
-### 工程构建配置文件
+### 2.1.3. 工程构建配置文件
 不同的构建工具需要不同的配置文件。在Python工程中，主要有两种主流的构建工具，一是Python setup tools,另一种是符合PEP517，PEP518规范的新型构建工具，如Poetry等。
 
 在上述目录示例中，使用的是基于python setup tools的构建工具，它需要的配置文件有setup.py, MANIFEST.IN等文件，还可能会有requirements.txt和makefile；这也是为什么您会看到setup.py等文件的原因。如果是使用Poetry,则配置文件会简单许多，只需要一个pyproject.toml就够了。
 
 当您开始新的项目时，应该只使用Poetry，而不使用python setup tools。Poetry的依赖管理可以锁定程序的运行时，避免很多问题。但是，您可能依然要能看懂基于setup tools的老式工程配置，它们将可能在未来的一两年里还继续存在。
-### 代码目录
+### 2.1.4. 代码目录
 在其它开发语言，特别是编译型语言中，代码目录常常被称为源文件目录。由于Python是非编译型语言，代码源文件本身就是可执行文件，所以一般我们不把代码文件称作源文件。我们通常把发行的目标物称之为一个"包(package)"。因此，在下面的叙述中，我们将会把代码目录称之为包目录，或者package目录。
 
 因此，如果您正在开发一个名为sample的package，那么您的代码就应该放在一个名为sample的目录下，正如上面的目录视图所示。
@@ -117,27 +117,27 @@ from sample.helper import *
 
     这个例子中我们使用了老式的构建工具。注意除了构建工具之外，其它部分仍然是一样的。
 
-### 单元测试文件目录
+### 2.1.5. 单元测试文件目录
 单元测试文件的目录名一般为tests。这也是许多测试框架和工具默认的文件夹位置。
 
-### Makefile
+### 2.1.6. Makefile
 对Python程序员来说，可能并不太喜欢Makefile。在其它语言中，makefile和工具make的主要作用是定义依赖关系，编译生成构建物。Python程序一般而言无须编译，它只需要进行打包。所以在最新的基于Poetry的项目模板中，是没有Makefile的。但是有一些工具，比如sphinx文档构建中还需要Makefile；此外，Makefile的多target命令模式，也还有它的用处，因此，是否使用Makefile，可以取决于您项目的需要。
 
 在Kenneth Reitz推荐的项目布局中，还缺少一些重要的文件（或者目录）。这些是确保项目质量不可或缺的。主要是lint工具的配置文件，tox配置文件，codecoverage配置文件，CI配置文件等。
-### lint相关工具配置文件
+### 2.1.7. lint相关工具配置文件
 项目可能使用工具如flake8来进行语法检查，使用black来进行格式化。这些工具都会引入配置文件。此外，为了保证签入服务器的代码的风格和质量，可能会配置pre-commit hooks。
 
-### tox
+### 2.1.8. tox
 如果一个项目同时支持多个Python版本，那么在发布之前，往往需要在各个Python环境下都运行单元测试。为单元测试自动化地构建虚拟运行环境并执行单元测试，这就是tox要做的工作。这也是上一章讲的虚拟运行环境的一个实际使用案例。
 
 配置了tox的项目，会在根目录下引入tox.ini文件。
 
-### CI
+### 2.1.9. CI
 在项目中使用CI是尽早暴露问题，避免更大的损失的有效方法。通过使用CI，可以确保程序员签入的代码在并入主分支之前，是能够通过单元测试的。
 
 有一些在线的CI服务，比如appVeyor, travis和后起之秀github actions. 作者没有使用过AppVeyor。如果使用travis的话，需要在根目录下放置travis.yml这个文件。如果使用github actions，则需要在根目录下的.github/workflows/中放置配置文件，github对配置文件的名字没有要求。
 
-### codecoverage
+### 2.1.10. codecoverage
 
 我们需要通过code coverage来度量单元测试的强度。一些优秀的开源项目，其code coverage甚至可以做到100%（当然允许合理地排除一些代码）。在Python项目中，我们一般使用[coverage.py](https://coverage.readthedocs.io/en/coverage-5.5/)来进行代码覆盖测试。测试框架比如pytest都会集成它，无须单独调用，但一般需要在根目录下配置.coveragerc。
 
@@ -149,11 +149,11 @@ from sample.helper import *
     一些工具的默认配置可能会相互冲突，这也是很常见的现象。因为大家对什么是最优的技术路线都有自己的理解。比如flak8与black之间，对什么是正确的代码，有一些地方看法就不一致，从而导致black格式化的代码，总是通不过flak8的检查。因此，如何使得工具之间相互协调，也是新建项目时比较费时费力的事。
 
 下面，我们就结合项目生成向导，来介绍更多的配置文件。
-## 项目生成向导 - Python Project Wizard
+## 2.2. 项目生成向导 - Python Project Wizard
 
 如果您有其它语言的开发经验，您会发现象visual studio， 或者IntelliJ这样的开发工具有较好的向导，您只需要点击一些按钮，填写一些信息，就能立刻生成一个能编译的项目。在Python世界中，很遗憾没有任何一个开发工具（无论是vscode还是pycharm)提供这样的功能。
 
-### cookiecutter
+### 2.2.1. cookiecutter
 
 幸运的是，有一个开源的项目，[cookiecutter](https://cookiecutter.readthedocs.io)，可以帮我们生成各种项目的架子。
 
@@ -166,7 +166,7 @@ cookiecutter-pypackage是遵循cookiecutter规范开发的一个生成Python项�
 
 在`cookiecutter-pypackage`生成项目的过程中，会询问开发者的名字、电邮、项目名称，许可证类型（会让你在MIT，BSD等好几种知名的许可证模式中选择，并提供标准的LICENSE文本），是否集成click这个命令行接口，是否生成console script等。回答完成这些问题之后，您就能得到一个框架程序，您可以立刻编译并发布它，包括文档。
 
-### python project wizard
+### 2.2.2. python project wizard
 cookiecutter-pypackage所使用的技术并不完全符合现在的社区规范，所以本书作者基于这个repo，开发了一个全新的模板，它具有这些功能：
 
 1. 提供README，AUTHORS, LICENSE, HISTORY等文件的模块，并根据您提供的相关信息进行定制化。
@@ -192,9 +192,9 @@ cookiecutter-pypackage所使用的技术并不完全符合现在的社区规范�
 
 这个向导工具的文档在[这里](https://zillionare.github.io/python-project-wizard/)。
 
-## 如何使用项目生成向导
+## 2.3. 如何使用项目生成向导
 
-### 1. 安装python project wizard (ppw)
+### 2.3.1. 安装python project wizard (ppw)
 首先，为我们的新工程创建一个虚拟环境，就叫sample好了：
 ```bash
 conda create -n sample python=3.10
@@ -203,7 +203,7 @@ conda create -n sample python=3.10
 ```
 pip install ppw
 ```
-### 2. 生成项目
+### 2.3.2. 生成项目
 现在，我们可以使用`ppw`来创建一个项目。
 
 ```
@@ -216,13 +216,13 @@ ppw
 
 最后，ppw提示你，是否要创建开发环境，默认是'yes'。它将为您安装pre-commit hooks, 安装poetry和项目依赖。如果您不清楚这意味着什么，我们将在稍后的章节中进行讲解。
 
-### 安装pre-commit hooks
+### 2.3.3. 安装pre-commit hooks
 如果您在ppw生成命令时，选择了init_dev_env的话，那么这一步已经自动运行过了。不过，我们正好借此机会来介绍一下init_dev_env具体做了什么。
 
 pre-commit hooks是git的一个功能，它允许通过配置一些检查钩子，使得您的代码在上传到仓库之前，可以进行一些基础的语法和风格检查，避免将不合格的代码混入到仓库中。
 
 一般情况下，我们通过运行命令`pre-commit install`来安装钩子。当`ppw`被安装时，这个命令也就随之安装到您的虚拟环境中了，因此，如果您在ppw命令生成时，没有选择init_dev_env的话，现在也可以手动运行这个命令。
-### 安装开发依赖
+### 2.3.4. 安装开发依赖
 如果您在ppw生成命令时，选择了init_dev_env的话，同pre-commit hooks一样，这一步也自动运行过了。
 
 模板使用Poetry来进行项目管理，并将项目的开发依赖分成dev, test, doc等三个组，这样依赖的粒度更小一些。作为开发者，应该同时安装这三组依赖。
@@ -234,7 +234,7 @@ tox
 ```
 在安装好开发依赖之后，我们立即运行了`tox`命令，对新生成的框架程序进行测试。命令最后会给出一个测试报告和lint report。不出意外，这里不应该有任何错误（但可能会有重新格式化的警告)。
 
-### 创建Github Repo
+### 2.3.5. 创建Github Repo
 现在，我们已经有了一个结构良好的框架程序，您可以立刻基于它进行功能开发。但是，一个完整的开发流程，还至少包括代码管理、CI和发布。我们接下来看看应该如何处理这一部分。
 
 我们使用github作为代码仓库。您也可以使用gitlab或者其它的代码仓库。但是，github是一个免费的服务，人人都能使用，也无须安装设置。因此，在本书中，我们都尽可能地使用这些免费服务。
@@ -252,13 +252,13 @@ git remote add origin git@github.com:myusername/sample.git
 git push -u origin main
 ```
 
-### 进行发布测试
+### 2.3.6. 进行发布测试
 
 您可以通过向testpypi进行发布来测试构建过程，您也可以忽略这一步。
 
 关于这一步，请参见[文档](https://zillionare.github.io/python-project-wizard/tutorial/)
 
-### 设置Github CI
+### 2.3.7. 设置Github CI
 
 您也可以暂时忽略这一步，但是强烈建议您完成它。
 
@@ -268,16 +268,16 @@ git push -u origin main
 
 当您完成上述设置后，以后每次将代码推送到github上的任何分支，都会触发CI，并在测试通过后，自动向testpypi进行发布；当main分支签入代码，并且打了tag时，则在测试通过后，自动向pypi进行发布。
 
-### 设置Codecov
+### 2.3.8. 设置Codecov
 
 CI已设置为自动发布codecoverage report，但需要您在[codecov]上导入您的repo并授权。
 
-### 设置git pages
+### 2.3.9. 设置git pages
 CI已设置为自动发布文档到git pages。但您需要在您的项目中启用它。启用的方法是，在 repo > settings > pages中，选中以下两项：
 
 ![](https://images.jieyu.ai/images/202211/20221225094224.png)
 
-### 自动化脚本
+### 2.3.10. 自动化脚本
 对初次使用github的人来说，从创建git仓库开始的一些操作可能会比较困难；即使是对熟练使用github的人，这些步骤也会比较繁琐易错。因此，在python project wizard创建的项目中，都会存在一个github.sh脚本:
 
 ```bash
@@ -318,7 +318,7 @@ CI已设置为自动发布文档到git pages。但您需要在您的项目中启
 1. 安装github cli工具。请参考[安装指南](https://github.com/cli/cli#installation)
 2. 申请一个GitHub的个人token（全部权限），然后将这个token通过环境变量GH_TOKEN暴露给脚本。只有这样，脚本才能创建github仓库，并设置其它token。
 
-### ppw生成的文件列表
+### 2.3.11. ppw生成的文件列表
 现在，一个规范的新项目就已经创建好，您已经拥有了很多酷炫的功能，比如CI，codecov, git pages，poetry，基于markdown的文档等等。您新生成的项目，应该看起来象这样：
 ```text
 .

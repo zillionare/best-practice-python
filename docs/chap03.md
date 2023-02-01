@@ -11,7 +11,7 @@ Python有两个主要的运行时版本，Python 2.x和Python 3.x。Python 3.x�
 
 这类问题被称之为依赖地狱。依赖地狱并不是Python独有的问题，它是所有的软件系统都会面临的问题。
 
-# 依赖地狱
+# 1. 依赖地狱
 
 在构建软件系统时，通用都会涉及功能复用的问题。毕竟，“重新发明轮子”是一种不必要的浪费。功能复用可能发生在源代码级别、二进制级别或者服务级别。源代码级别就是在我们的工程中，直接使用他人的代码源码；二进制级别是指在我们的应用中使用第三方库；服务级别的复用，则是程序功能以服务的方式独立运行，其它应用通过网络请求来使用这种功能。
 
@@ -24,7 +24,7 @@ Python本身也可以看成一个普通的应用程序。因此，当我们安�
 既然我们提到了“隔离”一词，我们不妨再稍稍引申一下。在第二章我们提到了虚拟机和Docker容器，这些是解决资源冲突，对资源进行隔离的方法。现在，通过容器以(微)服务的方式来部署Python应用程序也越来越常见，其中也有简化安装环境、避免依赖地狱等方面的考虑。
 
 在这一章我们主要讲如何构建虚拟运行环境，这样可以完全解决运行时与其它应用程序之间可能发生的依赖地狱问题。然而，依赖地狱还有其它多种表现形式，我们后面还会在讲述Poetry那一章再探讨这个问题。
-# 使用虚拟环境以避免依赖地狱
+# 2. 使用虚拟环境以避免依赖地狱
 Python的虚拟环境方案可谓源远流长，种类繁多。如果你接触Python已经有一段时间了，那么你很可能听说过annaconda, virutalenv, venv, pip, pipenv, poetry, pyenv, pyvenv, pyenv-virtualenv, virtualenvwrapper, pyenv-virtualenvwrapper等相似概念。   
 
 !!! Info
@@ -57,9 +57,9 @@ conda和Virtualenv都是用来创建和管理Python虚拟环境的工具，有�
 3. Virtualenvwrapper是virtualenv的一个扩展集，提供了诸如mkvirtualenv, lssitepackages, workon等命令。workon是用来在不同的virtualenv目录中进行切换的命令。
 4. pyenv-virutalenvwrapper则是pyenv的另一个插件，由pyenv的作者开发，它将pyenv和virtualenvwrapper的功能集成在一起。基于这些扩展，virtualevn就拥有了类似conda的全部功能。
 5. pyvenv（请不要与pyenv相混淆）是仅在python3.3到python3.7才有的一个官方脚本，但从python3.8开始，它已经被标准库venv代替了。
-## Anaconda：一站式管理的虚拟环境
+## 2.1. Anaconda：一站式管理的虚拟环境
 Anaconda包揽了从安装python版本、创建虚拟环境和切换虚拟环境的所有功能。它的官方网站是[Anaconda.org](https://www.anaconda.org/)。它是所有从事数据科学或者深度学习的人理所当然的首选工具。它自带的包管理系统，提供了许多流行的机器学习库预编译版本，因此你不用自己去熟悉gcc和c/c++代码的编译过程。
-### 安装Anaconda
+### 2.1.1. 安装Anaconda
 安装Anaconda请从https://www.anaconda.com/products/distribution页面下载安装包。除非您使用Anaconda进行科学计算，否则建议您从https://docs.conda.io/en/latest/miniconda.html处下载最新的miniconda安装包。
 
 以Ubuntu为例，无论是Ananconda还是Miniconda，其安装文件都是一个包含了安装数据文件的shell脚本，您可以通过wget或者curl将其下载下来，然后执行这个脚本进行安装。
@@ -67,7 +67,7 @@ Anaconda包揽了从安装python版本、创建虚拟环境和切换虚拟环境
 安装过程中，首先要求你阅读并接受Anaconda的服务条款，然后选择将要安装的目录。在完成文件拷贝之后，会询问你是否要运行conda init以初始化conda环境，推荐选择yes，这样conda会修改你的shell初始化脚本。要使用conda，这一步是必须的。
 
 conda安装完成后，就会在你的系统上生成第一个虚拟环境，称为`base`。现在可以列一下刚刚安装了conda的目录，这里面最重要的目录是envs，后面创建的新的python虚拟环境都会在这里。但现在它是空的，尽管已经有了一个名为base的虚拟环境，但这个虚拟环境，指向的是安装目录下的/bin目录下的python。
-### 配置conda环境
+### 2.1.2. 配置conda环境
 conda安装后，一般情况下，无须配置即可使用。但是，如果我们需要使用代理服务器，或者变更conda源以加快下载速度，则需要配置conda。
 
 conda的配置文件是用户目录下的.condarc，它是一个YAML格式的文件。这个文件直到你第一次调用conda config时才会产生,比如，增加一个conda源：
@@ -93,7 +93,7 @@ proxy_servers:
 有时候当访问conda的官方源时，我们需要使用代理服务器来进行加速。上面的示例显示了如何进行这些配置。有一些代理服务器对ssl验证支持的不是太好，这种情况下，你需要设置ssl_verify为False,正如以上示例所示。
 
 conda还允许其它一些配置，如果有需要，推荐读者进一步阅读[配置conda](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html)。
-### 创建和管理虚拟环境
+### 2.1.3. 创建和管理虚拟环境
 现在，我们来创建一个虚拟环境，并且通过conda的一些命令来看看如何管理它。
 
 ```
@@ -197,7 +197,7 @@ conda install --revision 2
 
 如果想全面而快速地了解conda命令，可以参考[conda小抄](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf)
 
-## 轻量的Python包安装工具Pip
+## 2.2. 轻量的Python包安装工具Pip
 在上一节，我们介绍了如何往虚拟环境中安装程序库：
 ```
 conda install PACKAGENAME
@@ -210,7 +210,7 @@ pip install PACKAGENAME
 ```
 ls /root/miniconda3/envs/test/bin
 ```
-## 配置VSCode中的解释器
+## 2.3. 配置VSCode中的解释器
 
 我们已经创建了一个虚拟环境，安装了python。但要在vscode下开发python应用程序，我们还得在vscode中完成相关的配置。
 

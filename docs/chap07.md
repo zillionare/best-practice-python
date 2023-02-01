@@ -1,13 +1,13 @@
-# 代码单元测试——基于Unittest、Pytest、Pycoverage和Tox
-## 测试代码的组织结构
-## Unittest框架
-### 测试文件的基本结构
-### 如何使用Mock（内含案例）
-### 使用断言（内含案例）
-## Pytest测试库
+# 1. 代码单元测试——基于Unittest、Pytest、Pycoverage和Tox
+## 1.1. 测试代码的组织结构
+## 1.2. Unittest框架
+### 1.2.1. 测试文件的基本结构
+### 1.2.2. 如何使用Mock（内含案例）
+### 1.2.3. 使用断言（内含案例）
+## 1.3. Pytest测试库
 
 
-# 单元测试
+# 2. 单元测试
 
 单元测试的概念可能多数读者都有接触过。作为开发人员，我们编写一个个测试用例，测试框架则用来发现和组装测试suite，收集测试报告，并且提供测试基础设施（断言、mock、setup和teardown等）。Python当中最主流的单元测试框架有三种，Pytest, nose和Unittest，其中Unittest是标准库，其它两种是第三方工具。在向导生成的项目中，就使用了Pytest来驱动测试。
 
@@ -48,7 +48,7 @@ def test_get_time_of_day(datetime_obj, expect, mocker):
 如果使用unittest，我们需要写一个循环，依次调用get_time_of_day()，然后对比结果。代码量要多出不少。
 
 基于以上原因，在后面的内容中，我们将以pytest为例进行介绍。
-## 测试代码的组织
+## 2.1. 测试代码的组织
 
 我们一般将所有的测试代码都归类在项目根目录下的tests文件夹中。每个测试文件的名字，要么使用test_*.py，要么使用*_test.py。这是测试框架的要求。如此以来，当我们执行命令如``pytest tests``时，测试框架就能从这些文件中发现测试用例，并组合成一个个待执行的suite。
 
@@ -69,7 +69,7 @@ sample
 │   └── test_cli.py
 ```
 注意这里面的__init__.py，如果缺少的话，tests就不会成为一个合法的包，从而导致pytest无法正确导入测试用例。
-## Pytest
+## 2.2. Pytest
 使用pytest写测试用例很简单。假设sample\app.py如下所示：
 ```
 def inc(x:int)->int:
@@ -85,7 +85,7 @@ def test_inc():
 ```
 这比unittest下的代码要简洁很多。
 
-### 测试用例的组装
+### 2.2.1. 测试用例的组装
 在pytest中，pytest会按传入的文件（或者文件夹），搜索其中的测试用例并组装成测试集合(suite)。除此之外，它还能通过pytest.mark来标记哪些测试用例是需要执行的，哪些测试用例是需要跳过的。
 
 ```python {class='line-numbers'}
@@ -133,7 +133,7 @@ test_server.py::test_send_http PASSED                                [100%]
 5. pytest.mark.parametrize, 给测试用例添加参数化标记，可以根据参数化的参数执行多次测试用例。
 
 这些标记可以用pytest --markers命令查看。
-### pytest 断言
+### 2.2.2. pytest 断言
 pytest中的断言巧妙地拦截并复用了python内置的函数assert，从而在这一部分的学习成本变得非常低。
 
 ```python {class='line-numbers'}
@@ -187,7 +187,7 @@ def test_assertion():
         assert False
 ```
 上述代码看上去逻辑正确，但它混淆了异常处理和断言，使得他人一时难以分清这段代码究竟是在处理测试代码中的异常呢，还是在测试被调用函数能否正确抛出异常，明显不如异常断言那样清晰。
-### pytest fixture
+### 2.2.3. pytest fixture
 一般而言，我们的测试用例很可能需要依赖于一些外部资源，比如数据库、缓存、第三方微服务等。这些外部资源的初始化和销毁，我们希望能够在测试用例执行前后自动完成，即自动完成setup和teardown的操作。这时候，我们就需要用到pytest的fixture。
 
 !!! Info
@@ -313,7 +313,7 @@ session_mocker [session scope] -- .../pytest_mock/plugin.py:419
     takes care of automatically undoing all patches after each test method.
 ```
 可以看到pytest-mock提供了5个fixture。后面我们会较多地介绍其中的mocker这个fixture。
-## Mock
+## 2.3. Mock
 在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接数据库或者真实的第三方微服务等。这时候，我们需要通mock来模拟这些外部接口。mock可能是单元测试中最核心的技术。
 
 !!! Readmore
@@ -467,7 +467,7 @@ with mock.patch.object(logger, 'info') as m:
 
 这里要提及pytest中mocker.patch与unitest.mock.patch的一个细微差别。后者进行patch时，可以返回mock对象，我们可以通过它进行更多的检查（见上面示例代码中的第14，16行）；但mocker.patch的返回值是None。
 
-## 衡量测试的覆盖率
+## 2.4. 衡量测试的覆盖率
 我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。coverage.py是最常用的测量Python程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别可能已执行但未执行的代码。
 
 覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分正在被测试执行，哪些没有。
@@ -498,7 +498,7 @@ TOTAL                        76     10    87%
 
 默认情况下，coverage.py将测试行（语句）覆盖率，但通过配置，还可以测量分支覆盖率。这需要一些配置。
 
-### 配置Pycoverage
+### 2.4.1. 配置Pycoverage
 配置文件的默认名称是.coveragerc，在ppw生成的工程中，这个文件处在项目根目录下（读者可以回到第4章的结束部分查看ppw生成的文件列表）。
 
 如果没有使用其他配置文件，Coverage.py 将从其他常用配置文件中读取设置。如果存在，它将自动从“setup.cfg”或“tox.ini”中读取。如果节(section)名称有“coverage:”前缀，则会当成是coverage的配置，比如.coveragerc中有一节名为run，当它出现在tox.ini中，节名字就应该是[coverage:run]。
@@ -540,7 +540,7 @@ directory = coverage_html_report
 我们前面提到过可以让coverage.py按分支覆盖率来统计，这可以按照第3行一样进行配置。[report]这一节中的配置项可以让coverage.py忽略一些不需要统计的代码，比如debug代码。[html]这一节配置了如果生成的html文件存放在何处。如果没有指定，将存放在htmlcov目录下。
 
 [run]这一节比较常用的配置项有include和omit，用来特别把某个文件或者目录加入到测试覆盖，或者排除掉。在[report]这一节中，也有相同的配置项，两者有所区别。在[report]中指定omit或者include，都仅适用于报告的生成，但不影响实际的测试覆盖率统计。
-### 发布覆盖率报告
+### 2.4.2. 发布覆盖率报告
 如果我们的项目是开源项目，你可能希望把覆盖率报告发布到网上，这样其他人就可以看到你的项目的覆盖率了。这里我们使用codecov.io来发布覆盖率报告。
 
 codecov是一个在线的代码覆盖率报告服务，它可以从GitHub、Bitbucket、GitLab等代码托管平台上获取代码覆盖率报告，然后生成一个在线的报告。这个报告可以让其他人看到你的项目的覆盖率情况。
@@ -568,25 +568,25 @@ chmod +x codecov
 ![](https://images.jieyu.ai/images/20230120230120213318.png)
 这会让你的开源项目看上去非常专业，不是吗？更重要的是，让你的潜在用户更加信任这是一个高质量的项目。
 
-## Tox环境矩阵加速测试
+## 2.5. Tox环境矩阵加速测试
 如果我们的软件支持3种操作系统，4个python版本，我们就必须在3种操作系统上，分别创建4个虚拟环境，安装上我们的软件和依赖，再执行测试，上传测试报告。这个动作不仅相当繁琐，还很容易引入错误。
 
 tox与CI结合，就可以帮助我们自动化完成这些环境的创建与测试执行。
-### 什么是Tox？
+### 2.5.1. 什么是Tox？
 tox是一个通用的 virtualenv 管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。
 
 实际上，tox主要完成以下工作：
 1. 根据配置创建基于多个版本的python虚拟环境，并且保证这些虚拟环境的可复制性（需要与poetry或者其它依赖管理工具一起）。
 2. 运行测试和代码检查工具，比如pytest和flake8, black, mypy等。
 3. 隔离环境变量。tox不会从系统传递任何环境变量到虚拟环境中，这样可以保证测试的可重复性。
-### Tox的工作原理
+### 2.5.2. Tox的工作原理
 下图是tox文档显示的工作原理图：
 ![](https://images.jieyu.ai/images/20230120230120223442.png)
 
 根据这张图，tox读取配置文件，打包待测试软件，按照配置文件创建虚拟环境，并安装待测试软件和依赖，然后依次执行测试命令。最终，当所有虚拟环境下的测试都通过后，tox会生成测试报告。
 
 下面，我们主要通过一个典型的配置文件来介绍tox是如何配置和工作的。
-### 如何配置Tox
+### 2.5.3. 如何配置Tox
 在ppw生成的项目中，存在以下tox.ini文件：
 ```ini {class = 'line-numbers'}
 [tox]
@@ -628,7 +628,7 @@ commands =
 ```
 
 配置文件仍然是标准的ini文件格式（tox也支持通过pyproject.toml来进行配置）。我们主要关注以下几个部分：
-#### [tox]节
+#### 2.5.3.1. [tox]节
 在测试一个package之前，tox首先需要构建一个sdit分发包。在打包这件事上，python走过了很长的一段历程，打包工具和标准也经历了很多变化，这些我们将用专门的一章来介绍。现在我们需要知道的是，最新的标准是PEP517和PEP518，tox已经支持这两个标准。但是，如果项目本身不支持这两个PEP，那么tox必须回到之前的打包方式。
 
 因此，tox引入了isolated_build这个选项，如果设置为true，tox会使用PEP517和PEP518的方式来打包项目。如果设置为false，tox会使用传统的方式(setup.py)来打包项目。如果通过poetry创建项目，并且在pyproject.toml中设置了requires和build-backend项的话，那么我们是需要设置isolated_build为true的。
@@ -668,7 +668,7 @@ You can
 ```
 这个选项在tox中是默认为false的，多数情况下无须配置。我们出于帮助大家理解tox工作原理的目的介绍它
 
-#### [testenv]
+#### 2.5.3.2. [testenv]
 这一节的配置项适用于所有的虚拟环境。如果在某个虚拟环境下存在特别的选项和动作，需要象[testenv:lint]那样定义在自己的节中。
 
 这里我们还额外设置了一些环境变量字段。比如设置了PYTHONPATH，另外也忽略了一些警告信息。如果我们使用的一些库没有更新，那么将在测试过程中打印大量的deprecation警告，从而干扰我们检查测试过程中的错误信息。当然，我们也应该至少在测试中打开一次这种警告，以便知道哪些用法已经需要更新。
@@ -696,5 +696,5 @@ commands =
 
 最后，tests是我们测试代码所在的文件夹。
 
-#### [testenv.lint]
+#### 2.5.3.3. [testenv.lint]
 这一节的语法与[testenv]并无二致。只不过要运行的命令不一样。这里就不再一一解释。

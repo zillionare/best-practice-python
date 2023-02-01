@@ -4,7 +4,7 @@
 
 持续集成是一种 DevOps 软件开发实践。采用持续集成时，开发人员会定期将代码变更合并到一个中央存储库中，之后系统会自动运行构建和测试操作。持续集成通常是指软件发布流程的构建或集成阶段，需要用到自动化组件（例如 CI 或构建服务）和文化组件（指组织的流程和规范等，例如学习频繁地集成）。持续集成的主要目标是更快发现并解决缺陷，提高软件质量，并减少验证和发布新软件更新所需的时间。
 
-# 常见的在线CI服务
+# 1. 常见的在线CI服务
 我们先来认识一下持续集成领域的头部玩家。Jekins是持续集成领域的老大哥，Jenkins自诞生之日起，至今已发展了近20年，社区、生态最为完善。Gitlab最初是基于Git的代码托管平台，自版本8.0起，开始提供持续集成功能。其优点是与代码仓库无缝集成，原生地支持代码仓库各类事件触发流水线。不足之处是，无论Jekins还是Gitlab，都需要自己搭建服务器，这对于开源项目和个人开发者来说，成本太高了。
 
 构建CI服务器的成本是昂贵的。在虚拟机没有广泛应用之前，这个成本就更为昂贵。你需要为你的应用将要部署到的每一种操作系统至少准备一台机器。如果你的应用需要部署到从windows到Linux到Macos上的各个版本，你可能就需要准备至少十台以上的机器硬件。虚拟化的出现大大降低了CI的成本，随后是容器化的出现，进一步降低了CI的成本。但是，即便是这样，对开源项目，自行搭建和维护CI服务器的成本仍然是昂贵的。比如，如果你的应用需要部署到MacOs上，你必须至少有一到多台苹果的服务器，因为其它机器上都无法虚拟化出来macos的容器。
@@ -14,14 +14,14 @@
 Travis CI是一个基于云的持续集成服务，它可以帮助开发者在Github上构建和测试代码，从而减少发布软件的时间。Travis CI为开源项目提供了一定量的服务时间，对于私有项目，则需要付费--计划起价是每月69美元。这个定价本身也说明了持续集成的价值，以及要实现持续集成，所需要消耗的资源。
 
 Github Actions是Github在2020年前后推出的持续集成服务，它的优点同gitlab CI一样，也在于与代码托管服务无缝集成，不需要自己搭建服务器。在价格方面，Github Actions对开源项目也是免费使用的，与Travis CI相比，给出的免费quota更多，足堪使用。因此，我们本章就略过Travis CI，直接介绍Github Actions。
-# Github Actions
+# 2. Github Actions
 Github Actions是一个持续集成与交付的平台，它使得我们可以将构建、测试和部署像流水线一样自动化。您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境。
 
 GitHub Actions 不仅仅是 DevOps，还允许您在存储库中发生其他事件时运行工作流程。 例如，您可以运行工作流程，以便在有人在您的存储库中创建新问题时自动添加相应的标签。
 
 GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行工作流程，您也可以在自己的数据中心或云基础架构中托管自己的自托管运行器。
 
-## Github Actions的架构和概念
+## 2.1. Github Actions的架构和概念
 
 Github Actions由工作流(workflow)、事件(Event)、作业(job)、操作(Action)和执行者(runner)等组件构成。
 
@@ -42,7 +42,7 @@ Github Actions由工作流(workflow)、事件(Event)、作业(job)、操作(Acti
 下面的图展示了Github Actions的架构：
 
 ![](assets/img/chap09/overview-actions.png)
-## 工作流语法概述
+## 2.2. 工作流语法概述
 在了解了Github Actions的架构之后，我们通过一个例子，来讲解如何定义工作流。
 
 我们先看ppw生成的一个工作流文件：
@@ -216,7 +216,7 @@ jobs:
 这是一个名为dev build CI的作业，它将在任一分支发生提交和pull request时触发。它包含三个作业，即test(执行单元测试)、publish_dev_build(构建并发布开发版本到test_pypi)和notification(在构建成功或失败时发送邮件通知)。三者之间有依赖关系，如果test作业失败，publish_dev_build会取消；但是无论test/publish_dev_build作业是否成功，notification作业都会执行，并根据前两个作业的状态发送邮件通知。
 
 这是一个比较简单的作业，也涉及了我们在CI中需要做的几乎所有事情。在代码中我们加入了较多的注释，建议读者结合下面的讲解，仔细阅读代码。
-### 定义触发条件
+### 2.2.1. 定义触发条件
 第4行到第14行配置了工作流的触发条件。触发条件一节由关键字**'on'**引起。在它的下一层，我们可以定义多个触发事件，并为每个触发事件，指定类型和过滤器。一个完整的触发条件配置如下：
 
 ```yaml
@@ -242,7 +242,7 @@ on:
 
 上面的示例还展示了一种特殊的事件，即 'schedule' 事件。这将导致工作流周期性地运行。这可以用来运行一些安全性扫描、依赖升级扫描等工作。
 
-### 定义作业集
+### 2.2.2. 定义作业集
 接下来工作流声明了三个作业，即test, publish_dev_build和notification。作业定义一节由关键字**'jobs'**引起。在它的下一层，我们可以定义多个作业，并为每个作业，指定运行环境和运行步骤。
 
 每个作业都有自己的id和名字。在上述例子中，test, publish_dev_build和notification都是作业id。作业id是必须的，但是作业名字是可选的。如果没有指定作业名字，那么作业名字将默认为作业id。作业名字可以用来在GitHub Actions的界面上显示作业的名称。
@@ -318,7 +318,7 @@ jobs:
           # 声明了步骤上下文的环境变量
           First_Name: Mona
 ```
-### 连接其它服务
+### 2.2.3. 连接其它服务
 在示例的第31行到第40行，有一段被注释的代码，这是用来启用redis服务的。Github Actions通过容器技术来提供这些服务。理论上，只要在docker hub上存在某个服务的image（镜像），我们就可以在Github Actions中使用它。
 
 !!! Attention
@@ -328,12 +328,12 @@ jobs:
 
 在工作流中使用服务，一般需要等待容器完全启动被初始化成功。这就是第96行的工作。
 
-## 使用较多的一些第三方应用和Actions
+## 2.3. 使用较多的一些第三方应用和Actions
 我们已经在示例中看到了一些来自应用市场的action，比如actions/checkout, actions/setup-python, pypa/gh-action-pypi-publish, dawidd6/action-send-mail, codecove/Codecov等等。这里'/'之前的是action的作者，其中actions是Github官方的action，其它的都是第三方的action。例子中的action，它们的名字就已经说明了其功能，因此这里不再赘述。
 
 下面介绍其它一些使用较多的第三方actions，其中有一些我们进行了简要说明并举例了使用方法。如果我们没有进行特别说明，或者您想进一步了解相关信息，可以访问[marketplace](https://github.com/marketplace/actions)查看相关文档。
 
-### Github pages部署
+### 2.3.1. Github pages部署
 这个action可以用来将静态网站部署到Github Pages上。在ppw生成的项目中，它与mkdocs/mike配合使用。其ID是JamesIves/github-pages-deploy-action，使用示例如下：
 ```
 name: Build and Deploy
@@ -359,13 +359,13 @@ jobs:
           folder: build # The folder the action should deploy.
 ```
 
-### 构建和发布docker镜像
+### 2.3.2. 构建和发布docker镜像
 显然，作为持续部署的一个步骤，docker镜像的构建也应该通过CI/CD服务器来完成并发布。这是docker官方的一个action， id是docker/build-push-action。
 
-### GH Release
+### 2.3.3. GH Release
 一般地，Python项目的发布都是通过PyPI来完成的。但是，我们也可以将其发布到Github Release上。这个action的id是softprops/action-gh-release。
 
-### 制订发布草案
+### 2.3.4. 制订发布草案
 编写release notes是一件枯燥乏味的事。这个action可以帮助我们自动生成release notes。它的id是relase-drafter/release-drafter。
 
 这个action可以与GH Release一起使用。
@@ -374,8 +374,8 @@ jobs:
 ![](https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg)
 
 
-### 通知消息
+### 2.3.5. 通知消息
 我们已经介绍了邮件通知。在应用市场里，还有各种各样的通知action，比如Slack通知，id是Ilshidur/action-slack。
 
-### Giscus
+### 2.3.6. Giscus
 Giscus是一个基于Github Discussion的评论系统。它的id是giscus/giscus。如果你使用了gitpages作为博客和静态站系统，你可以在Github上安装它，并在博客和静态站系统中增加评论功能。

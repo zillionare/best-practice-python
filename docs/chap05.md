@@ -173,7 +173,7 @@ setup(
 这些看上去都是很常规的操作，为什么不将它自动化呢？这是第四个问题，即如何简化打包和发布。
 
 这就是我们这一章要讨论的主题。我们将以Poetry为主要工具，结合semantic versioning来串起这一话题的讨论。
-# Poetry： 简洁清晰的项目管理工具
+# 1. Poetry： 简洁清晰的项目管理工具
   
 ![](http://images.jieyu.ai/images/202104/1-BUUIee-t1I2eqTm0RtDNHQ.jpeg)
 
@@ -319,9 +319,9 @@ sample = 'sample.cli:main'
 
 在示例代码中，还有[tool.black]和[tool.isort]两个小节，分别是black（代码格式化工具）和isort（将导入进行排序的工具）的配置文件。它们是对pyproject.toml的扩展，并不是poetry所要求的。
 
-## 版本管理
+## 1.1. 版本管理
 poetry为我们的package提供了基于语义(semantic version)的版本管理功能。它通过`poetry version`这个命令，让我们查看package的版本，并且实现版本号的升级。
-### Semantic Versioning（基于语义的版本管理）
+### 1.1.1. Semantic Versioning（基于语义的版本管理）
 说到版本管理，我不禁想起忒修斯之船（The Ship of Theseus）问题，该问题是最为古老的思想实验之一，最早出自公元一世纪普鲁塔克的记载。它描述的是一艘可以在海上航行几百年的船，归功于不间断的维修和替换部件。只要一块木板腐烂了，它就会被替换掉，以此类推，直到所有的功能部件都不是最开始的那些了。问题是，最终产生的这艘船是否还是原来的那艘特修斯之船，还是一艘完全不同的船？如果不是原来的船，那么在什么时候它不再是原来的船了？
 
 在软件开发领域中，我们也常常对同一软件进行不断的修补和更新。但是，随着这种修补和替换越来越多，软件会不会也出现忒修斯船之问：现在的软件还是不是当初的软件，如果不是，那它是在什么时候不再是原来的软件了呢？该软件应该如何向外界表明它已发生了实质性的变化；生态内依赖于该软件的其它软件，又应该如何识别软件的蜕变呢？
@@ -361,7 +361,7 @@ Sematic versioning提议用一组简单的规则及条件来约束版本号的�
 事实上，如果你的程序的API发生了变化（函数签名发生改变），或者会导致旧版的数据无法继续使用，你都应该考虑主版本号的递增。
 
 此外，从0.1到1.0之前的每一个minor版本，都被认为在API上是不稳定的，都可能是破坏性的更新。因此，如果你的程序使用了还未定型到1.0版本的第三方库，你需要谨慎声明其依赖关系。
-### 如何使用Poetry进行版本管理
+### 1.1.2. 如何使用Poetry进行版本管理
 假设您已经使用[python project wizard]生成了一个工程框架，那么应该可以在根目录下找到pyproject.toml文件，其中有一项：
 
 ```
@@ -425,10 +425,10 @@ Bumping version from 0.1.1a1 to 0.1.1
 poetry暂时还没有提供从alpha转到beta版本系列的命令。如果有此需要，您需要手工编辑pyproject.toml文件。
 
 除了poetry version prerelease之外，我们还注意到上面列出的premajor, preminor和prepatch选项。它们的作用也是将版本号修改为alpha版本系列，但无论你运行多少次，它们并不会象prerelease选项一样，递增alpha版本号。所以在实际的alpha版本管理中，似乎只使用``poetry version prerelease``就可以了。
-## 依赖管理
-### 实现依赖管理的意义
+## 1.2. 依赖管理
+### 1.2.1. 实现依赖管理的意义
 我们已经通过大量的例子说明了依赖管理的作用。总结起来，依赖管理不仅要检查项目中声明的直接依赖之间的冲突，还要检查它们各自的传递依赖之间的彼此兼容性。
-### Poetry进行依赖管理的相关命令
+### 1.2.2. Poetry进行依赖管理的相关命令
 在Poetry管理的工程中，当我们向工程中加入（或者更新）依赖时，总是使用``poetry add``命令，比如：``poetry add pytest``
 
 这里可以指定，也可以不指定版本号。命令在执行时，会对``pytest``所依赖的库进行解析，直到找到合适的版本为止。如果您指定了版本号，该版本与工程里已有的其它库不兼容的话，命令将会失败。
@@ -547,7 +547,7 @@ optional = true
 !!! Info
     注意，通过上述命令生成的toml文件的内容可能与python project wizard当前版本生成的有所不同。但python project wizard的未来版本最终将使用同样的语法。
 
-### poetry依赖解析的工作原理
+### 1.2.3. poetry依赖解析的工作原理
 
 在上一节，我们简单地介绍了如何使用poetry来向我们的项目中增加依赖。我们强调了依赖解析的困难，但并没有解释poetry是如何进行依赖解析的，它会遇到哪些困难，可能遭遇什么样的失败，以及应该如何排错。对于初学者来说，这往往是配置poetry项目时最困难和最耗时间的部分。
 
@@ -664,7 +664,7 @@ Package operations: 0 installs, 0 updates, 3 removals
   • Removing sqlalchemy (1.3.24)
 ```
 从输出可以看出，不仅是gino本身被卸载，它的传递依赖 -- asyncpg和sqlalchemy也被移除掉了。这是pip做不到的。
-## 虚拟运行时
+## 1.3. 虚拟运行时
 
 Poetry自己管理着虚拟运行时环境。当你执行``poetry install``命令时，Poetry就会安装一个基于venv的虚拟环境，然后把项目依赖都安装到这个虚拟的运行环境中去。此后，当你通过poetry来执行其它命令时，比如``poetry pytest``，也会在这个虚拟环境中执行。反之，如果你直接执行``pytest``，则会报告一些模块无法导入，因为你的工程依赖并没有安装在当前的环境下。
 
@@ -672,12 +672,12 @@ Poetry自己管理着虚拟运行时环境。当你执行``poetry install``命�
 
 但是Poetry的创建虚拟环境的功能也是有用的，主要是在测试时，通过virtualenv/venv创建虚拟环境速度非常快。
 
-## 构建发行包
-### Python构建标准和工具的变化
+## 1.4. 构建发行包
+### 1.4.1. Python构建标准和工具的变化
 在poetry 1.0发布之前，打包一个python项目，需要准备MANIFEST.in, setup.cfg, setup.py，makefile等文件。这是PyPA(python packaging authority)的要求，只有遵循这些要求打出来的包，才可以上传到pypi.org，从而向全世界发布。
 
 但是这一套系统也有不少问题，比如缺少构建时依赖声明，自动配置，版本管理。因此，[PEP 517](https://peps.python.org/pep-0517/)被提出，然后基于PEP 517, PEP 518等一系列新的标准，Sébastien Eustace开发了poetry。
-### 基于Poetry进行发行包的构建
+### 1.4.2. 基于Poetry进行发行包的构建
 
 我们通过运行``poetry build``来打包，打包的文件约定俗成地放在dist目录下。
 
@@ -695,19 +695,19 @@ poetry publish
 ```
 上面的命令分别对发布到test pypi和pypi进行了演示。由于默认地Poetry支持PyPI发布，所以有些参数就不需要提供了。当然，一般情况下，我们都不应该直接运行`poetry publish`命令来发布版本。版本的发布，都应该通过CI机制来进行。这样的好处时，可以保证每次发布，都经过了完整的测试，并且，构建环境是始终一致的，不会出现因构建环境不一致，导致打出来的包有问题的情况。
 
-## 其它重要的Poetry命令
+## 1.5. 其它重要的Poetry命令
 我们已经介绍了poetry add, poetry remove, poetry show, poetry build, poetry publish, poetry version等命令。还有一些命令也值得介绍。
-### poetry lock
+### 1.5.1. poetry lock
 该命令将进行依赖解析，锁定所有的依赖到最新的兼容版本，并将结果写入到poetry.lock文件中。通常，运行poetry add时也会生成新的锁定文件。
 
 在对代码执行测试、CI或者发布之前，务必要确保poetry.lock存在，并且这个文件也应该提交到代码仓库中，这样所有的测试，CI服务器，你的同侪开发者构建的环境才会是完全一致的。
 
-### poetry export
+### 1.5.2. poetry export
 极少数情况下，你可能希望将依赖导出为requirements:
 ```
 poetry export -f requirements.txt --output requirements.txt
 ```
-### poetry config
+### 1.5.3. poetry config
 我们可以通过poetry config --list来查看当前配置项：
 ```
 cache-dir = "/path/to/cache/directory"
@@ -722,5 +722,5 @@ virtualenvs.prefer-active-python = false
 virtualenvs.prompt = "{project_name}-py{python_version}"
 ```
 这里面比较重要的有配置pypi-token，以便发布你的项目。
-## 案例： 基于Poetry创建并发布一个项目
+## 1.6. 案例： 基于Poetry创建并发布一个项目
 移除掉？
