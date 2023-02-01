@@ -21,6 +21,7 @@ nav:
 theme:
   name: material
   language: zh
+  custom_dir: docs/overrides
   palette:
     primary: light blue
   features:
