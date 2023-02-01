@@ -327,3 +327,55 @@ jobs:
 我们的工作流可以运行在执行者(runner)上，也可以运行在容器里（该容器运行在runner上）。如果工作流运行在容器里，则需要通过自定义的桥接网络来连接运行在容器里的服务。如果工作流就运行在执行者(runner)上，那么我们可以将容器的端口映射到执行者上，这样我们就可以直接访问容器里的服务了。
 
 在工作流中使用服务，一般需要等待容器完全启动被初始化成功。这就是第96行的工作。
+
+## 使用较多的一些第三方应用和Actions
+我们已经在示例中看到了一些来自应用市场的action，比如actions/checkout, actions/setup-python, pypa/gh-action-pypi-publish, dawidd6/action-send-mail, codecove/Codecov等等。这里'/'之前的是action的作者，其中actions是Github官方的action，其它的都是第三方的action。例子中的action，它们的名字就已经说明了其功能，因此这里不再赘述。
+
+下面介绍其它一些使用较多的第三方actions，其中有一些我们进行了简要说明并举例了使用方法。如果我们没有进行特别说明，或者您想进一步了解相关信息，可以访问[marketplace](https://github.com/marketplace/actions)查看相关文档。
+
+### Github pages部署
+这个action可以用来将静态网站部署到Github Pages上。在ppw生成的项目中，它与mkdocs/mike配合使用。其ID是JamesIves/github-pages-deploy-action，使用示例如下：
+```
+name: Build and Deploy
+on: [push]
+permissions:
+  contents: write
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build # The folder the action should deploy.
+```
+
+### 构建和发布docker镜像
+显然，作为持续部署的一个步骤，docker镜像的构建也应该通过CI/CD服务器来完成并发布。这是docker官方的一个action， id是docker/build-push-action。
+
+### GH Release
+一般地，Python项目的发布都是通过PyPI来完成的。但是，我们也可以将其发布到Github Release上。这个action的id是softprops/action-gh-release。
+
+### 制订发布草案
+编写release notes是一件枯燥乏味的事。这个action可以帮助我们自动生成release notes。它的id是relase-drafter/release-drafter。
+
+这个action可以与GH Release一起使用。
+
+还有一些好玩的action，比如一个生成贪吃蛇游戏的action，id是Platane/snk。它会生成如下的贪吃蛇游戏:
+![](https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg)
+
+
+### 通知消息
+我们已经介绍了邮件通知。在应用市场里，还有各种各样的通知action，比如Slack通知，id是Ilshidur/action-slack。
+
+### Giscus
+Giscus是一个基于Github Discussion的评论系统。它的id是giscus/giscus。如果你使用了gitpages作为博客和静态站系统，你可以在Github上安装它，并在博客和静态站系统中增加评论功能。
