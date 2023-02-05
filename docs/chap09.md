@@ -380,7 +380,7 @@ jobs:
 ### 2.3.6. Giscus
 Giscus是一个基于Github Discussion的评论系统。它的id是giscus/giscus。如果你使用了gitpages作为博客和静态站系统，你可以在Github上安装它，并在博客和静态站系统中增加评论功能。
 
-## 通过Github CI发布Python库
+## 2.4. 通过Github CI发布Python库
 我们在前面看到的例子来自于`ppw`生成的项目下的.github\workflows\dev.yml文件。这个文件定义的工作流适用于所有的分支，在每次push时都会触发。它的作用是进行集成测试，构建测试包并发布到testpypi，并发布非正式文档到Github Pages上。
 
 正式的版本发布工作交给了release.yml。这个工作流仅适用于main分支，并且只有当main分支上有打标签事件发生，并且标签是以'v'字线开头时，才会真正运行。下面是这个工作流的内容：

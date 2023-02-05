@@ -173,7 +173,7 @@ setup(
 这些看上去都是很常规的操作，为什么不将它自动化呢？这是第四个问题，即如何简化打包和发布。
 
 这就是我们这一章要讨论的主题。我们将以Poetry为主要工具，结合semantic versioning来串起这一话题的讨论。
-# 1. Poetry： 简洁清晰的项目管理工具
+# 1. Poetry：简洁清晰的项目管理工具
   
 ![](http://images.jieyu.ai/images/202104/1-BUUIee-t1I2eqTm0RtDNHQ.jpeg)
 
@@ -197,8 +197,8 @@ Poetry解决了所有这些问题（除了案例中的第一个，该问题要�
 !!! Info
     实际上Poetry还会用到另一个文件，即poetry.lock。这个文件并非独立文件，而是Poetry根据pyproject.toml生成的、锁定了依赖版本的最终文件。
 
-现在，让我们看一眼sample项目中的pyproject.toml文件:
-```toml
+现在，让我们看一眼sample项目中的[pyproject.toml文件:](#pyproject-example)
+```toml title="pyproject.toml示例"
 [tool]
 [tool.poetry]
 name = "sample"
@@ -632,7 +632,7 @@ mkdocs 1.2.4 Project documentation with Markdown.
 
 最终，关于gino和sqlalchemy，poetry安装的分别是1.0.1和1.3.24，但是，上述解析树表明，如果存在sqlalchemy的1.3.25版本，它是可以自动升级的。我们许的愿，poetry帮助实现了。
 
-One more thing: 生成这棵依赖树可能要比你想像的困难得多。首先，PyPi在多数情况下，无法给出它上面的某一个package的依赖树（这也是为什么你在pypi.org上没有看到类似上面的依赖树的原因），这意味着poetry要知道`black`依赖哪些库，它必须先把`black`下载下来，打开它并解析才能知道。然后它从`black`中发现更多的依赖，这往往就需要它把这些依赖也下载下来，依次递归下去。
+One more thing: 生成这棵依赖树可能要比你想像的困难得多。首先，PyPI目前还没有给出它上面的某一个package的依赖树，这意味着poetry要知道`black`依赖哪些库，它必须先把`black`下载下来，打开它并解析才能知道。然后它从`black`中发现更多的依赖，这往往就需要它把这些依赖也下载下来，依次递归下去。
 
 更为糟糕的是，在这个过程中，某个库的好几个版本可能都需要依次下载下来 -- 因为它们的传递依赖不能兼容。我记得在某次解析中，poetry把numpy的版本从1.2.x一直下载到了0.1！
 

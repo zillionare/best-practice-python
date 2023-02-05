@@ -33,6 +33,8 @@ theme:
     - navigation.top
     - toc.follow
     - toc.integrate
+    - content.code.copy
+    - content.code.annotate
 markdown_extensions:
   - toc:
       permalink: true
