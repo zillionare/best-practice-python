@@ -1,0 +1,16 @@
+FROM python:3.8
+
+WORKDIR /
+COPY rootfs ./
+
+ARG version
+ARG pypi=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG wheel
+ENV PORT=7080
+
+RUN pip config set global.index-url ${pypi} \
+    && pip install ${wheel}
+
+EXPOSE $PORT
+ENTRYPOINT ["/root/entrypoint.sh"]
+

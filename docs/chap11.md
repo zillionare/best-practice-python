@@ -254,15 +254,24 @@ Poetry为何不将`lock`文件中锁定的版本号写入到METADATA文件中呢
 # 2. 应用程序分发
 应用程序的打包分发，按它最终分的的目标，又可大致分为桌面应用程序和移动应用程序[^1]。前者一般只需要借助一些打包工具；后者往往要在一开始，就要从框架入手进行支持。
 ## 2.1. 桌面应用程序
-Python打包桌面应用程序的选项非常之多，包括跨平台的如[pyInstaller](https://pyinstaller.readthedocs.io/en/stable/), [cx_Freeze](https://marcelotduarte.github.io/cx_Freeze/)，[briefcase](briefcase.readthedocs.io/)，专用于Windows的[py2exe](http://www.py2exe.org/)和专用于Mac的[py2app](https://py2app.readthedocs.io/en/latest/)等。此外，还有Nuitka, makeself等。这里我们只介绍makeself, PyInstaller和Nuikta。
-### 2.1.1. makeself的多平台安装包（内含案例）
-makeself[^2]是一个可用以Unix/Linux和MacOs下的自解压工具。在安装了cygwin的前提下，也可用以Windows。它不仅可以用来打包Python应用程序，也可以用来打包其它脚本应用。makeself本身是一个小型 shell 脚本，可从指定目录生成可自解压的压缩文档。生成的文件显示为 shell 脚本（其中许多具有.run后缀），并且可以在shell下启动执行，执行后，这个压缩文档将自行解压缩到一个临时目录，并执行可选的任意命令（例如安装脚本）。这与在 Windows 世界中使用 WinZip Self-Extractor 生成的档案非常相似。Makeself 档案还包括用于完整性自我验证的校验和（CRC 和/或 MD5/SHA256 校验和）。
+Python打包桌面应用程序的选项非常之多，包括跨平台的如pyInstaller[^3], 还有Nuitka[^8]，briefcase[^5]，专用于Windows的py2exe[^6]和专用于Mac的py2app[^7]等。此外，还有cx_Freeze[^4]，makeself[^2]等。这里我们将介绍makeself, PyInstaller，Nuikta。
 
-我们介绍这个工具，是因为在运维领域它应用非常广泛，在Github上也有过千stars。它的使用方法也非常简单，几乎没有学习成本。在Ubuntu下，它可以通过以下命令安装:
+在介绍这些工具之前，我们先讨论下，打包分发一个桌面应用程序意味着什么？当我们分发一个Python库时，我们的用户是程序员，他们应该掌握诸如创建虚拟环境、安装依赖等基本的Python知识。而当我们分发一个桌面应用程序时，我们的用户是普通用户，他们很可能不具备这些知识，而且很可能都不知道如何运行一个Python程序。因此，我们还需要帮他们创建程序运行的入口（比如，将程序入口放到启动菜单、桌面快捷方式等）。此外，在安装时，可能还需要询问用户安装目录、显示并接受许可协议等。这些都是打包分发桌面应用程序的基本要求。
+
+不是所有我们将介绍的工具，都同样的具有上述能力，请读者注意辨别，根据需要做出选择。
+### 2.1.1. makeself的多平台安装包（内含案例）
+makeself[^2]是一个可用以Unix/Linux和MacOs下的自解压工具。如果用户使用Windoes，则在安装了cygwin的前提下，也可使用（不过这样一来，基本上就将普通用户排除在外了，所以并不是好的方案）。makeself本身是一个小型 shell 脚本，可从指定目录生成可自解压的压缩文档。生成的文件显示为 shell 脚本，并且可以在shell下启动执行，执行后，这个压缩文档将自行解压缩到一个临时目录，并执行可选的任意命令（例如安装脚本）。这与在 Windows 世界中使用 WinZip Self-Extractor 生成的档案非常相似。Makeself 档案还包括用于完整性自我验证的校验和（CRC 和/或 MD5/SHA256 校验和）。
+
+我们介绍这个工具，是因为在运维领域它应用非常广泛，在Github上也有过千stars。另外，对于Python开发者来说，这个概念很可能并不陌生。如果你在Ubuntu下安装过Anaconda，你应该知道，Anaconda的安装包就是一个类似于shell脚本的压缩包，不确定的是，它是用makeself打包的，还是用其它工具打包的。
+
+Makeself 的使用方法也非常简单，几乎没有学习成本。在Ubuntu下，它可以通过以下命令安装:
 ```
 sudo apt-get install makeself
 ```
-在其它操作系统上，您可能需要从其官网[^2]下载安装。
+在其它操作系统上，您可能需要从其官网[^2]下载安装。也可以通过`conda`命令来安装：
+```
+$ conda install -c conda-forge makeself
+```
 
 它的用法如下：
 
@@ -294,15 +303,224 @@ chmod +x /tmp/sample/install.sh
 # packaging with makeself
 makeself /tmp/sample install_sample.sh "sample package made by makeself" ./install.sh
 ```
-非常轻巧和干净，这正是我们介绍它的目的。我们这里使用了一个名为`install.sh`的脚本作为启动脚本。在这个脚本里，我们仅仅执行了安装命令，您也可以在此与用户交互，并在安装后，根据用户的输入进行初始化设置。
+非常轻巧和干净，这正是我们介绍它的目的。我们这里使用了一个名为`install.sh`的脚本作为启动脚本。在这个脚本里，我们仅仅演示了如何执行安装命令，一个安整的安装脚本可能需要：
+1. 检查符合版本要求的Python是否可用，如果不可用，下载并安装。这里也可以询问用户意见，如果用户不接受，则退出安装。
+2. 安装virtualenv，如果当前环境下不存在的话：`pip install virtualenv`
+3. 通过`virtualenv --no-site-packages venv path/to/your/app`创建一个新的虚拟环境，我们的应用程序应该在此虚拟环境下运行。虚拟环境的路径也将是我们的安装路径，这需要向用户询问并接收输入。这里的参数`--no-site-packages`的作用是不将系统环境中的包拷贝过来，这样我们可以得到一个干净的虚拟环境。
+4. 将解压后的应用程序拷贝`path/to/your/app`中。
+5. 切换目录到`path/to/your/app`下，激活虚拟环境：`source venv/bin/activate`
+6. 安装应用程序：`pip install ./sample-$version-py3-none-any.whl`。安装完成后，这个whl文件也可以删除。
+7. 创建一个启动脚本（假设名字为start.sh），这个启动脚本的作用是通过虚拟环境中的python来调用我们的应用程序`sample`。如果`sample`程序提供了`console script`，那么启动脚本的任务就是直接调用它；否则，就要看`sample`的入口程序是如何提供的了。这部分只能交给读者自行完成了。
+8. 创建一个软链接，将启动脚本链接到`/usr/local/bin`下，这样就可以在任何地方通过`sample`来启动我们的应用程序了。命令是:
+```
+sudo ln -s path/to/your/app/start.sh /usr/local/bin/sample
+```
 
-### 2.1.2. 基于PyInstaller的多平台安装包
-### 2.1.3. Nuitka
+### 2.1.2. PyInstaller和Nuitka
+这两者都是打包工具。其目标都是将Python程序打包成一个自包含的可执行文件（也可能是文件夹）。这样，我们就可以将其分发给客户，无论客户的目标机器上是否安装有Python，都可以直接运行，并且所有的依赖都已经包含了。除了上述功能外，两个工具都还有加密Python程序的能力，这也是国内不少开发者所需要的功能。
+
+不同的是，PyInstaller只对Python程序进行打包，即从指定的python文件开始，递归分析它的依赖项，将这些依赖项和适配的Python解释器一并打包。在这个过程中，它可以按要求对生成的字节码进行一定的混淆，从而起到加密的作用。最终应用程序的运行方式跟普通的Python程序一样，通过解释器来执行。
+
+Nuitka则是将Python程序编译成C代码，然后再编译成可执行文件。这样，生成的可执行文件就不依赖于Python解释器了。这样做的好处是，生成的可执行文件更小，理论上运行速度应该比肩c程序。不过Python程序转换为c时可能会遇到一部分兼容性问题，在这种情况下，Nuitka会优先考虑兼容性问题，而不是优化速度，因此一般认为加速在30%以内。使用Nuitka打包的另一个好处是，由于我们发布的是二进制文件，所以能比较好地保护源代码。
+
+看上去Nuitka似乎更有发展前景，毕竟，它有性能加成的因素。随着使用`Type hint`的Python库越来越多，这种性能加成将会越明显。因此，这里我们只对Nuitka进行简单介绍。如果读者对PyInstaller感兴趣，可以按照我们文中给出的官网链接，自行学习。
+
+下面，我们以一个简单的例子来说明如何使用Nuitka打包Python程序。尽管我们所有的示例都推荐在Ubunutu或者MacOS上运行，但这一次，我们需要在windows上运行这个示例。
+
+首先，我们要安装nuitka，可以通过pip安装（注意我们需要创建一个虚拟环境，在其中安装nuitka）：
+
+```bash
+$ pip install nuitka
+```
+
+然后，我们创建一个名为`greetings.py`的文件，内容如下：
+
+```python title="greetings.py"
+import fire
+
+def greeting(name: str):
+    print(f"hi {name}")
+
+fire.Fire({
+    "greeting": greeting
+})
+```
+
+接下来就是见证奇迹的时刻，我们这样进行打包:
+```
+python -m nuitka greetings.py
+```
+这会在给出以下警示后，程序继续：
+```
+Nuitka-Options:INFO: Used command line options: greetings.py
+Nuitka-Options:WARNING: You did not specify to follow or include anything but main program. Check options and make sure
+Nuitka-Options:WARNING: that is intended.
+Nuitka:WARNING: Using very slow fallback for ordered sets, please install 'orderedset' PyPI package for best Python
+Nuitka:WARNING: compile time performance.
+```
+对我们这个简单的程序，这些警告不会有任何影响。如果你的程序中使用了`set`，那么你应该安装`orderedset`，这样可以提高编译速度。但接下来，它要求下载并安装MinGW64和ccache。这个下载可能会失败，如果是这样，你需要自行下载，并且将下载的压缩包解压缩后，按提示放到指定的位置，比如'C:\Users\Administrator\AppData\Local\Nuitka\Nuitka\Cache\downloads\gcc\x86_64\11.3.0-14.0.3-10.0.0-msvcrt-r3'。这个位置可能会因为你的系统不同而不同，但都会打印在命令行窗口中。
+
+接下来，它开始进行真正的编译：
+```
+Nuitka:INFO: Starting Python compilation with Nuitka '1.4.3' on Python '3.8' commercial grade 'not installed'.
+Nuitka:INFO: Completed Python level compilation and optimization.
+Nuitka:INFO: Generating source code for C backend compiler.
+Nuitka:INFO: Running data composer tool for optimal constant value handling.
+Nuitka:INFO: Running C compilation via Scons.
+Nuitka-Scons:INFO: Backend C compiler: gcc (gcc).
+Nuitka-Scons:INFO: Backend linking program with 6 files (no progress information available).
+Nuitka-Scons:INFO: Compiled 24 C files using ccache.
+Nuitka-Scons:INFO: Cached C files (using ccache) with result 'cache miss': 6
+Nuitka:INFO: Keeping build directory 'greetings.build'.
+Nuitka:INFO: Successfully created 'greetings.exe'.
+Nuitka:INFO: Execute it by launching 'greetings.cmd', the batch file needs to set environment.
+```
+根据提示，我们看到它将python代码转换成c的源码，并进一步编译成windows上可以运行的原生程序。最终，我们得到了两个文件，一个是'greetings.exe'，另一个是'greetings.cmd'。如果我们是在刚刚进行打包的窗口中，则可以直接运行`greetings.exe`，否则，我们应该运行`greetings.cmd`。
+
+运行结果如下：
+```
+$ greetings.exe greeting aaron
+
+hi aaron
+```
+这仅仅是一个命令行程序，所以看上去可能不那么令人兴奋。但如果我们打算从资源管理器里找到它，双击并运行它，我们会被提示缺少某些python的dll。为了使这个程序完全独立，我们需要在打包时加上--standalone参数：
+```
+$ python -m nuitka --standalone --follow-imports greetings.py
+```
+这一次，又会提示下载一些东西，主要是msvc的运行时，但这次下载会非常顺利。最终，编译成功，我们得到了一个名为greetings.dist的文件夹。现在，我们可以直接双击运行greetings.exe了（由于我们的greetings程序需要接收用户输入，所以我们还是得从命令行中打开它。不过这次，我们可以将新生成的文件夹拷贝到另一个机器，没有安装python和nuitka的机器上，然后在命令行下运行greetings.exe）：
+```
+$ greetings.exe greeting aaron
+
+hi aaron
+```
+
+Nuitka的打包构建过程已经可以和poetry整合，我们只需要这样修改`pyproject.toml`即可工作：
+```
+[build-system]
+requires = ["setuptools>=42", "wheel", "nuitka", "toml"]
+build-backend = "nuitka.distutils.Build"
+
+[nuitka]
+# These are not recommended, but they make it obvious to have effect.
+
+# boolean option, e.g. if you cared for C compilation commands, leading
+# dashes are omitted
+show-scons = true
+
+# options with single values, e.g. enable a plugin of Nuitka
+enable-plugin = pyside2
+
+# options with several values, e.g. avoiding including modules, accepts
+# list argument.
+nofollow-import-to = ["*.tests", "*.distutils"]
+```
+
+现在，我们来思考一下，PyInstaller和Nuitka的定位。它们是打包程序，显然。但他们并不是安装程序。通过它们打包，我们实现的目标是让这些程序可以在用户的桌面操作系统上，在不安装Python和依赖的情况下，就可以直接运行，但是，它只适合无须安装的“绿色程序”，如果我们的程序需要创建桌面快捷方式，修改注册表，那么它将无能为力。
+
+如果您的程序需要有一个较华丽的安装界面，建议您查看一下Inno Setup[^4]或者Wix[^9]。
 ## 2.2. 移动应用程序
+移动应用程序与桌面应用有很大的不同，一般来说，即使我们能把一个桌面应用打包成能安装的移动应用，其用户体验也很难说会有多好。因此，对于Python应用程序的打包和分发，必须从一开始就进行规划，必须一开始就使用上相关的跨平台开发的框架。
 
+这里我们主要介绍和比较两个最流行的框架，`Kivy`和`BeeWare`，读者可以根据自己的需要进行选择。
+
+### Kivy
+Kivy[^10]是一个跨平台的Python框架，它可以让我们使用Python来开发桌面应用程序和移动应用程序。它基于MIT License，完全免费。它的主要特点是，有自己的UI设计语言，因此在所有的设备上，应用程序都有一致的行为和外观；它使用OpenGL来绘制UI，因此十分高效。 下图是使用Kivy开发的一个围棋游戏，名为Lazy Baduk，你可以在谷歌应用商店中找到它。
+
+![](assets/img/chap11/kivy_go.png){width="50%"}
+
+!!! Info
+    如果你对围棋感兴趣，这里推荐一个名为KaTrain的围棋训练软件，它也是用Python和Kivy开发的。它基于KataGo -- 最强算力的开源围棋AI，一些谣传认为，某些商业软件，包括某些国家队用以训练的AI围棋软件，都“借鉴”了KataGo的算法。
+
+Kivy的短板可能也在于它的独特的UI设计语言。Kivy的UI toolkit保证了基于Kivy的应用程序可以很好在运行在Android, iOS, Linux甚至Raspberry Pi上，但是也使得它缺少了原生应用程序的某些操作能力。
+### BeeWare
+BeeWare[^11]同样是一个跨平台的Python框架。它基于BSD License，完全免费。它的主要特点是，它致力于提供接近原生程序的用户体验。BeeWare的出现时间要晚一些，不过它的发展势头也不差。另外，它是组件式的，BeeWare包含了BriefCase，这是另一个为人广泛使用的Python打包工具。Toga，一个基于Python的跨平台GUI框架，也是BeeWare的一部分。
+
+移动端的差异远大于桌面端，因此，能利用移动设备的最新特性，对打造一款吸引人的移动应用是十分重要的。出于这个考虑，也许Python目前仍不是最适合的开发语言。但是，不管是Kivy，还是BeeWare，都为Python开发移动应用提供了一种选择。
 # 3. 基于云的应用部署
-code to implement a simple REST API in GO
+比起桌面应用程序，Python似乎更擅长开发后台服务程序。在微服务架构下，多进程+异步IO，使得Python无法发挥硬件性能的短板被极大地补齐，而它简洁、高效开发和丰富的生态的优势则得到了充分的发挥。
+
+Python的云部署有Heroku, GoogleApp等方式。但可能更广泛使用的方式是使用公有云或者私有云部署。要使用这种云部署，核心是通过容器来打包我们的Python服务。
+
+一个运行Python服务的docker容器，通常由一个操作系统内核，一个Python解释器，以及我们的Python服务组成。这些组件可以通过Dockerfile来描述。Dockerfile是一个文本文件，它包含了一系列命令和参数，用以构建一个镜像。镜像是一个只读的模板，它描述了一个Docker容器应该如何运行。当镜像被Docker运行时拉取到本地并执行时，就会生成一个容器。我们的服务此时就运行在服务器里。
+
+容器是一种轻量化的虚拟机，它与虚拟机不同的是，它不需要一个完整的操作系统，而是直接使用宿主机的内核。这样，容器的启动速度比虚拟机快很多，而且它们的资源占用也更少。一般地，我们使用容器来运行某个服务，当该服务停止时，容器也就终结了。
+
+下面我们通过一个例子来说明如何构建和运行一个Python服务的容器。我们仍以sample项目为例，但这次，我们需要在项目根目录下增加一个目录，名为docker，其中包含以下文件:
+```
+.
+├── build.sh
+├── dockerfile
+└── rootfs
+    └── root
+        ├── entrypoint.sh
+        └── sample
+            ├── index.html
+            └── mars.jpg
+```
+其中，build.sh是一个脚本，用于构建镜像。dockerfile是Dockerfile文件，用于描述镜像。rootfs是一个目录，用于存放镜像中的文件。在构建镜像时，它将被映射为容器的根目录。build.sh主要的工作是构建sample项目，将相应的文件拷贝到rootfs下，再执行`docer build`命令来构建镜像。
+
+以下是build.sh的主要内容：
+```
+version=`poetry version | awk '{print $2}'`
+wheel="/root/sample/sample-$version-py3-none-any.whl"
+echo "packaging sample version = $version"
+echo "the wheel file is $wheel"
+poetry build
+cp ../dist/*$version*.whl rootfs/root/sample/
+docker rmi sample
+docker build --build-arg version=$version --build-arg wheel=$wheel . -t sample
+
+# launch the container
+docker run -d --name sample -p 7080:7080 sample
+```
+在这个构建脚本里，我们首先构建了sample项目的wheel包，然后将它拷贝到rootfs目录下。接着，我们执行`docker build`命令，构建了一个名为sample的镜像，最后，我们以此镜像为基础，启动了一个名为sample的容器，并且将端口7080映射为主机端口。
+
+现在，我们来看看Dockerfile的内容：
+```
+FROM python:3.8
+
+WORKDIR /
+COPY rootfs ./
+
+ARG version
+ARG pypi=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG wheel
+ENV PORT=7080
+
+RUN pip config set global.index-url ${pypi} \
+    && pip install ${wheel}
+
+EXPOSE $PORT
+ENTRYPOINT ["/root/entrypoint.sh"]
+```
+这个Dockerfile文件的内容很简单，它首先基于python:3.8镜像，然后将rootfs目录下的文件拷贝到容器的根目录下。接着，它安装了sample项目的wheel包。最后，它设置了容器的入口点为/root/entrypoint.sh。
+
+我们用`ARG`来传递docker编译期变量。这里的version和wheel是两个编译器变量，它们是由build.sh通过`--arg $version`传递进来的。`EXPOSE`是将端口暴露出来。我们在`entrypoint.sh`中启动了一个监听在$PORT上的HTTP服务，我们必须把这个端口暴露给主机，以便我们可以从主机上访问这里的服务。
+
+接下来，我们来看看`entrypoint.sh`的内容：
+```
+#!/bin/sh
+
+python3 -m http.server -d /root/sample $PORT
+```
+由于这只是个演示性的程序，我们在这里并没有用到sample的任何功能。您只需要知道，如果您想使用`sample`的功能，您可以在这里调用它的命令即可。这与我们在别的地方调用它没有任何不同。在这里，我们只是简单地通过python的内置的`http`模块来启动了一个简单的HTTP服务。
+
+我们在`build.sh`中，指定了容器的端口为7080。现在，容器已经启动，服务也正在运行，让我们访问它吧：
+
+![](assets/img/chap11/end.png)
+
+我们在第一章里看到过这张图。
+
+就让我们从这里开始，也在这里结束。
 
 [^1]: 在[Python官方文档](https://packaging.python.org/en/latest/overview/#packaging-python-applications)(https://packaging.python.org/en/latest/overview/#packaging-python-applications)中，还提到了其它几种打包。
 [^2]: [Makeself](https://makeself.io/)的官网地址是：https://makeself.io/
-
+[^3]: [PyInstaller](https://pyinstaller.org)的官网是：https://pyinstaller.org
+[^4]: [Inno Setup](https://jrsoftware.org/isinfo.php)的官网是：https://jrsoftware.org/isinfo.php
+[^5]: [Briefcase](https://briefcase.readthedocs.io/)的官网是：https://briefcase.readthedocs.io/
+[^6]: [Py2exe](https://www.py2exe.org/)的官网地址是：https://www.py2exe.org/
+[^7]: [Py2app](https://py2app.readthedocs.io/en/latest/)的官网地址是: https://py2app.readthedocs.io/
+[^8]: [Nuitka](https://nuitka.net/)的官网地址是: https://nuitka.net/
+[^9]: [WiX](https://wixtoolset.org/)的官网地址是: https://wixtoolset.org/
+[^10]: [Kivy](https://kivy.org)的官网地址是：https://kivy.org
+[^11]: [BeeWare](https://beeware.org/)的官网地址是：https://beeware.org/
