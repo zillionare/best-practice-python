@@ -1,4 +1,4 @@
-在上一章里，我们讨论了构建开发环境的基本步骤，如选择操作系统、选择集成开发环境等。现在我们可以着手编写代码了，但要能运行和调试程序，还需要指定Python运行时（或者称之为解释器）。特别地，如果你使用的开发工具是VsCode，那么这一步是必须的：因为VsCode并不是只为开发Python应用程序而设计的，它支持好多种开发语言。因此，要使得VsCode知道你的工程项目是基于Python的，就必须为它指定Python运行时。
+在上一章里，我们讨论了构建开发环境的基本步骤，如选择操作系统、选择集成开发环境等。现在我们可以着手编写代码了，但要能运行和调试程序，还需要指定Python运行时（或者称之为解释器）。特别地，如果你使用的开发工具是VS Code，那么这一步是必须的：因为VS Code并不是只为开发Python应用程序而设计的，它支持好多种开发语言。因此，要使得VS Code知道你的工程项目是基于Python的，就必须为它指定Python运行时。
 
 Python有两个主要的运行时版本，Python 2.x和Python 3.x。Python 3.x是对2.x版本的破坏性升级。当前，需要在3.x版本下运行的应用程序和组件越来越多了，然而，象MacOs或者Ubuntu这样的操作系统，它的一些老旧版本仍然依赖Python 2.x来运行一些核心功能，比如包管理。因此，在这些系统上，Python 2.x仍然是缺省安装的Python运行时版本。
 
@@ -7,7 +7,7 @@ Python有两个主要的运行时版本，Python 2.x和Python 3.x。Python 3.x�
 
 这会是你在开发Python应用时的将会遇到的第一个问题：你想要开发一个Python应用程序，使用了最新的Python版本，有着大量酷炫的新特征和新功能。但当你的应用程序部署时，可能被部署到各种各样的机器上，这些机器上缺省安装的Python版本，并不是你开发时指定的版本。如果强行升级系统缺省安装的Python版本，则可能会破坏其它应用程序；而如果不进行升级，则又没办法运行你的程序。
 
-即使目标机器和你的应用程序使用了同样的Python版本，类似的冲突还可能发生在其它组件上。比如Django是Python社区中最负盛名的web开发框架。它依赖于SQLAlchemy，Python社区中另一个同样颇负盛名的开源orm框架。如果你的程序也依赖于SQLAlchemy，并且你使用了SQLAlchemy 1.4以上的版本，而Django使用了它的早期版本，那么很不幸，这两个应用程序将无法共用同一个Python环境： SQLAlchemy 1.4相对于之前的版本，是完全不兼容的破坏性更新。
+即使目标机器和你的应用程序使用了同样的Python版本，类似的冲突还可能发生在其它组件上。比如Django是Python社区中最负盛名的web开发框架。它依赖于SQLAlchemy -- Python社区中另一个同样颇负盛名的开源orm框架。如果你的程序也依赖于SQLAlchemy，并且你使用了SQLAlchemy 1.4以上的版本，而Django使用了它的早期版本，那么很不幸，这两个应用程序将无法共用同一个Python环境： SQLAlchemy 1.4相对于之前的版本，是完全不兼容的破坏性更新。
 
 这类问题被称之为依赖地狱。依赖地狱并不是Python独有的问题，它是所有的软件系统都会面临的问题。
 
@@ -36,19 +36,20 @@ Python的虚拟环境方案可谓源远流长，种类繁多。如果你接触Py
 
 在上面这些令人眼花缭乱的词语中，Annaconda(以下简称conda)和Virtualenv是一对儿对手，Pipenv则和Poetry相互竞争。而Venv则是其中血统最为纯正的一个，得到了Python官方的祝福。
 
-pipenv和poetry，尽管常常被人在讨论虚拟环境的场合下提起，也确实与虚拟环境相关，但他们所做的工作都远远超过了虚拟环境本身--它们的主要功能是提供依赖管理，poetry还提供了构建和打包功能。因此，我们将在第五章-Poetry那一章中来详细讲述。
+pipenv和poetry，尽管常常被人在讨论虚拟环境的场合下提起，也确实与虚拟环境相关，但他们所做的工作都远远超过了虚拟环境本身——它们的主要功能是提供依赖管理，poetry还提供了构建和打包功能。因此，我们将在第五章——Poetry那一章中来详细讲述。
 
 venv不是一个独立的工具，它只是一个模块。venv是从Python 3.8起，标准库提供的一个模块，你可以使用python -m venv来运行它。它的目标与virtualenv比较接近，但只提供了virutalenv的一个命令子集。由于它是标准库提供的，因此许多工具，比如poetry, pyenv现在都是基于它来构建的。因此，如果你是某个工具的开发者，我想你需要熟悉它；否则，你会在使用poetry等工具时，自然而然地接触和使用到它。
 
 conda和Virtualenv都是用来创建和管理Python虚拟环境的工具，有着相似的命令行接口，不同之处在于：
+
 1. Conda是一个多语言、跨平台的虚拟环境管理器，而Virtualenv则只用于Python。
 2. 通过Conda可以管理（安装、升级）Python版本，而virtualenv则没有这个能力。
 3. 缺省安装下，conda会占用大约100MB的磁盘空间，而virtualenv则只需要占用更少的空间（约10MB）。这可能即是优势，也是缺点。virtualenv通过使用对原生库的符号链接来减少对硬盘空间的使用，这使得对原生库的隔离并未真正实现--如果你的应用程序不仅仅依赖Python库，还依赖于原生库，则仍然可能产生依赖冲突，导致你的程序出现一些很难查找原因的错误。而在conda虚拟环境中，所有的依赖都是完全隔离的。
 4. 缺省地，conda对虚拟环境进行集中式管理，所有的虚拟环境都在一个目录下，而virtualenv则倾向于将虚拟环境放在当前目录下。长期来看，非集中式管理可能导致这些虚拟环境呈碎片化而难于被追踪。
 
-上述第3点可能是最重要的差异。我们很难保证Python应用程序永远只依赖于纯的Python库。事实上，一些性能相关的模块，往往是用c++或者其它语言来开发的。LAPACK（一个常用的线性代数库，Python中最著名的科学计算库Numpy和scipy都依赖于此）或者OpenSSL是常见的例子。
+上述第3点可能是最重要的差异。我们很难保证Python应用程序永远只依赖于纯的Python库。事实上，一些性能相关的模块，往往是用c++或者其它语言来开发的。Lapack（一个常用的线性代数库，Python中最著名的科学计算库Numpy和scipy都依赖于此）或者OpenSSL都是常见的例子。
 
-在本书中，我们只推荐使用Annaconda。但对virtualenv和venv，读者需要知道的是，如果正在开发一个生成和构建虚拟环境的工具（或者模块）--比如，为一个容器构建一个虚拟环境，或者为分布式程序动态构建一个远程的虚拟环境--那么venv或者virtualenv将是惟一的选择，因为conda并不是一个轻量级的工具。
+在本书中，我们只推荐使用Annaconda。但对virtualenv和venv，读者需要知道的是，如果正在开发一个生成和构建虚拟环境的工具（或者模块）—— 比如，为一个容器构建一个虚拟环境，或者为分布式程序动态构建一个远程的虚拟环境--那么venv或者virtualenv将是惟一的选择，因为conda并不是一个轻量级的工具。
 
 对上面没有提到的那些技术，我们将不会在本书中详细介绍它，这里仅对它们做一个概括性的描述：
 
@@ -60,7 +61,7 @@ conda和Virtualenv都是用来创建和管理Python虚拟环境的工具，有�
 ## 2.1. Anaconda：一站式管理的虚拟环境
 Anaconda包揽了从安装python版本、创建虚拟环境和切换虚拟环境的所有功能。它的官方网站是[Anaconda.org](https://www.anaconda.org/)。它是所有从事数据科学或者深度学习的人理所当然的首选工具。它自带的包管理系统，提供了许多流行的机器学习库预编译版本，因此你不用自己去熟悉gcc和c/c++代码的编译过程。
 ### 2.1.1. 安装Anaconda
-安装Anaconda请从https://www.anaconda.com/products/distribution页面下载安装包。除非您使用Anaconda进行科学计算，否则建议您从https://docs.conda.io/en/latest/miniconda.html处下载最新的miniconda安装包。
+安装Anaconda请从这里[^anaconda]页面下载安装包。除非您使用Anaconda进行科学计算，否则建议您下载最新的miniconda[^miniconda]安装包。
 
 以Ubuntu为例，无论是Ananconda还是Miniconda，其安装文件都是一个包含了安装数据文件的shell脚本，您可以通过wget或者curl将其下载下来，然后执行这个脚本进行安装。
 
@@ -70,14 +71,14 @@ conda安装完成后，就会在你的系统上生成第一个虚拟环境，称
 ### 2.1.2. 配置conda环境
 conda安装后，一般情况下，无须配置即可使用。但是，如果我们需要使用代理服务器，或者变更conda源以加快下载速度，则需要配置conda。
 
-conda的配置文件是用户目录下的.condarc，它是一个YAML格式的文件。这个文件直到你第一次调用conda config时才会产生,比如，增加一个conda源：
+conda的配置文件是用户目录下的.condarc，它是一个YAML格式的文件。这个文件直到你第一次调用conda config时才会产生，比如，增加一个conda源：
 
 ```shell
 conda config --add channels conda-forge
 ```
 
 我们也可以直接编辑.condarc文件:
-```yaml
+```yaml title=".condarc"
 channels:
   - https://mirrors.aliyun.com/anaconda/pkgs/free/
   - https://mirrors.aliyun.com/anaconda/pkgs/main/
@@ -92,17 +93,17 @@ proxy_servers:
 
 有时候当访问conda的官方源时，我们需要使用代理服务器来进行加速。上面的示例显示了如何进行这些配置。有一些代理服务器对ssl验证支持的不是太好，这种情况下，你需要设置ssl_verify为False,正如以上示例所示。
 
-conda还允许其它一些配置，如果有需要，推荐读者进一步阅读[配置conda](https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html)。
+conda还允许其它一些配置，如果有需要，推荐读者进一步阅读配置conda[^config]。
 ### 2.1.3. 创建和管理虚拟环境
 现在，我们来创建一个虚拟环境，并且通过conda的一些命令来看看如何管理它。
 
-```
-conda create -n test python=3.8
+```shell
+$ conda create -n test python=3.8
 ```
 上述命令创建了一个名为test的虚拟环境，并且安装python=3.8。现在我们查看一下，当前系统中，都存在哪些虚拟环境：
 
 ```shell
-conda env list
+$ conda env list
 
 # 输出应该类似于：
 # conda environments:
@@ -113,8 +114,8 @@ test           /root/miniconda3/envs/test
 上面的输出表明，我们在/root下安装了一个miniconda，并且还创建了一个名为test的虚拟环境。这个虚拟环境的文件夹是/root/miniconda3/envs/test。
 
 现在让我们切换到新创建的这个虚拟环境中：
-```
-conda activate test
+```shell
+$ conda activate test
 ```
 现在，你的shell提示符应该修改为类似于：
 ```
@@ -123,22 +124,24 @@ conda activate test
 我们的测试是在一个ubuntu虚拟机上，直接使用了root账户来进行测试。所以，上面的提示符中，root是当前用户名。在当前用户名之前的(test)，表明我们当前处在test虚拟环境中。
 
 要往这个虚拟环境中安装一个包，可以使用conda install命令：
-```
-conda install PACKAGENAME
+```sheel
+$ conda install PACKAGENAME
 ```
 
 现在，假设我们要移除这个虚拟环境：
-```
+```shell
 # 退出当前的虚拟环境test，以便可以删除它
-conda deactivate
-conda env remove --name test
+$ conda deactivate
+$ conda env remove --name test
 ```
 上述命令不会给你确认的机会，所以，在使用这个命令之前，必须小心。当然，conda这样设计并没有任何问题，虚拟环境本身就应该是可以随时创建和随时销毁的。如果不小心删除错误，那么重建一个就好了。后悔药一直都在。
 
 在结束这一节内容之前，我们还想介绍一些高级使用方法，掌握这些方法，会在出现疑难问题时，更加容易解决问题。
 
 首先，我们可以通过conda info命令来检查conda安装的一些关键信息：
-```
+```shell
+$ conda info
+
      active environment : base
     active env location : /root/miniconda3
        user config file : /root/.condarc
@@ -158,6 +161,7 @@ conda env remove --name test
                           /root/.conda/envs
 ```
 上面的内容是conda info的输出（为了简洁起见，删掉了一些不重要的内容），它揭示了一些关键信息：
+
 1. 当前我们处于base虚拟环境下。这是当你安装了conda之后，就默认存在的一个虚拟环境。它的文件目录是/root/miniconda3。如果你是在test虚拟环境下，则active env location应该指向/root/miniconda3/envs/test
 2. 配置文件在/root/.condarc下。前面我们介绍配置conda时，已经用过这个文件了，但是为简洁起见，在那里并没有告诉读者，这个文件的位置。现在你就知道，如果不清楚conda配置文件的位置，可以使用conda info命令来查看。
 3. 上述输出还显示了conda源的配置。
@@ -172,49 +176,51 @@ bin # 在bin目录下，存放有python, pip等重要命令
 lib # 在lib下，存放有python3.x目录，site-packages等安装包将最终安装到这里。
 ```
 
-另一个对查错有用的重要命令，是conda list。它将列出
+另一个对查错有用的重要命令，是conda list。它将列出当前conda环境下已安装的库（package）。
+
+### 2.1.4. 几个常见问题
 
 1. 可以重命名一个虚拟环境吗？
 从conda 4.14起，conda支持重命名虚拟环境：
 ```
-conda rename -n old_name -d new_name
+$ conda rename -n old_name -d new_name
 ```
 不过，上述命令其实只是conda create和conda remove的简单组合，所以，在旧的conda版本下，你可以：
 ```
-conda create --name new_name --clone old_name
-conda env remove --name old_name
+$ conda create --name new_name --clone old_name
+$ conda env remove --name old_name
 ```
 2. 如何追踪一个虚拟环境的变更？
 这是conda提供的一个有用的功能之一，即可以追踪一个虚拟环境的变更历史：
 ```
 # 切换到关注的虚拟环境，并运行以下命令：
-conda list --revisions
+$ conda list --revisions
 
 # 恢复变更到某个镜像点
-conda install --revision 2
+$ conda install --revision 2
 ```
 注意区分conda list与conda env list。后者是列出虚拟环境，前者则是列出当前虚拟环境里安装的packages和版本。
 
-如果想全面而快速地了解conda命令，可以参考[conda小抄](https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf)
+如果想全面而快速地了解conda命令，可以参考conda小抄[^cheatsheet]。
 
 ## 2.2. 轻量的Python包安装工具Pip
 在上一节，我们介绍了如何往虚拟环境中安装程序库：
 ```
-conda install PACKAGENAME
+$ conda install PACKAGENAME
 ```
 您也可以使用pip来安装程序库：
 ```
-pip install PACKAGENAME
+$ pip install PACKAGENAME
 ```
 实际上，以您前面创建的test环境为例，conda已经把pip安装到了/root/miniconda3/test/bin目录下：
 ```
-ls /root/miniconda3/envs/test/bin
+$ ls /root/miniconda3/envs/test/bin
 ```
-## 2.3. 配置VSCode中的解释器
+## 2.3. 配置VS Code中的解释器
 
-我们已经创建了一个虚拟环境，安装了python。但要在vscode下开发python应用程序，我们还得在vscode中完成相关的配置。
+我们已经创建了一个虚拟环境，安装了python。但要在VS Code下开发python应用程序，我们还得在VS Code中完成相关的配置。
 
-在vscode中，打开命令面板(在mac下是cmd+shift+p, 其它操作系统中是ctrl + shift + p)，输入 Python: select Interpreter，如下图所示：
+在VS Code中，打开命令面板(在mac下是cmd+shift+p, 其它操作系统中是ctrl + shift + p)，输入 Python: select Interpreter，如下图所示：
 
 ![](https://images.jieyu.ai/images/20220820220821195956.png)
 
@@ -228,15 +234,18 @@ ls /root/miniconda3/envs/test/bin
 /root/miniconda3/envs/test/bin/python
 ```
 
-此外，您也可以在vscode的状态栏中，寻找类似下面的提示文字：
+此外，您也可以在VS Code的状态栏中，寻找类似下面的提示文字：
 
 ![](https://images.jieyu.ai/images/202211/20221224143053.png)
 然后点击它，也可进入"python: Select Interpreter"菜单。
 
 至此，您就完成了最基础的开发环境设置：IDE已经安装好，并且要使用的python版本也已经指定！现在，您就可以编写一个最简单的python程序：
-```python
-# helloworld.py
+```python title="helloworld.py"
 print("Hello World")
 ```
-把这个程序存为helloworld.py，然后可以在命令行下，通过python helloworld.py来运行它！
+把这个程序存为helloworld.py，然后可以在命令行下，通过`python helloworld.py`来运行它！
 
+[^anaconda]: https://www.anaconda.com/products/distribution
+[^miniconda]: https://docs.conda.io/en/latest/miniconda.html
+[^config]: https://docs.conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html
+[^cheatsheet]: https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf

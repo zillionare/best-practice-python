@@ -24,8 +24,8 @@ Python项目应该使用哪种方式进行分发，取决于用户的使用方�
 在`ppw`中，我们的发布是在Github Actions中完成的。这部分我们已经在[持续集成](chap09.md)那一章讲过了。万一你存在手工发布的需求，那么请回顾[基于Poetry进行发行包的构建](chap05.md#基于Poetry进行发行包的构建)那一节。
 
 这里简要地提及一下，在Poetry出现之前，我们是如何发布Python库的，以防读者偶尔还会遇到需要维护老旧的Python项目的情况。我们需要通过`twine`这个命令来发布Python库。这个命令可以通过`pip`来安装：
-```
-pip install twine
+```shell
+$ pip install twine
 ```
 
 尽管`ppw`生成的项目中，我们使用了别的技术来发布Python库，但这个命令也保留了下来。用在`poetry build`之后，检查构建物是否合乎PyPI的规定，以提前预防发布失败。
@@ -139,7 +139,7 @@ default = false
 secondary = true
 ```
 现在我们就可以把对zillionare-omicron的开发中版本的依赖加进来：
-```bash
+```shell
 $ poetry add -v zillionare-omicron^1.2.3a1
 ```
 命令将成功执行，你可以从更新后的pyproject.toml中看到对`zillionare-omicron`的引用。如果我们没有添加这个源，则上述命令在执行时会报出以下错误：
@@ -170,8 +170,8 @@ Using virtualenv: /home/aaron/miniconda3/envs/sample
 
 下面的示例来自于`pip`的文档：
 
-```
-pip install tea
+```shell
+$ pip install tea
 Collecting tea
   Downloading tea-1.9.8-py2.py3-none-any.whl (346 kB)
      |████████████████████████████████| 346 kB 10.4 MB/s
@@ -265,24 +265,24 @@ makeself[^2]是一个可用以Unix/Linux和MacOs下的自解压工具。如果�
 我们介绍这个工具，是因为在运维领域它应用非常广泛，在Github上也有过千stars。另外，对于Python开发者来说，这个概念很可能并不陌生。如果你在Ubuntu下安装过Anaconda，你应该知道，Anaconda的安装包就是一个类似于shell脚本的压缩包，不确定的是，它是用makeself打包的，还是用其它工具打包的。
 
 Makeself 的使用方法也非常简单，几乎没有学习成本。在Ubuntu下，它可以通过以下命令安装:
-```
-sudo apt-get install makeself
+```shell
+$ sudo apt-get install makeself
 ```
 在其它操作系统上，您可能需要从其官网[^2]下载安装。也可以通过`conda`命令来安装：
-```
+```shell
 $ conda install -c conda-forge makeself
 ```
 
 它的用法如下：
 
-```
+```shell
 $ makeself.sh [args] archive_dir file_name label startup_script [script_args]
 ```
 args是Makeself的可选参数。参数比较多，涵盖了如何压缩、是否加密、解压缩行为等，这里就不一一详述。请读者在需要时参考官方文档[^2]。
 archive_dir是包含归档文件的目录名，比如项目下的dist文件夹；file_name是要创建的归档文件名，比如install_sample.sh；label是归档文件的描述，比如“Install sample”;startup_script是归档文件解压后执行的脚本，比如install.sh；script_args是startup_script的参数。
 
 仍以`sample`项目为例，我们可以使用以下脚本来完成打包：
-```
+```shell
 #!/bin/bash
   
 poetry build
@@ -312,8 +312,8 @@ makeself /tmp/sample install_sample.sh "sample package made by makeself" ./insta
 6. 安装应用程序：`pip install ./sample-$version-py3-none-any.whl`。安装完成后，这个whl文件也可以删除。
 7. 创建一个启动脚本（假设名字为start.sh），这个启动脚本的作用是通过虚拟环境中的python来调用我们的应用程序`sample`。如果`sample`程序提供了`console script`，那么启动脚本的任务就是直接调用它；否则，就要看`sample`的入口程序是如何提供的了。这部分只能交给读者自行完成了。
 8. 创建一个软链接，将启动脚本链接到`/usr/local/bin`下，这样就可以在任何地方通过`sample`来启动我们的应用程序了。命令是:
-```
-sudo ln -s path/to/your/app/start.sh /usr/local/bin/sample
+```shell
+$ sudo ln -s path/to/your/app/start.sh /usr/local/bin/sample
 ```
 
 ### 2.1.2. PyInstaller和Nuitka
@@ -329,7 +329,7 @@ Nuitka则是将Python程序编译成C代码，然后再编译成可执行文件�
 
 首先，我们要安装nuitka，可以通过pip安装（注意我们需要创建一个虚拟环境，在其中安装nuitka）：
 
-```bash
+```shell
 $ pip install nuitka
 ```
 
@@ -378,24 +378,24 @@ Nuitka:INFO: Execute it by launching 'greetings.cmd', the batch file needs to se
 根据提示，我们看到它将python代码转换成c的源码，并进一步编译成windows上可以运行的原生程序。最终，我们得到了两个文件，一个是'greetings.exe'，另一个是'greetings.cmd'。如果我们是在刚刚进行打包的窗口中，则可以直接运行`greetings.exe`，否则，我们应该运行`greetings.cmd`。
 
 运行结果如下：
-```
+```shell
 $ greetings.exe greeting aaron
 
 hi aaron
 ```
 这仅仅是一个命令行程序，所以看上去可能不那么令人兴奋。但如果我们打算从资源管理器里找到它，双击并运行它，我们会被提示缺少某些python的dll。为了使这个程序完全独立，我们需要在打包时加上--standalone参数：
-```
+```shell
 $ python -m nuitka --standalone --follow-imports greetings.py
 ```
 这一次，又会提示下载一些东西，主要是msvc的运行时，但这次下载会非常顺利。最终，编译成功，我们得到了一个名为greetings.dist的文件夹。现在，我们可以直接双击运行greetings.exe了（由于我们的greetings程序需要接收用户输入，所以我们还是得从命令行中打开它。不过这次，我们可以将新生成的文件夹拷贝到另一个机器，没有安装python和nuitka的机器上，然后在命令行下运行greetings.exe）：
-```
+```shell
 $ greetings.exe greeting aaron
 
 hi aaron
 ```
 
 Nuitka的打包构建过程已经可以和poetry整合，我们只需要这样修改`pyproject.toml`即可工作：
-```
+```toml
 [build-system]
 requires = ["setuptools>=42", "wheel", "nuitka", "toml"]
 build-backend = "nuitka.distutils.Build"
@@ -462,7 +462,7 @@ Docker是目前最流行的容器化部署工具。构建基于容器的服务�
 build.sh主要的工作是构建sample项目，将相应的文件拷贝到rootfs下，再执行`docer build`命令来构建镜像。
 
 以下是build.sh的主要内容：
-```
+```shell
 version=`poetry version | awk '{print $2}'`
 wheel="/root/sample/sample-$version-py3-none-any.whl"
 
@@ -483,7 +483,7 @@ docker run -d --name sample -p 7080:7080 sample
 在这个构建脚本里，我们首先构建了sample项目的wheel包，然后将它拷贝到rootfs目录下。接着，我们执行`docker build`命令，构建了一个名为sample的镜像，最后，我们以此镜像为基础，启动了一个名为sample的容器，并且将端口7080映射为主机端口。
 
 Dockerfile是这一节的核心，现在，我们来看看Dockerfile的内容：
-```
+```Dockerfile
 FROM python:3.8-alpine3.17
 
 WORKDIR /
@@ -509,6 +509,7 @@ ENTRYPOINT ["/root/entrypoint.sh"]
 这个镜像被下载超过10亿次。对比java镜像，仅被下载1亿次。这不仅说明Python的使用有多么广泛，也说明了Python在后台服务开发上有多重要。
 
 点击上图中的链接，我们可以进入详情页，找到3.8-alpine3.17这个标签，点击进去，我们会跳转到Github上，查看其Dockerfile的内容：
+
 ![](assets/img/chap11/python3.8_alpine_dockerfile.png){width="50%"}
 
 Alpine是一个轻量级的Linux发行版，基于Alpine构建的镜像，其大小只有5M左右，因此常常是构建微服务的首选。我们的镜像，最终也是使用的这个操作系统内核。
@@ -531,7 +532,7 @@ python3 -m http.server -d /root/sample $PORT
 
 我们在`build.sh`中，指定了容器的端口为7080。现在，容器已经启动，服务也正在运行，让我们访问它吧：
 
-![](assets/img/chap11/end.png)
+![](assets/img/chap11/end.png){width="80%"}
 
 我们在第一章里看到过这张图。
 

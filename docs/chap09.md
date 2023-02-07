@@ -47,7 +47,7 @@ Github Actions由工作流(workflow)、事件(Event)、作业(job)、操作(Acti
 
 我们先看ppw生成的一个工作流文件：
 
-```yaml
+```yaml title="dev.yml"
 name: dev build CI
 
 # 定义哪些事件可以触发工作流，以及筛选条件
@@ -328,7 +328,7 @@ jobs:
 
 在工作流中使用服务，一般需要等待容器完全启动被初始化成功。这就是第96行的工作。
 
-## 2.3. 使用较多的一些第三方应用和Actions
+## 2.3. 第三方应用和Actions
 我们已经在示例中看到了一些来自应用市场的action，比如actions/checkout, actions/setup-python, pypa/gh-action-pypi-publish, dawidd6/action-send-mail, codecove/Codecov等等。这里'/'之前的是action的作者，其中actions是Github官方的action，其它的都是第三方的action。例子中的action，它们的名字就已经说明了其功能，因此这里不再赘述。
 
 下面介绍其它一些使用较多的第三方actions，其中有一些我们进行了简要说明并举例了使用方法。如果我们没有进行特别说明，或者您想进一步了解相关信息，可以访问[marketplace](https://github.com/marketplace/actions)查看相关文档。
@@ -371,7 +371,8 @@ jobs:
 这个action可以与GH Release一起使用。
 
 还有一些好玩的action，比如一个生成贪吃蛇游戏的action，id是Platane/snk。它会生成如下的贪吃蛇游戏:
-![](https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg)
+
+![](assets/img/chap09/github-contribution-grid-snake.svg)
 
 
 ### 2.3.5. 通知消息
@@ -384,7 +385,7 @@ Giscus是一个基于Github Discussion的评论系统。它的id是giscus/giscus
 我们在前面看到的例子来自于`ppw`生成的项目下的.github\workflows\dev.yml文件。这个文件定义的工作流适用于所有的分支，在每次push时都会触发。它的作用是进行集成测试，构建测试包并发布到testpypi，并发布非正式文档到Github Pages上。
 
 正式的版本发布工作交给了release.yml。这个工作流仅适用于main分支，并且只有当main分支上有打标签事件发生，并且标签是以'v'字线开头时，才会真正运行。下面是这个工作流的内容：
-```
+```yaml title="release.yml"
 # Publish package on release branch if it's tagged with 'v*'
 
 name: build & release

@@ -291,9 +291,9 @@ markdown没有rst那样的指令语法，因此对超出核心语法的特性，
  <img src="img/markdown.png" width="30%">
  ```
  效果如下图所示：
-  <img src="https://images.jieyu.ai/images/202301/20230127084420.png" width="30%">
+![](assets/img/chap10/markdown.png){width="30%"}
 
-二是可能您使用的markdown编辑器支持扩展语法。本文撰写时，就使用了Mkdocs-Material中的相关扩展功能：
+二是可能您使用的markdown编辑器支持扩展语法。本文撰写时，就使用了Mkdocs-Material中的相关扩展功能，下面的例子是它的用法举例：
 ```
  ![](assets/img/chap10/markdown_logo.png "警示文本示例"){width="30%"}
 ```
@@ -322,19 +322,19 @@ markdown没有rst那样的指令语法，因此对超出核心语法的特性，
 
 比如，下面是引用它人文字的一例：
 ```
-    !!! quote
-        这里引用名人名言
+    !!! quote "罗曼.罗兰"
+    世上只有一种英雄主义，就是认清生活的真相之后依然热爱生活。
 ```
 其效果如下：
 
-!!! quote
-    这里引用名人名言
+!!! quote "罗曼.罗兰"
+    世上只有一种英雄主义，就是认清生活的真相之后依然热爱生活。
 
 
 ### 2.2.8. 其它语法
 两个'\*\*'之间的文本将显示为加粗，两个'\_'之间的文本将显示为 _斜体_（也可以使用两个'\*'包含文本）。如果文本被包含在两个'\*\*\*'，则文本显示为 ***既加粗，也显示为斜体***。
 
-行内数字公式使用一对'\$'包含，例如：\$x\^2\$，效果如下：$x^2$。这里我们还演示了上标，即使用'^'。如果是要生成下标，则可以用'_'，例如：\$x\_2\$，效果如下：$x_2$。
+行内数字公式使用一对'\$'包含，例如：\$x\^2\$，效果如下：x<sup>2</sup>。这里我们还演示了上标，即使用'^'。如果是要生成下标，则可以用'_'，例如：\$x\_2\$，效果如下：$x_2$。
 
 我们在介绍插入图片的语法时提到，有一些特性，比如指定宽度，markdown核心语法不支持，我们可以使用html语法。这不仅仅对图片适用。html语法支持上下标，因此，我们也可以用html语法来重写上面的例子:
 
@@ -363,10 +363,10 @@ rst和markdown都是伟大的发明，它使得我们可以基于文本文件格
 在安装sphinx之后，通过下面的命令来初始化文档:
 
 ``` bash
-pip install sphinx 
+$ pip install sphinx 
 
 # 下面的命令只能在你的项目根目录下执行！
-shpinx-quickstart
+$ shpinx-quickstart
 ```
 Sphinx会提示你输入项目名称、作者、版本等信息，最终生成docs目录及以下文件：
 ```
@@ -428,9 +428,7 @@ Sphinx通过主控文档，把单个文档串联起来。 上面的toctree中的
 
 要自动生成API文档，我们需要配置autodoc扩展。Sphinx的配置文档是docs/conf.py：
 
-```python
-# from conf.py
-
+```python title="docs/conf.py"
 # 要实现autodoc的功能，你的模块必须能够导入，因此先声明导入路径
 sys.path.insert(0, os.path.abspath('../src'))
 
@@ -491,7 +489,7 @@ Sphinx的功能十分强大，其学习曲线也比较陡峭。在学习时，�
 ## 4.5. docstring的样式
 
 如果不做任何配置，Sphinx会使用rst的docstring样式。下面是rst风格的docstring示例:
-```
+```python
 def abc(a: int, c = [1,2]):
     """_summary_
 
@@ -511,7 +509,7 @@ def abc(a: int, c = [1,2]):
 rst风格的docstring稍显冗长。为简洁起见，我们一般使用google style(最简)，或者numpy style。
 
 下面是google style的docstring示例:
-```
+```python
 def abc(a: int, c = [1,2]):
     """_summary_
 
@@ -533,7 +531,7 @@ def abc(a: int, c = [1,2]):
 显然，google style使用的字数更少，视觉上更简洁。google style也是可罕学院（khan academy）的官方推荐风格。
 
 我们再来看看numpy风格的docstring:
-```
+```python
 def abc(a: int, c = [1,2]):
     """_summary_
 
@@ -588,14 +586,14 @@ Mkdocs提供了两种开箱即用的主题，readthedocs和mkdocs。你也可以
 首先，我们介绍如何安装。
 
 ```
-pip install --upgrade pip
-pip install mkdocs
+$ pip install --upgrade pip
+$ pip install mkdocs
 # 安装material主题。如果忽略，将使用readthedocs默认主题。
-pip install mkdocs-material 
+$ pip install mkdocs-material 
 
 # 创建文档结构，在项目根目录下执行
-mkdocs new PROJECT_NAME
-cd PROJECT_NAME
+$ mkdocs new PROJECT_NAME
+$ cd PROJECT_NAME
 ```
 
 现在，在项目根目录下应该多了一个docs目录，和一个名为mkdocs.yaml的文件。docs目录下还有一个名为index.md的文件。如果此时运行``mkdocs serve -a 0.0.0.0:8000``,在浏览器中打开，你会看到如下图所示界面：
@@ -694,6 +692,7 @@ Fiction is obliged to stick to possibilities; Truth isn’t.
 ```
 
 现在，我们来看看如何定制mkdocs，使之更适合生成技术文档。这些定制主要包括：
+
 1. 更换主题
 2. 文档重定向
 3. 增强markdown功能
@@ -736,11 +735,12 @@ Mkdocs也不能支持这种结构，不过好在有一个好用的插件，[mkdo
 
 ```
 {%
-  include-markdown "../README.md"
-%}
+    include-markdown "../README.md"
+% }
 ```
-修改mkdocs.yaml,加载include-markdown插件：
-```
+
+修改mkdocs.yaml，加载include-markdown插件：
+```yaml
 site_name: Omicron
 
 nav: 
@@ -918,8 +918,6 @@ mike set-default [version-or-alias]
 # 7. 结论
 
 Sphinx + rst这条技术栈比较成熟稳定，但学习曲线比较陡峭，rst的一些语法过于繁琐，文档生成效率不高。Mkdocs正在成为构建静态站点和技术文档的新工具，相关功能、特性逐渐丰富，版本也趋于稳定，建议读者尝试使用。
-
-![](http://images.jieyu.ai/images/12/20201207190913.png)
 
 两种技术栈的比较如下：
 

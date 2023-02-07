@@ -54,6 +54,7 @@ markdown_extensions:
   - pymdownx.tabbed
   - attr_list
   - footnotes
+  - smarty
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.highlight:

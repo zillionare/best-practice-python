@@ -1,13 +1,3 @@
-# 1. 代码单元测试——基于Unittest、Pytest、Pycoverage和Tox
-## 1.1. 测试代码的组织结构
-## 1.2. Unittest框架
-### 1.2.1. 测试文件的基本结构
-### 1.2.2. 如何使用Mock（内含案例）
-### 1.2.3. 使用断言（内含案例）
-## 1.3. Pytest测试库
-
-
-# 2. 单元测试
 
 单元测试的概念可能多数读者都有接触过。作为开发人员，我们编写一个个测试用例，测试框架则用来发现和组装测试suite，收集测试报告，并且提供测试基础设施（断言、mock、setup和teardown等）。Python当中最主流的单元测试框架有三种，Pytest, nose和Unittest，其中Unittest是标准库，其它两种是第三方工具。在向导生成的项目中，就使用了Pytest来驱动测试。
 
@@ -16,13 +6,14 @@
 另外一个值得一提的区别是，unittest从python 3.8起就内在地支持asyncio，而在pytest中，则需要插件pytest-asyncio来支持。但两者在测试的兼容性上并没有大的不同。
 
 pytest的主要优势是有：
+
 1. pytest的测试用例更简洁。由于测试用例并不是正式代码，开发者当然希望少花时间在这些代码上，因此代码的简洁程度很重要。
 2. 提供了命令行工具。如果我们仅使用unittest，则执行单元测试必须要使用`python -m unittest`来执行；而通过pytest来执行单元测试，我们只需要调用`pytest .`即可。
 3. pytest提供了marker，可以更方便来决定哪些用例执行或者不执行。
 4. pytest提供了参数化测试。
 
 这里我们简要地举例说明一下什么是参数化测试，以便读者理解为什么参数化测试是一个值得一提的优点。
-```python {class='line-numbers'}
+```python
 import pytest
 from datetime import datetime
 from src.example import get_time_of_day
@@ -48,7 +39,7 @@ def test_get_time_of_day(datetime_obj, expect, mocker):
 如果使用unittest，我们需要写一个循环，依次调用get_time_of_day()，然后对比结果。代码量要多出不少。
 
 基于以上原因，在后面的内容中，我们将以pytest为例进行介绍。
-## 2.1. 测试代码的组织
+# 1. 测试代码的组织
 
 我们一般将所有的测试代码都归类在项目根目录下的tests文件夹中。每个测试文件的名字，要么使用test_*.py，要么使用*_test.py。这是测试框架的要求。如此以来，当我们执行命令如``pytest tests``时，测试框架就能从这些文件中发现测试用例，并组合成一个个待执行的suite。
 
@@ -69,14 +60,14 @@ sample
 │   └── test_cli.py
 ```
 注意这里面的__init__.py，如果缺少的话，tests就不会成为一个合法的包，从而导致pytest无法正确导入测试用例。
-## 2.2. Pytest
+# 2. Pytest
 使用pytest写测试用例很简单。假设sample\app.py如下所示：
-```
+```python
 def inc(x:int)->int:
     return x + 1
 ```
 则我们的test_app.py只需要有以下代码即可完成测试：
-```
+```python
 import pytest
 from sample.app import inc
 
@@ -85,10 +76,10 @@ def test_inc():
 ```
 这比unittest下的代码要简洁很多。
 
-### 2.2.1. 测试用例的组装
+## 2.1. 测试用例的组装
 在pytest中，pytest会按传入的文件（或者文件夹），搜索其中的测试用例并组装成测试集合(suite)。除此之外，它还能通过pytest.mark来标记哪些测试用例是需要执行的，哪些测试用例是需要跳过的。
 
-```python {class='line-numbers'}
+```python
 import pytest
 
 @pytest.mark.webtest
@@ -110,8 +101,8 @@ class TestClass:
 ```
 
 然后我们就可以选择只执行标记为webtest的测试用例：
-```bash {class='line-numbers'}
-pytest -v -m webtest
+```shell
+$ pytest -v -m webtest
 
 =========================== test session starts ============================
 platform linux -- Python 3.x.y, pytest-7.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
@@ -133,10 +124,10 @@ test_server.py::test_send_http PASSED                                [100%]
 5. pytest.mark.parametrize, 给测试用例添加参数化标记，可以根据参数化的参数执行多次测试用例。
 
 这些标记可以用pytest --markers命令查看。
-### 2.2.2. pytest 断言
+## 2.2. pytest 断言
 pytest中的断言巧妙地拦截并复用了python内置的函数assert，从而在这一部分的学习成本变得非常低。
 
-```python {class='line-numbers'}
+```python
 def test_assertion():
     # 判断基本变量相等
     assert "loud noises".upper() == "LOUD NOISES"
@@ -178,7 +169,7 @@ def test_assertion():
 上面的代码分别演示了如何判断内置类型、列表、集合、字典、浮点数和浮点数组是否相等。这部分语法跟标准python语法并无二致。pytest与unittest一样，都没有提供如何判断两个浮点数数组是否相等的断言，如果有这个需求，我们可以求助于numpy.testing，正如例子中第25~30行所示。
 
 有时候我们需要测试错误处理，看函数是否正确地抛出了异常，代码32~37演示了异常断言的使用。注意这里我们不应该这么写：
-```python {class='line-numbers'}
+```python
     try:
         # call some_func will raise ValueError
     except ValueError as e:
@@ -187,7 +178,7 @@ def test_assertion():
         assert False
 ```
 上述代码看上去逻辑正确，但它混淆了异常处理和断言，使得他人一时难以分清这段代码究竟是在处理测试代码中的异常呢，还是在测试被调用函数能否正确抛出异常，明显不如异常断言那样清晰。
-### 2.2.3. pytest fixture
+## 2.3. pytest fixture
 一般而言，我们的测试用例很可能需要依赖于一些外部资源，比如数据库、缓存、第三方微服务等。这些外部资源的初始化和销毁，我们希望能够在测试用例执行前后自动完成，即自动完成setup和teardown的操作。这时候，我们就需要用到pytest的fixture。
 
 !!! Info
@@ -195,7 +186,7 @@ def test_assertion():
 
 假定我们有一个测试用例，它需要连接数据库，代码如下(参见code/chap07/sample/app.py)
 
-```python {class='line-numbers'}
+```python 
 import asyncpg
 import datetime
 
@@ -214,7 +205,7 @@ async def add_user(conn: asyncpg.Connection, name: str, date_of_birth: datetime.
 ```
 我们展示测试代码(参见code/chap07/sample/test_app.py)，再结合代码讲解fixture的使用：
 
-```python {class='line-numbers'}
+```python 
 import pytest
 from sample.app import add_user
 import pytest_asyncio
@@ -265,8 +256,8 @@ fixture是一些函数，pytest会在执行测试函数之前（或之后）加�
     注意只有从python 3.8开始，unittest才直接支持异步测试。在python 3.7及之前的版本中，我们需要使用第三方库aiounittest。
 
 我们通过上面的例子演示了fixture。与markers类似，我们可以通过pytest --fixtures来显示当前环境中所有的fixture。
-```bash
-pytest --fixtures
+```shell
+$ pytest --fixtures
 
 ------------- fixtures defined from faker.contrib.pytest.plugin --------------
 faker -- .../faker/contrib/pytest/plugin.py:24
@@ -287,8 +278,8 @@ db [session scope] -- tests/test_app.py:52
 这里我们看到faker.contrib提供了一个名为faker的fixture, 我们之前安装的、支持异步测试的pytest_asyncio也提供了名为event_loop的fixture(为节省篇幅，其它几个省略了)，以及我们自己测试代码中定义的event_loop和db这两个fixture。
 
 为了后面讲解方便，我们现在来安装pytest-mock这个插件，看看它提供的fixture。
-```bash
-pip install pytest-mock
+```shell
+$ pip install pytest-mock
 pytest --fixture
 
 ------- fixtures defined from pytest_mock.plugin --------
@@ -313,7 +304,7 @@ session_mocker [session scope] -- .../pytest_mock/plugin.py:419
     takes care of automatically undoing all patches after each test method.
 ```
 可以看到pytest-mock提供了5个fixture。后面我们会较多地介绍其中的mocker这个fixture。
-## 2.3. Mock
+## 2.4. Mock
 在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接数据库或者真实的第三方微服务等。这时候，我们需要通mock来模拟这些外部接口。mock可能是单元测试中最核心的技术。
 
 !!! Readmore
@@ -327,8 +318,7 @@ session_mocker [session scope] -- .../pytest_mock/plugin.py:419
 最常用的mock对象有Mock, MagicMock和patch。MagicMock是Mock的子类。如果你之前接触过其它mock框架的话，可能需要注意，python中的mock是’action -> assertion‘模式，而不是其它语言中常见的'record -> replay’模式。
 
 在unittest中要使用mock, 我们需要手动导入mock模块。在pytest中，我们可以直接使用mocker这个fixture。
-```python
-# unittest example
+```python title="unittest example"
 import unittest
 from unittest import mock
 
@@ -347,7 +337,7 @@ def test_mock(mocker):
 上面的例子清楚地演示了两个框架中应该如何调用patch方法。如果我们要使用Mock或者MagicMock这两个类，也是一样，只不过在pytest中，我们需要通过mocker这个对象来引用它们。
 
 现在我们来介绍一下patch方法。patch是一个context manager（也可以当装饰器用），它可以用来mock一个对象。上面的例子已经演示了如何mock一个内置函数。内置函数是指象open、print、input这样的方法，我们可以在程序中无须导入即可直接使用，但是在mock它们时，我们必须通过'builtins'这个名字空间来引用它们，这也是我们在这里特别举例的原因。另一个需要特别说明的内置库是datetime，当你需要mock这个库时，我们的建议是使用freezegun这个库，而不是使用patch。
-```python {class = 'line-numbers'}
+```python
 @freeze_time("2021-01-01")
 def test_freezegun():
     now = datetime.datetime(2021, 1, 1)
@@ -356,8 +346,7 @@ def test_freezegun():
 
 mock自己代码中的方法，或者第三方库中的方法一般来讲是比较容易的，关键是要找到正确的引用方法。在第7章的示例代码中，有这样一小段程序：
 
-```python {class='line-numbers'}
-# from sample\core\foo.py
+```python title="sample/core/foo.py"
 def is_windows():
     return True
 
@@ -379,16 +368,15 @@ def test_get_operating_system(mocker):
 
 上面的例子中，我们mock了一个普通方法，如果我们要mock一个类的方法呢？此时target的写法应该是'package.package.module.Class.method'。以第10~12行定义的Foo对象的bark方法为例，target的写法应该是'sample.core.foo.Foo.bark'。
 
-这里我们要指出一个初学者很容易掉进去的坑，就是明明target正确，但是却无法mock成功。在unittest的文档中有这样一句话
+这里我们要指出一个初学者很容易掉进去的坑，就是明明target正确，但是却无法mock成功。在unittest的文档中有这样一句话:
 
 !!! quote
     The basic principle is that you patch where an object is looked up, which is not necessarily the same place as where it is defined. 
 
 也就是，patch应用于哪个target对象，取决于被mock对象是在哪里被引用的，而不是在哪里被定义的。
 
-我们通过一个例子来详细说明这个问题。假设在前面的foo.py之外，还有一个sample\bar.py文件，定义如下：
-```python {class='line-numbers'}
-# sample\bar.py
+我们通过一个例子来详细说明这个问题。假设在前面的foo.py之外，还有一个sample/bar.py文件，定义如下：
+```python title="sample/bar.py"
 from sample.core.foo import Foo, is_windows
 
 def my_bark() -> str:
@@ -400,7 +388,7 @@ def get_operating_system() -> str:
 ```
 
 对应的测试文件tests\test_bar.py定义如下：
-```python {class='line-numbers'}
+```python 
 from sample.bar import get_operating_system, my_bark
 
 def test_my_bark(mocker):
@@ -421,8 +409,7 @@ def test_get_operation_system(mocker):
 
 前面我们讨论了patch的一个用法，即patch一个函数的返回值。有时候我们不关心函数的返回值，而是希望函数在被调用时，能够无条件地抛出某个异常，这时就需要用到`side_effect`参数。
 
-```python {class='line-numbers'}
-# tests\test_bar.py
+```python title="tests/test_bar.py"
 import pytest
 def test_mock_side_effect(mocker):
     with mocker.patch('builtins.input', side_effect = ValueError):
@@ -432,9 +419,8 @@ def test_mock_side_effect(mocker):
 上述代码不仅模拟出了一个ValueError，还检测这个异常是否抛出。通过这种方式，异常处理代码现在也可以轻松覆盖到了。
 
 side_effect不仅可以用来模拟异常，还可以用来模拟多次调用的返回值。比如，我们希望某个函数在第一次调用时返回1，第二次调用时返回2，第三次调用时返回3，以此类推。这时可以这样写：
-```python {class='line-numbers'}
-# tests\test_bar.py
-def def test_mock_multiple_return(mocker):
+```python title="tests/test_bar.py"
+def test_mock_multiple_return(mocker):
     with mocker.patch('builtins.input', side_effect = [1, 2, 3]):
         assert input() == 1
         assert input() == 2
@@ -444,8 +430,7 @@ def def test_mock_multiple_return(mocker):
 
 上面的例子中，我们给patch传入的target是一个字符串，显然，在patch作用域内，所有的新生成的对象都会被patch。如果在patch之前，对象已经生成了，我们则需要使用`patch.object`来完成patch。
 
-```python {class='line-numbers'}
-# sample\core\foo.py
+```python title="sample/core/foo.py"
 
 def bar():
     logger = logging.getLogger(__name__)
@@ -467,18 +452,18 @@ with mock.patch.object(logger, 'info') as m:
 
 这里要提及pytest中mocker.patch与unitest.mock.patch的一个细微差别。后者进行patch时，可以返回mock对象，我们可以通过它进行更多的检查（见上面示例代码中的第14，16行）；但mocker.patch的返回值是None。
 
-## 2.4. 衡量测试的覆盖率
+## 2.5. 衡量测试的覆盖率
 我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。coverage.py是最常用的测量Python程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别可能已执行但未执行的代码。
 
 覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分正在被测试执行，哪些没有。
 
 我们可以通过下面的方法来安装coverage.py：
-```bash
-pip install coverage
+```shell
+$ pip install coverage
 ```
 要收集测试覆盖率数据，我们只需要在原来的测试命令前加上coverage run即可。比如，如果我们之前是使用`pytest arg1 arg2 arg3`来进行测试，则现在我们使用:
-```bash
-coverage run -m pytest arg1 arg2 arg3
+```shell
+$ coverage run -m pytest arg1 arg2 arg3
 ```
 不过，更多人选择使用pytest-cov插件来进行测试覆盖率的收集。这也是ppw的选择。通过ppw生成的工程，pytest-cov已被加入到测试依赖中，因此也就自然安装到环境中去了。
 
@@ -498,7 +483,7 @@ TOTAL                        76     10    87%
 
 默认情况下，coverage.py将测试行（语句）覆盖率，但通过配置，还可以测量分支覆盖率。这需要一些配置。
 
-### 2.4.1. 配置Pycoverage
+### 2.5.1. 配置Pycoverage
 配置文件的默认名称是.coveragerc，在ppw生成的工程中，这个文件处在项目根目录下（读者可以回到第4章的结束部分查看ppw生成的文件列表）。
 
 如果没有使用其他配置文件，Coverage.py 将从其他常用配置文件中读取设置。如果存在，它将自动从“setup.cfg”或“tox.ini”中读取。如果节(section)名称有“coverage:”前缀，则会当成是coverage的配置，比如.coveragerc中有一节名为run，当它出现在tox.ini中，节名字就应该是[coverage:run]。
@@ -506,8 +491,7 @@ TOTAL                        76     10    87%
 我们也可以在pyproject.toml中配置coverage。如果要使用这种方式，需要在pyproject.toml中添加一个名为tool.coverage的节，然后在这个节中添加配置项。
 
 coverage的配置项遵循ini语法，示例如下：
-```ini {class='line-numbers'}
-# .coveragerc to control coverage.py
+```ini title=".coveragerc"
 [run]
 branch = True
 
@@ -540,7 +524,7 @@ directory = coverage_html_report
 我们前面提到过可以让coverage.py按分支覆盖率来统计，这可以按照第3行一样进行配置。[report]这一节中的配置项可以让coverage.py忽略一些不需要统计的代码，比如debug代码。[html]这一节配置了如果生成的html文件存放在何处。如果没有指定，将存放在htmlcov目录下。
 
 [run]这一节比较常用的配置项有include和omit，用来特别把某个文件或者目录加入到测试覆盖，或者排除掉。在[report]这一节中，也有相同的配置项，两者有所区别。在[report]中指定omit或者include，都仅适用于报告的生成，但不影响实际的测试覆盖率统计。
-### 2.4.2. 发布覆盖率报告
+### 2.5.2. 发布覆盖率报告
 如果我们的项目是开源项目，你可能希望把覆盖率报告发布到网上，这样其他人就可以看到你的项目的覆盖率了。这里我们使用codecov.io来发布覆盖率报告。
 
 codecov是一个在线的代码覆盖率报告服务，它可以从GitHub、Bitbucket、GitLab等代码托管平台上获取代码覆盖率报告，然后生成一个在线的报告。这个报告可以让其他人看到你的项目的覆盖率情况。
@@ -548,47 +532,48 @@ codecov是一个在线的代码覆盖率报告服务，它可以从GitHub、Bitb
 在github中设置codecov集成很简单，在浏览器中打开https://github.com/apps/codecov页面，点击完成安装，然后在CI过程中增加一个上传动作就可以了。在通过ppw创建的项目中，我们已经集成了这一步。如果你想在自己的项目中手动执行，则是：
 ```
 # linux
-curl -Os https://uploader.codecov.io/latest/linux/codecov 
-chmod +x codecov 
-./codecov
+$ curl -Os https://uploader.codecov.io/latest/linux/codecov 
+$ chmod +x codecov 
+$ ./codecov
 
 # windows
-$ProgressPreference = 'SilentlyContinue' 
-Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe 
-.\codecov.exe
+$ ProgressPreference = 'SilentlyContinue' 
+$ Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe 
+$ .\codecov.exe
 
 # macOS
-curl -Os https://uploader.codecov.io/latest/macos/codecov
-chmod +x codecov
-./codecov
+$ curl -Os https://uploader.codecov.io/latest/macos/codecov
+$ chmod +x codecov
+$ ./codecov
 ```
 我们强烈建议仅通过CI来上传覆盖率报告，而不是在本地执行。因为本地执行的覆盖率报告，可能会因为本地环境的不同而产生差异。另一方面，在CI中执行后，我们还能在pull request之后，得到这样的状态报告：
-![](https://images.jieyu.ai/images/20230120230120213255.png)
+![](https://images.jieyu.ai/images/2023/01/20230120213255.png)
 并且还能在pull request的注释中看到覆盖率的变化：
-![](https://images.jieyu.ai/images/20230120230120213318.png)
+![](https://images.jieyu.ai/images/2023/01/20230120213318.png)
 这会让你的开源项目看上去非常专业，不是吗？更重要的是，让你的潜在用户更加信任这是一个高质量的项目。
 
-## 2.5. Tox环境矩阵加速测试
+## 2.6. Tox环境矩阵加速测试
 如果我们的软件支持3种操作系统，4个python版本，我们就必须在3种操作系统上，分别创建4个虚拟环境，安装上我们的软件和依赖，再执行测试，上传测试报告。这个动作不仅相当繁琐，还很容易引入错误。
 
 tox与CI结合，就可以帮助我们自动化完成这些环境的创建与测试执行。
-### 2.5.1. 什么是Tox？
+### 2.6.1. 什么是Tox？
 tox是一个通用的 virtualenv 管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。
 
 实际上，tox主要完成以下工作：
 1. 根据配置创建基于多个版本的python虚拟环境，并且保证这些虚拟环境的可复制性（需要与poetry或者其它依赖管理工具一起）。
 2. 运行测试和代码检查工具，比如pytest和flake8, black, mypy等。
 3. 隔离环境变量。tox不会从系统传递任何环境变量到虚拟环境中，这样可以保证测试的可重复性。
-### 2.5.2. Tox的工作原理
+### 2.6.2. Tox的工作原理
 下图是tox文档显示的工作原理图：
-![](https://images.jieyu.ai/images/20230120230120223442.png)
+
+![](https://images.jieyu.ai/images/2023/01/20230120223442.png)
 
 根据这张图，tox读取配置文件，打包待测试软件，按照配置文件创建虚拟环境，并安装待测试软件和依赖，然后依次执行测试命令。最终，当所有虚拟环境下的测试都通过后，tox会生成测试报告。
 
 下面，我们主要通过一个典型的配置文件来介绍tox是如何配置和工作的。
-### 2.5.3. 如何配置Tox
+### 2.6.3. 如何配置Tox
 在ppw生成的项目中，存在以下tox.ini文件：
-```ini {class = 'line-numbers'}
+```ini title="tox.ini"
 [tox]
 isolated_build = true
 envlist = py38, py39, py310, lint
@@ -628,7 +613,7 @@ commands =
 ```
 
 配置文件仍然是标准的ini文件格式（tox也支持通过pyproject.toml来进行配置）。我们主要关注以下几个部分：
-#### 2.5.3.1. [tox]节
+#### 2.6.3.1. [tox]节
 在测试一个package之前，tox首先需要构建一个sdit分发包。在打包这件事上，python走过了很长的一段历程，打包工具和标准也经历了很多变化，这些我们将用专门的一章来介绍。现在我们需要知道的是，最新的标准是PEP517和PEP518，tox已经支持这两个标准。但是，如果项目本身不支持这两个PEP，那么tox必须回到之前的打包方式。
 
 因此，tox引入了isolated_build这个选项，如果设置为true，tox会使用PEP517和PEP518的方式来打包项目。如果设置为false，tox会使用传统的方式(setup.py)来打包项目。如果通过poetry创建项目，并且在pyproject.toml中设置了requires和build-backend项的话，那么我们是需要设置isolated_build为true的。
@@ -658,7 +643,8 @@ drwxrwxr-x  7 aaron aaron 4096 Jan 20 23:48 py39/
 skipsdist选项用来指示tox是否要跳过构建sdist分发包的步骤。这个设置主要是为了兼容python应用程序，因为tox的测试对象除了library之外，还可能是服务或者简单的脚本集，这些服务或者脚本集是没有setup.py文件，也无法构建sdist分发包的。如果没有一个标志让tox来跳过构建sdist分发包的步骤，那么tox会报错：
 ```
 ERROR: No pyproject.toml or setup.py file found. The expected locations are:
-  /Users/christophersamiullah/repos/tox_examples/basic/pyproject.toml or /Users/christophersamiullah/repos/tox_examples/basic/setup.py
+  /Users/christophersamiullah/repos/tox_examples/basic/pyproject.toml or 
+  /Users/christophersamiullah/repos/tox_examples/basic/setup.py
 You can
   1. Create one:
      https://tox.readthedocs.io/en/latest/example/package.html
@@ -668,7 +654,7 @@ You can
 ```
 这个选项在tox中是默认为false的，多数情况下无须配置。我们出于帮助大家理解tox工作原理的目的介绍它
 
-#### 2.5.3.2. [testenv]
+#### 2.6.3.2. [testenv]
 这一节的配置项适用于所有的虚拟环境。如果在某个虚拟环境下存在特别的选项和动作，需要象[testenv:lint]那样定义在自己的节中。
 
 这里我们还额外设置了一些环境变量字段。比如设置了PYTHONPATH，另外也忽略了一些警告信息。如果我们使用的一些库没有更新，那么将在测试过程中打印大量的deprecation警告，从而干扰我们检查测试过程中的错误信息。当然，我们也应该至少在测试中打开一次这种警告，以便知道哪些用法已经需要更新。
@@ -688,7 +674,8 @@ tox在安装被测试包时，一般是不安装声明为extra依赖的。但是
 
 ```
 commands =
-    poetry run pytest -s --cov=%package_under_test% --cov-append --cov-report=xml --cov-report term-missing tests
+    poetry run pytest -s --cov=%package_under_test% --cov-append --cov-report=xml 
+    --cov-report term-missing tests
 ```
 "-s" 是告诉pytest不要捕获控制台输入输出。
 
@@ -696,5 +683,5 @@ commands =
 
 最后，tests是我们测试代码所在的文件夹。
 
-#### 2.5.3.3. [testenv.lint]
+#### 2.6.3.3. [testenv.lint]
 这一节的语法与[testenv]并无二致。只不过要运行的命令不一样。这里就不再一一解释。
