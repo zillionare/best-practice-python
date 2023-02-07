@@ -526,10 +526,10 @@
 <p><img alt="" src="http://images.jieyu.ai/images/202106/mars-67522_1920.jpg" /> 
 <em>图片来源: <a href="https://pixabay.com/photos/mars-mars-rover-space-travel-rover-67522/">mars-rover-space-traveler</a></em></p>
 <p>第一个登陆火星的编程语言，是Java。它作为勇气(Spirit)号探测器系统的一部分，于2004年1月4号着陆在火星上。而这一次，为了完成更复杂、更智慧的任务，科学家们选择了Python。</p>
-<p>做出这个选择并不困难。实际上，随着人工智能的兴起，Python已成为当前最炙手可热的开发语言，其排名在<a href="https://www.tiobe.com/tiobe-index/">TIOBE</a>排行榜上逐年攀升：</p>
-<p><img alt="" src="http://images.jieyu.ai/images/202105/20210522223629.png" /></p>
-<p>不仅如此，自从<a href="https://www.tiobe.com/tiobe-index/">TIOBE</a>开始编制各种开发语言的排行榜以来，Python还分别于2020年、2018年、2010年和2007年获得年度之星称号，这也是惟一四次获得该称号的开发语言：</p>
-<p><img alt="" src="http://images.jieyu.ai/images/202105/20210522224627.png" /></p>
+<p>做出这个选择并不奇怪。实际上，随着人工智能的兴起，Python已成为当前最炙手可热的开发语言，其排名在<a href="https://www.tiobe.com/tiobe-index/">TIOBE</a>排行榜上逐年攀升：</p>
+<p><img alt="" src="../assets/img/chap01/toibe_2023_rank.png" /></p>
+<p>不仅如此，自从<a href="https://www.tiobe.com/tiobe-index/">TIOBE</a>开始编制各种开发语言的排行榜以来，Python还分别于2021年、2020年、2018年、2010年和2007年五夺年度之星称号，这也是惟一五次获得该称号的开发语言：</p>
+<p><img alt="" src="../assets/img/chap01/toibe_hall_of_fame.png" /></p>
 <p>那么，Python究竟是一门什么样的语言？它在开发上有何优势，以致于能得到如此这般名声呢？我们常常听人说（尤其是在中文社区），Python不适合开发大型应用程序，这是真的吗？这本书将尝试回答这些问题，特别是从软件工程的角度，阐述应该遵循什么样的开发流程和规范，才能更加快速地开发出复杂的大型应用程序。</p>
 <p>Python是一门有着悠久历史的开发语言，它由出生于荷兰的程序员Guido Van Rossum开发。Guido Van Rossum在国内被粉丝亲切地称作“龟叔”。从创立这门语言起的长达30年时间里，Guido Van Rossum一直以他的热情和热爱指引着这门语言的未来发展方向，被称作“仁慈的终身独裁者”（the benevolent dictator for life）。大约在2018年他有过一段短暂的退休，不过很快于2020年重新回归社区，加入微软并继续领导Python的开发。</p>
 <p>Python的最初版本于1994年1月发布，甚至还要早于Java<sup id="fnref:JAVA"><a class="footnote-ref" href="#fn:JAVA">1</a></sup>。一开始它吸收了很多Lisp语言的特性，比如引入了函数式编程工具，其痕迹一直遗留到今天 -- 这就是现在仍然在广泛使用的<code>reduce</code>, <code>filter</code>, <code>map</code>等函数的出处。在那时，Perl还是一种非常流行的脚本语言， Python也从中吸收了很多成熟模块的功能，这样就成功地留住了一批寻找Perl的替换语言的用户。</p>
@@ -734,7 +734,53 @@
 
 
 
+<h2 id="__comments">评论 </h2>
 
+<script src="https://giscus.app/client.js"
+        data-repo="zillionare/best-practice-python"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzNjc4ODIzNDI="
+        data-category="General"
+        data-category-id="DIC_kwDOFe1wZs4CT7pV"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    var giscus = document.querySelector("script[src*=giscus]")
+
+    /* Set palette on initial load */
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "dark" : "light"
+      giscus.setAttribute("data-theme", theme) 
+
+
+    }
+
+    /* Register event handlers after documented loaded */
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      ref.addEventListener("change", function() {
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+          /* Instruct Giscus to change theme */
+          var frame = document.querySelector(".giscus-frame")
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme } } },
+            "https://giscus.app"
+          )
+        }
+      })
+    })
+  </script>
                 
               </article>
             </div>
@@ -772,7 +818,7 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes", "navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "header.autohide", "navigation.top", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes", "navigation.tabs", "navigation.instant", "navigation.tabs.sticky", "header.autohide", "navigation.top", "toc.follow", "toc.integrate", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
     
     
       <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
