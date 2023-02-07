@@ -69,7 +69,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-代码单元测试基于unittestpytestpycoverage和tox" class="md-skip">
+        <a href="#1-测试代码的组织" class="md-skip">
           跳转至
         </a>
       
@@ -424,45 +424,66 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-代码单元测试基于unittestpytestpycoverage和tox" class="md-nav__link">
-    1. 代码单元测试——基于Unittest、Pytest、Pycoverage和Tox
+  <a href="#1-测试代码的组织" class="md-nav__link">
+    1. 测试代码的组织
   </a>
   
-    <nav class="md-nav" aria-label="1. 代码单元测试——基于Unittest、Pytest、Pycoverage和Tox">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pytest" class="md-nav__link">
+    2. Pytest
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Pytest">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-测试代码的组织结构" class="md-nav__link">
-    1.1. 测试代码的组织结构
+  <a href="#21-测试用例的组装" class="md-nav__link">
+    2.1. 测试用例的组装
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#12-unittest框架" class="md-nav__link">
-    1.2. Unittest框架
+  <a href="#22-pytest-断言" class="md-nav__link">
+    2.2. pytest 断言
   </a>
   
-    <nav class="md-nav" aria-label="1.2. Unittest框架">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-pytest-fixture" class="md-nav__link">
+    2.3. pytest fixture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-mock" class="md-nav__link">
+    2.4. Mock
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-衡量测试的覆盖率" class="md-nav__link">
+    2.5. 衡量测试的覆盖率
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5. 衡量测试的覆盖率">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#121-测试文件的基本结构" class="md-nav__link">
-    1.2.1. 测试文件的基本结构
+  <a href="#251-配置pycoverage" class="md-nav__link">
+    2.5.1. 配置Pycoverage
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#122-如何使用mock内含案例" class="md-nav__link">
-    1.2.2. 如何使用Mock（内含案例）
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#123-使用断言内含案例" class="md-nav__link">
-    1.2.3. 使用断言（内含案例）
+  <a href="#252-发布覆盖率报告" class="md-nav__link">
+    2.5.2. 发布覆盖率报告
   </a>
   
 </li>
@@ -473,8 +494,52 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-pytest测试库" class="md-nav__link">
-    1.3. Pytest测试库
+  <a href="#26-tox环境矩阵加速测试" class="md-nav__link">
+    2.6. Tox环境矩阵加速测试
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6. Tox环境矩阵加速测试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#261-什么是tox" class="md-nav__link">
+    2.6.1. 什么是Tox？
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#262-tox的工作原理" class="md-nav__link">
+    2.6.2. Tox的工作原理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#263-如何配置tox" class="md-nav__link">
+    2.6.3. 如何配置Tox
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6.3. 如何配置Tox">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2631-tox节" class="md-nav__link">
+    2.6.3.1. [tox]节
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2632-testenv" class="md-nav__link">
+    2.6.3.2. [testenv]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2633-testenvlint" class="md-nav__link">
+    2.6.3.3. [testenv.lint]
   </a>
   
 </li>
@@ -483,156 +548,9 @@
     </nav>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#2-单元测试" class="md-nav__link">
-    2. 单元测试
-  </a>
-  
-    <nav class="md-nav" aria-label="2. 单元测试">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#21-测试代码的组织" class="md-nav__link">
-    2.1. 测试代码的组织
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#22-pytest" class="md-nav__link">
-    2.2. Pytest
-  </a>
-  
-</li>
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pytest-asyncio已经提供了一个event_loop的fixture但它是function级别的" class="md-nav__link">
-    pytest-asyncio已经提供了一个event_loop的fixture,但它是function级别的
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#这里我们需要一个session级别的fixture所以我们需要自己实现" class="md-nav__link">
-    这里我们需要一个session级别的fixture，所以我们需要自己实现
-  </a>
-  
-    <nav class="md-nav" aria-label="这里我们需要一个session级别的fixture，所以我们需要自己实现">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#23-mock" class="md-nav__link">
-    2.3. Mock
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#samplebarpy" class="md-nav__link">
-    sample\bar.py
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#teststest_barpy" class="md-nav__link">
-    tests\test_bar.py
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#samplecorefoopy" class="md-nav__link">
-    sample\core\foo.py
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#test_foopy" class="md-nav__link">
-    test_foo.py
-  </a>
-  
-    <nav class="md-nav" aria-label="test_foo.py">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#241-配置pycoverage" class="md-nav__link">
-    2.4.1. 配置Pycoverage
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#coveragerc-to-control-coveragepy" class="md-nav__link">
-    .coveragerc to control coverage.py
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#regexes-for-lines-to-exclude-from-consideration" class="md-nav__link">
-    Regexes for lines to exclude from consideration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#linux" class="md-nav__link">
-    linux
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#windows" class="md-nav__link">
-    windows
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#macos" class="md-nav__link">
-    macOS
-  </a>
-  
-    <nav class="md-nav" aria-label="macOS">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#2531-tox节" class="md-nav__link">
-    2.5.3.1. [tox]节
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2532-testenv" class="md-nav__link">
-    2.5.3.2. [testenv]
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2533-testenvlint" class="md-nav__link">
-    2.5.3.3. [testenv.lint]
-  </a>
   
 </li>
         
@@ -733,57 +651,75 @@
 
   <h1>第七章 代码单元测试</h1>
 
-<h2 id="1-代码单元测试基于unittestpytestpycoverage和tox">1. 代码单元测试——基于Unittest、Pytest、Pycoverage和Tox<a class="headerlink" href="#1-代码单元测试基于unittestpytestpycoverage和tox" title="Permanent link">&para;</a></h2>
-<h3 id="11-测试代码的组织结构">1.1. 测试代码的组织结构<a class="headerlink" href="#11-测试代码的组织结构" title="Permanent link">&para;</a></h3>
-<h3 id="12-unittest框架">1.2. Unittest框架<a class="headerlink" href="#12-unittest框架" title="Permanent link">&para;</a></h3>
-<h4 id="121-测试文件的基本结构">1.2.1. 测试文件的基本结构<a class="headerlink" href="#121-测试文件的基本结构" title="Permanent link">&para;</a></h4>
-<h4 id="122-如何使用mock内含案例">1.2.2. 如何使用Mock（内含案例）<a class="headerlink" href="#122-如何使用mock内含案例" title="Permanent link">&para;</a></h4>
-<h4 id="123-使用断言内含案例">1.2.3. 使用断言（内含案例）<a class="headerlink" href="#123-使用断言内含案例" title="Permanent link">&para;</a></h4>
-<h3 id="13-pytest测试库">1.3. Pytest测试库<a class="headerlink" href="#13-pytest测试库" title="Permanent link">&para;</a></h3>
-<h2 id="2-单元测试">2. 单元测试<a class="headerlink" href="#2-单元测试" title="Permanent link">&para;</a></h2>
 <p>单元测试的概念可能多数读者都有接触过。作为开发人员，我们编写一个个测试用例，测试框架则用来发现和组装测试suite，收集测试报告，并且提供测试基础设施（断言、mock、setup和teardown等）。Python当中最主流的单元测试框架有三种，Pytest, nose和Unittest，其中Unittest是标准库，其它两种是第三方工具。在向导生成的项目中，就使用了Pytest来驱动测试。</p>
 <p>这里主要比较一下pytest和unittest。多数情况下，当我们选择单元测试框架时，选择二者之一就好了。unitttest基于类来组织测试用例，而pytest则是函数式的，基于模块来组织测试用例，同时它也提供了group概念来组织测试用例。pytest的mock是基于第三方的pytest-mock，而pytest-mock实际上只是对标准库中的mock的简单封装。单元测试都会有setup和teardown的概念，unittest直接使用了setUp和tearDown作为测试入口和结束的API，在pytest中，则是通过fixture来实现，这方面学习曲线可能稍微陡峭一点。在断言方面，pytest使用python的关键字assert进行断言，比unittest更为简洁，不过断言类型上没有unittest丰富。</p>
 <p>另外一个值得一提的区别是，unittest从python 3.8起就内在地支持asyncio，而在pytest中，则需要插件pytest-asyncio来支持。但两者在测试的兼容性上并没有大的不同。</p>
-<p>pytest的主要优势是有：
-1. pytest的测试用例更简洁。由于测试用例并不是正式代码，开发者当然希望少花时间在这些代码上，因此代码的简洁程度很重要。
-2. 提供了命令行工具。如果我们仅使用unittest，则执行单元测试必须要使用<code>python -m unittest</code>来执行；而通过pytest来执行单元测试，我们只需要调用<code>pytest .</code>即可。
-3. pytest提供了marker，可以更方便来决定哪些用例执行或者不执行。
-4. pytest提供了参数化测试。</p>
+<p>pytest的主要优势是有：</p>
+<ol>
+<li>pytest的测试用例更简洁。由于测试用例并不是正式代码，开发者当然希望少花时间在这些代码上，因此代码的简洁程度很重要。</li>
+<li>提供了命令行工具。如果我们仅使用unittest，则执行单元测试必须要使用<code>python -m unittest</code>来执行；而通过pytest来执行单元测试，我们只需要调用<code>pytest .</code>即可。</li>
+<li>pytest提供了marker，可以更方便来决定哪些用例执行或者不执行。</li>
+<li>pytest提供了参数化测试。</li>
+</ol>
 <p>这里我们简要地举例说明一下什么是参数化测试，以便读者理解为什么参数化测试是一个值得一提的优点。
-```python {class='line-numbers'}
-import pytest
-from datetime import datetime
-from src.example import get_time_of_day</p>
-<p>@pytest.mark.parametrize(
-    "datetime_obj, expect",
-    [
-        (datetime(2016, 5, 20, 0, 0, 0), "Night"),
-        (datetime(2016, 5, 20, 1, 10, 0), "Night"),
-        (datetime(2016, 5, 20, 6, 10, 0), "Morning"),
-        (datetime(2016, 5, 20, 12, 0, 0), "Afternoon"),
-        (datetime(2016, 5, 20, 14, 10, 0), "Afternoon"),
-        (datetime(2016, 5, 20, 18, 0, 0), "Evening"),
-        (datetime(2016, 5, 20, 19, 10, 0), "Evening"),
-    ],
-)
-def test_get_time_of_day(datetime_obj, expect, mocker):
-    mock_now = mocker.patch("src.example.datetime")
-    mock_now.now.return_value = datetime_obj</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>assert get_time_of_day() == expect​
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">src.example</span> <span class="kn">import</span> <span class="n">get_time_of_day</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
+    <span class="s2">&quot;datetime_obj, expect&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Night&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Night&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Morning&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Afternoon&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Afternoon&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Evening&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;Evening&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_get_time_of_day</span><span class="p">(</span><span class="n">datetime_obj</span><span class="p">,</span> <span class="n">expect</span><span class="p">,</span> <span class="n">mocker</span><span class="p">):</span>
+    <span class="n">mock_now</span> <span class="o">=</span> <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;src.example.datetime&quot;</span><span class="p">)</span>
+    <span class="n">mock_now</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">datetime_obj</span>
+
+    <span class="k">assert</span> <span class="n">get_time_of_day</span><span class="p">()</span> <span class="o">==</span> <span class="n">expect</span><span class="err">​</span>
 </code></pre></div></td></tr></table></div>
-<p>```
-如果使用unittest，我们需要写一个循环，依次调用get_time_of_day()，然后对比结果。代码量要多出不少。
-
-基于以上原因，在后面的内容中，我们将以pytest为例进行介绍。</p>
-<h3 id="21-测试代码的组织">2.1. 测试代码的组织<a class="headerlink" href="#21-测试代码的组织" title="Permanent link">&para;</a></h3>
-<p>我们一般将所有的测试代码都归类在项目根目录下的tests文件夹中。每个测试文件的名字，要么使用test_<em>.py，要么使用</em><em>test.py。这是测试框架的要求。如此以来，当我们执行命令如<code>pytest tests</code>时，测试框架就能从这些文件中发现测试用例，并组合成一个个待执行的suite。
-
-在test</em>*.py中，函数名一样要遵循一定的模式，比如使用test_xxx。不遵循规则的测试函数，不会被执行。
-
-一般来说，测试文件应该与功能模块文件一一对应。如果被测代码有多重文件夹，对应的测试代码也应该按同样的目录来组织。这样做的目的，是为了方便查找对应的测试代码，方便我们添加新的测试用例。
-
-比如在ppw生成的示例工程中，我们有：
-<code>sample
+如果使用unittest，我们需要写一个循环，依次调用get_time_of_day()，然后对比结果。代码量要多出不少。</p>
+<p>基于以上原因，在后面的内容中，我们将以pytest为例进行介绍。</p>
+<h2 id="1-测试代码的组织">1. 测试代码的组织<a class="headerlink" href="#1-测试代码的组织" title="Permanent link">&para;</a></h2>
+<p>我们一般将所有的测试代码都归类在项目根目录下的tests文件夹中。每个测试文件的名字，要么使用test_<em>.py，要么使用</em>_test.py。这是测试框架的要求。如此以来，当我们执行命令如<code>pytest tests</code>时，测试框架就能从这些文件中发现测试用例，并组合成一个个待执行的suite。</p>
+<p>在test_*.py中，函数名一样要遵循一定的模式，比如使用test_xxx。不遵循规则的测试函数，不会被执行。</p>
+<p>一般来说，测试文件应该与功能模块文件一一对应。如果被测代码有多重文件夹，对应的测试代码也应该按同样的目录来组织。这样做的目的，是为了方便查找对应的测试代码，方便我们添加新的测试用例。</p>
+<p>比如在ppw生成的示例工程中，我们有：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>sample
 ├── sample
 │   ├── __init__.py
 │   ├── app.py
@@ -791,18 +727,29 @@ def test_get_time_of_day(datetime_obj, expect, mocker):
 ├── tests
 │   ├── __init__.py
 │   ├── test_app.py
-│   └── test_cli.py</code>
+│   └── test_cli.py
+</code></pre></div></td></tr></table></div>
 注意这里面的__init__.py，如果缺少的话，tests就不会成为一个合法的包，从而导致pytest无法正确导入测试用例。</p>
-<h3 id="22-pytest">2.2. Pytest<a class="headerlink" href="#22-pytest" title="Permanent link">&para;</a></h3>
+<h2 id="2-pytest">2. Pytest<a class="headerlink" href="#2-pytest" title="Permanent link">&para;</a></h2>
 <p>使用pytest写测试用例很简单。假设sample\app.py如下所示：
-<code>def inc(x:int)-&gt;int:
-    return x + 1</code>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">inc</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</code></pre></div></td></tr></table></div>
 则我们的test_app.py只需要有以下代码即可完成测试：
-```
-import pytest
-from sample.app import inc</p>
-<p>def test_inc():
-    assert inc(3) == 4
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">sample.app</span> <span class="kn">import</span> <span class="n">inc</span>
+
+<span class="k">def</span> <span class="nf">test_inc</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">inc</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+</code></pre></div></td></tr></table></div>
+这比unittest下的代码要简洁很多。</p>
+<h3 id="21-测试用例的组装">2.1. 测试用例的组装<a class="headerlink" href="#21-测试用例的组装" title="Permanent link">&para;</a></h3>
+<p>在pytest中，pytest会按传入的文件（或者文件夹），搜索其中的测试用例并组装成测试集合(suite)。除此之外，它还能通过pytest.mark来标记哪些测试用例是需要执行的，哪些测试用例是需要跳过的。</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -820,47 +767,26 @@ from sample.app import inc</p>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code>这比unittest下的代码要简洁很多。
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
 
-### 2.2.1. 测试用例的组装
-在pytest中，pytest会按传入的文件（或者文件夹），搜索其中的测试用例并组装成测试集合(suite)。除此之外，它还能通过pytest.mark来标记哪些测试用例是需要执行的，哪些测试用例是需要跳过的。
-
-```python {class=&#39;line-numbers&#39;}
-import pytest
-
-@pytest.mark.webtest
-def test_send_http():
-    pass  # perform some webtest test for your app
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">webtest</span>
+<span class="k">def</span> <span class="nf">test_send_http</span><span class="p">():</span>
+    <span class="k">pass</span>  <span class="c1"># perform some webtest test for your app</span>
 
 
-def test_something_quick():
-    pass
+<span class="k">def</span> <span class="nf">test_something_quick</span><span class="p">():</span>
+    <span class="k">pass</span>
 
 
-def test_another():
-    pass
+<span class="k">def</span> <span class="nf">test_another</span><span class="p">():</span>
+    <span class="k">pass</span>
 
 
-class TestClass:
-    def test_method(self):
-        pass
-</code></pre></div></td></tr></table></div></p>
+<span class="k">class</span> <span class="nc">TestClass</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">test_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div></td></tr></table></div>
 <p>然后我们就可以选择只执行标记为webtest的测试用例：
-```bash {class='line-numbers'}
-pytest -v -m webtest</p>
-<p>=========================== test session starts ============================
-platform linux -- Python 3.x.y, pytest-7.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
-cachedir: .pytest_cache
-rootdir: /home/sweet/project
-collecting ... collected 4 items / 3 deselected / 1 selected</p>
-<p>test_server.py::test_send_http PASSED                                [100%]</p>
-<p>===================== 1 passed, 3 deselected in 0.12s ======================
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -871,184 +797,29 @@ collecting ... collected 4 items / 3 deselected / 1 selected</p>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code>从输出可以看出，只有test_send_http被执行了。
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>pytest<span class="w"> </span>-v<span class="w"> </span>-m<span class="w"> </span><span class="nv">webtest</span>
 
-这里的webtest是自定义的标记。pytest还内置了这些标记，有的也可以用来筛选用例：
+<span class="o">===========================</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span>session<span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="o">============================</span>
+platform<span class="w"> </span>linux<span class="w"> </span>--<span class="w"> </span>Python<span class="w"> </span><span class="m">3</span>.x.y,<span class="w"> </span>pytest-7.x.y,<span class="w"> </span>pluggy-1.x.y<span class="w"> </span>--<span class="w"> </span><span class="nv">$PYTHON_PREFIX</span>/bin/python
+cachedir:<span class="w"> </span>.pytest_cache
+rootdir:<span class="w"> </span>/home/sweet/project
+collecting<span class="w"> </span>...<span class="w"> </span>collected<span class="w"> </span><span class="m">4</span><span class="w"> </span>items<span class="w"> </span>/<span class="w"> </span><span class="m">3</span><span class="w"> </span>deselected<span class="w"> </span>/<span class="w"> </span><span class="m">1</span><span class="w"> </span>selected
+
+test_server.py::test_send_http<span class="w"> </span>PASSED<span class="w">                                </span><span class="o">[</span><span class="m">100</span>%<span class="o">]</span>
+
+<span class="o">=====================</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>passed,<span class="w"> </span><span class="m">3</span><span class="w"> </span>deselected<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.12s<span class="w"> </span><span class="o">======================</span>
+</code></pre></div></td></tr></table></div>
+从输出可以看出，只有test_send_http被执行了。</p>
+<p>这里的webtest是自定义的标记。pytest还内置了这些标记，有的也可以用来筛选用例：
 1. pytest.mark.filterwarnings， 给测试用例添加filterwarnings标记，可以忽略警告信息。
 2. pytest.mark.skip，给测试用例添加skip标记，可以跳过测试用例。
 3. pytest.mark.skipif, 给测试用例添加skipif标记，可以根据条件跳过测试用例。
 4. pytest.mark.xfail, 在某些条件下（比如运行在某个os上），用例本应该失败，此时就应使用此标记，以便在测试报告中标记出来。
-5. pytest.mark.parametrize, 给测试用例添加参数化标记，可以根据参数化的参数执行多次测试用例。
-
-这些标记可以用pytest --markers命令查看。
-### 2.2.2. pytest 断言
-pytest中的断言巧妙地拦截并复用了python内置的函数assert，从而在这一部分的学习成本变得非常低。
-
-```python {class=&#39;line-numbers&#39;}
-def test_assertion():
-    # 判断基本变量相等
-    assert &quot;loud noises&quot;.upper() == &quot;LOUD NOISES&quot;
-
-    # 判断列表相等
-    assert [1, 2, 3] == list((1, 2, 3))
-
-    # 判断集合相等
-    assert set([1, 2, 3]) == {1, 3, 2}
-
-    # 判断字典相等
-    assert dict({
-        &quot;one&quot;: 1,
-        &quot;two&quot;: 2
-    }) == {
-        &quot;one&quot;: 1,
-        &quot;two&quot;: 2
-    }
-
-    # 判断浮点数相等
-    # 缺省地， origin  ± 1e-06
-    assert 2.2 == pytest.approx(2.2 + 1e-6)
-    assert 2.2 == pytest.approx(2.3, 0.1)
-
-    # 如果要判断两个浮点数组是否相等，我们需要借助numpy.testing
-    import numpy
-
-    arr1 = numpy.array([1., 2., 3.])
-    arr2 = arr1 + 1e-6
-    numpy.testing.assert_array_almost_equal(arr1, arr2)
-
-    # 异常断言：有些用例要求能抛出异常
-    with pytest.raises(ValueError) as e:
-        raise ValueError(&quot;some error&quot;)
-
-    msg = e.value.args[0]
-    assert msg == &quot;some error&quot;
-</code></pre></div></td></tr></table></div>
-上面的代码分别演示了如何判断内置类型、列表、集合、字典、浮点数和浮点数组是否相等。这部分语法跟标准python语法并无二致。pytest与unittest一样，都没有提供如何判断两个浮点数数组是否相等的断言，如果有这个需求，我们可以求助于numpy.testing，正如例子中第25~30行所示。</p>
-<p>有时候我们需要测试错误处理，看函数是否正确地抛出了异常，代码32~37演示了异常断言的使用。注意这里我们不应该这么写：
-```python {class='line-numbers'}
-    try:
-        # call some_func will raise ValueError
-    except ValueError as e:
-        assert str(e) == "some error":
-    else:
-        assert False
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code>上述代码看上去逻辑正确，但它混淆了异常处理和断言，使得他人一时难以分清这段代码究竟是在处理测试代码中的异常呢，还是在测试被调用函数能否正确抛出异常，明显不如异常断言那样清晰。
-### 2.2.3. pytest fixture
-一般而言，我们的测试用例很可能需要依赖于一些外部资源，比如数据库、缓存、第三方微服务等。这些外部资源的初始化和销毁，我们希望能够在测试用例执行前后自动完成，即自动完成setup和teardown的操作。这时候，我们就需要用到pytest的fixture。
-
-!!! Info
-    在单元测试中是否需要使用外部资源是一个见仁见智的问题。有的看法认为，一旦引入外部资源，测试用例就不再是单元测试，而是集成测试。时代总在发展，特别是进入容器化时代后，在测试中快速创建一个专属的数据库服务器变得十分快捷和容易，这可能要比我们通过大量的mock来进行外部资源隔离更容易，因此我们也没必要于拘泥于这些看法。
-
-假定我们有一个测试用例，它需要连接数据库，代码如下(参见code/chap07/sample/app.py)
-
-```python {class=&#39;line-numbers&#39;}
-import asyncpg
-import datetime
-
-async def add_user(conn: asyncpg.Connection, name: str, date_of_birth: datetime.date)-&gt;int:
-    # Insert a record into the created table.
-    await conn.execute(&#39;&#39;&#39;
-        INSERT INTO users(name, dob) VALUES($1, $2)
-    &#39;&#39;&#39;, name, date_of_birth)
-
-    # Select a row from the table.
-    row: asyncpg.Record = await conn.fetchrow(
-        &#39;SELECT * FROM users WHERE name = $1&#39;, &#39;Bob&#39;)
-    # *row* now contains
-    # asyncpg.Record(id=1, name=&#39;Bob&#39;, dob=datetime.date(1984, 3, 1))
-    return row[&quot;id&quot;]
-</code></pre></div></td></tr></table></div>
-我们展示测试代码(参见code/chap07/sample/test_app.py)，再结合代码讲解fixture的使用：</p>
-<p>```python {class='line-numbers'}
-import pytest
-from sample.app import add_user
-import pytest_asyncio
-import asyncio</p>
-<h2 id="pytest-asyncio已经提供了一个event_loop的fixture但它是function级别的">pytest-asyncio已经提供了一个event_loop的fixture,但它是function级别的<a class="headerlink" href="#pytest-asyncio已经提供了一个event_loop的fixture但它是function级别的" title="Permanent link">&para;</a></h2>
-<h2 id="这里我们需要一个session级别的fixture所以我们需要自己实现">这里我们需要一个session级别的fixture，所以我们需要自己实现<a class="headerlink" href="#这里我们需要一个session级别的fixture所以我们需要自己实现" title="Permanent link">&para;</a></h2>
-<p>@pytest.fixture(scope="session")
-def event_loop():
-    policy = asyncio.get_event_loop_policy()
-    loop = policy.new_event_loop()
-    yield loop
-    loop.close()</p>
-<p>@pytest_asyncio.fixture(scope='session')
-async def db():
-    import asyncpg
-    conn = await asyncpg.connect('postgresql://zillionare:123456@localhost/bpp')
-    yield conn</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>await conn.close()
-</code></pre></div></td></tr></table></div>
-<p>@pytest.mark.asyncio
-async def test_add_user(db):
-    import datetime
-    user_id = await add_user(db, 'Bob', datetime.date(2022, 1, 1))
-    assert user_id == 1
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+5. pytest.mark.parametrize, 给测试用例添加参数化标记，可以根据参数化的参数执行多次测试用例。</p>
+<p>这些标记可以用pytest &ndash;markers命令查看。</p>
+<h3 id="22-pytest-断言">2.2. pytest 断言<a class="headerlink" href="#22-pytest-断言" title="Permanent link">&para;</a></h3>
+<p>pytest中的断言巧妙地拦截并复用了python内置的函数assert，从而在这一部分的学习成本变得非常低。</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -1084,47 +855,196 @@ async def test_add_user(db):
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code>我们的功能代码很简单，就是往users表里插入一条记录，并返回它在表中的id。测试代码调用add_user这个函数，然后检测返回值是否为1（如果每次测试前都新建数据库或者清空表的话，那么返回的ID就应该是1）。
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_assertion</span><span class="p">():</span>
+    <span class="c1"># 判断基本变量相等</span>
+    <span class="k">assert</span> <span class="s2">&quot;loud noises&quot;</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;LOUD NOISES&quot;</span>
 
-这个测试显然需要连接数据库，因此我们需要在测试前创建一个数据库连接，然后在测试结束后关闭连接。并且，我们还会有多个测试用例需要连接数据库，因此我们希望数据库连接是一个全局的资源，可以在多个测试用例中共享。这就是fixture的用武之地。
+    <span class="c1"># 判断列表相等</span>
+    <span class="k">assert</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="nb">list</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
-fixture是一些函数，pytest会在执行测试函数之前（或之后）加载运行它们。但与unitest中的setup和teardown不同，pytest中的fixture依赖是显式声明的。比如，在上面的test_add_user显式依赖了db这个fixture(通过在函数声明中传入db作为参数)，而db则又显示依赖event_loop这个fixture。即使文件中还存在其它fixture, test_add_user也不会依赖到这些fixture，因为依赖必须显式声明。
+    <span class="c1"># 判断集合相等</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
 
-上面的代码中，我们演示的是对异步函数add_user的测试。显然，异步函数必须在某个event loop中执行，并且相关的初始化(setup)和退出操作(teardown)也必须在同一个loop中执行。这里是分别通过pytest.mark.asyncio, pytest_asyncio等要件来实现的。
+    <span class="c1"># 判断字典相等</span>
+    <span class="k">assert</span> <span class="nb">dict</span><span class="p">({</span>
+        <span class="s2">&quot;one&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;two&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">})</span> <span class="o">==</span> <span class="p">{</span>
+        <span class="s2">&quot;one&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;two&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">}</span>
 
-首先，我们需要将测试用例标注为异步执行，即上面的代码第21行。其次，test_add_user需要一个数据库连接，该连接由fixture `db`来提供。这个连接的获得也是异步的，因此，我们不能使用pytest.fixutre来声明该函数，而必须使用@pytest_asyncio.fixture来声明该函数。
+    <span class="c1"># 判断浮点数相等</span>
+    <span class="c1"># 缺省地， origin  ± 1e-06</span>
+    <span class="k">assert</span> <span class="mf">2.2</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">2.2</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="mf">2.2</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">2.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 
-最后，我们还必须提供一个event_loop的fixture，它是一切的关键。当某个函数被pytest.mark.asyncio装饰时，该函数将在event_loop提供的event loop中执行。
+    <span class="c1"># 如果要判断两个浮点数组是否相等，我们需要借助numpy.testing</span>
+    <span class="kn">import</span> <span class="nn">numpy</span>
 
-我们还要介绍一下出现在第6行和第13行中的scope=&#39;session&#39;。这个参数表示fixture的作用域，它有四个可选值：function, class, module和session。默认值是function，表示fixture只在当前测试函数中有效。在上面的示例中，我们希望这个event loop在一次测试中都有效，所以将scope设置为session。
+    <span class="n">arr1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+    <span class="n">arr2</span> <span class="o">=</span> <span class="n">arr1</span> <span class="o">+</span> <span class="mf">1e-6</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_almost_equal</span><span class="p">(</span><span class="n">arr1</span><span class="p">,</span> <span class="n">arr2</span><span class="p">)</span>
 
-上面的例子是关于异步模式下的测试的。对普通函数的测试更简单一些。我们不需要pytest.mark.asynio这个装饰器，也不需要event_loop这个fixture。所有的pytest_asyncio.fixture都换成pytest.fixture即可（显然，它必须、也只能装饰普通函数，而非由async定义的函数）。
+    <span class="c1"># 异常断言：有些用例要求能抛出异常</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;some error&quot;</span><span class="p">)</span>
 
-!!! Info
-    如果我们使用unittest来对异步代码进行测试，要注意首先测试类要从unittest.IsolatedAsyncioTestCase继承，然后测试函数要以async def定义。并且setup和teardown都要换成它们的异步版本asyncSetup、asyncTeardown。
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">msg</span> <span class="o">==</span> <span class="s2">&quot;some error&quot;</span>
+</code></pre></div></td></tr></table></div>
+上面的代码分别演示了如何判断内置类型、列表、集合、字典、浮点数和浮点数组是否相等。这部分语法跟标准python语法并无二致。pytest与unittest一样，都没有提供如何判断两个浮点数数组是否相等的断言，如果有这个需求，我们可以求助于numpy.testing，正如例子中第25~30行所示。</p>
+<p>有时候我们需要测试错误处理，看函数是否正确地抛出了异常，代码32~37演示了异常断言的使用。注意这里我们不应该这么写：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># call some_func will raise ValueError</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;some error&quot;</span><span class="p">:</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+上述代码看上去逻辑正确，但它混淆了异常处理和断言，使得他人一时难以分清这段代码究竟是在处理测试代码中的异常呢，还是在测试被调用函数能否正确抛出异常，明显不如异常断言那样清晰。</p>
+<h3 id="23-pytest-fixture">2.3. pytest fixture<a class="headerlink" href="#23-pytest-fixture" title="Permanent link">&para;</a></h3>
+<p>一般而言，我们的测试用例很可能需要依赖于一些外部资源，比如数据库、缓存、第三方微服务等。这些外部资源的初始化和销毁，我们希望能够在测试用例执行前后自动完成，即自动完成setup和teardown的操作。这时候，我们就需要用到pytest的fixture。</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>在单元测试中是否需要使用外部资源是一个见仁见智的问题。有的看法认为，一旦引入外部资源，测试用例就不再是单元测试，而是集成测试。时代总在发展，特别是进入容器化时代后，在测试中快速创建一个专属的数据库服务器变得十分快捷和容易，这可能要比我们通过大量的mock来进行外部资源隔离更容易，因此我们也没必要于拘泥于这些看法。</p>
+</div>
+<p>假定我们有一个测试用例，它需要连接数据库，代码如下(参见code/chap07/sample/app.py)</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncpg</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
-    注意只有从python 3.8开始，unittest才直接支持异步测试。在python 3.7及之前的版本中，我们需要使用第三方库aiounittest。
+<span class="k">async</span> <span class="k">def</span> <span class="nf">add_user</span><span class="p">(</span><span class="n">conn</span><span class="p">:</span> <span class="n">asyncpg</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">date_of_birth</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
+    <span class="c1"># Insert a record into the created table.</span>
+    <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        INSERT INTO users(name, dob) VALUES($1, $2)</span>
+<span class="s1">    &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">date_of_birth</span><span class="p">)</span>
 
-我们通过上面的例子演示了fixture。与markers类似，我们可以通过pytest --fixtures来显示当前环境中所有的fixture。
-```bash
-pytest --fixtures
+    <span class="c1"># Select a row from the table.</span>
+    <span class="n">row</span><span class="p">:</span> <span class="n">asyncpg</span><span class="o">.</span><span class="n">Record</span> <span class="o">=</span> <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">fetchrow</span><span class="p">(</span>
+        <span class="s1">&#39;SELECT * FROM users WHERE name = $1&#39;</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">)</span>
+    <span class="c1"># *row* now contains</span>
+    <span class="c1"># asyncpg.Record(id=1, name=&#39;Bob&#39;, dob=datetime.date(1984, 3, 1))</span>
+    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+我们展示测试代码(参见code/chap07/sample/test_app.py)，再结合代码讲解fixture的使用：</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">sample.app</span> <span class="kn">import</span> <span class="n">add_user</span>
+<span class="kn">import</span> <span class="nn">pytest_asyncio</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 
-------------- fixtures defined from faker.contrib.pytest.plugin --------------
-faker -- .../faker/contrib/pytest/plugin.py:24
-    Fixture that returns a seeded and suitable ``Faker`` instance.
+<span class="c1"># pytest-asyncio已经提供了一个event_loop的fixture,但它是function级别的</span>
+<span class="c1"># 这里我们需要一个session级别的fixture，所以我们需要自己实现</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">event_loop</span><span class="p">():</span>
+    <span class="n">policy</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop_policy</span><span class="p">()</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">new_event_loop</span><span class="p">()</span>
+    <span class="k">yield</span> <span class="n">loop</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-------------- fixtures defined from pytest_asyncio.plugin -----------------
-event_loop -- .../pytest_asyncio/plugin.py:511
-    Create an instance of the default event loop for each test case.
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s1">&#39;session&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">db</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">asyncpg</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncpg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;postgresql://zillionare:123456@localhost/bpp&#39;</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">conn</span>
+
+    <span class="k">await</span> <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_add_user</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">datetime</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="k">await</span> <span class="n">add_user</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">user_id</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div></td></tr></table></div>
+我们的功能代码很简单，就是往users表里插入一条记录，并返回它在表中的id。测试代码调用add_user这个函数，然后检测返回值是否为1（如果每次测试前都新建数据库或者清空表的话，那么返回的ID就应该是1）。</p>
+<p>这个测试显然需要连接数据库，因此我们需要在测试前创建一个数据库连接，然后在测试结束后关闭连接。并且，我们还会有多个测试用例需要连接数据库，因此我们希望数据库连接是一个全局的资源，可以在多个测试用例中共享。这就是fixture的用武之地。</p>
+<p>fixture是一些函数，pytest会在执行测试函数之前（或之后）加载运行它们。但与unitest中的setup和teardown不同，pytest中的fixture依赖是显式声明的。比如，在上面的test_add_user显式依赖了db这个fixture(通过在函数声明中传入db作为参数)，而db则又显示依赖event_loop这个fixture。即使文件中还存在其它fixture, test_add_user也不会依赖到这些fixture，因为依赖必须显式声明。</p>
+<p>上面的代码中，我们演示的是对异步函数add_user的测试。显然，异步函数必须在某个event loop中执行，并且相关的初始化(setup)和退出操作(teardown)也必须在同一个loop中执行。这里是分别通过pytest.mark.asyncio, pytest_asyncio等要件来实现的。</p>
+<p>首先，我们需要将测试用例标注为异步执行，即上面的代码第21行。其次，test_add_user需要一个数据库连接，该连接由fixture <code>db</code>来提供。这个连接的获得也是异步的，因此，我们不能使用pytest.fixutre来声明该函数，而必须使用@pytest_asyncio.fixture来声明该函数。</p>
+<p>最后，我们还必须提供一个event_loop的fixture，它是一切的关键。当某个函数被pytest.mark.asyncio装饰时，该函数将在event_loop提供的event loop中执行。</p>
+<p>我们还要介绍一下出现在第6行和第13行中的scope=&rsquo;session&rsquo;。这个参数表示fixture的作用域，它有四个可选值：function, class, module和session。默认值是function，表示fixture只在当前测试函数中有效。在上面的示例中，我们希望这个event loop在一次测试中都有效，所以将scope设置为session。</p>
+<p>上面的例子是关于异步模式下的测试的。对普通函数的测试更简单一些。我们不需要pytest.mark.asynio这个装饰器，也不需要event_loop这个fixture。所有的pytest_asyncio.fixture都换成pytest.fixture即可（显然，它必须、也只能装饰普通函数，而非由async定义的函数）。</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>如果我们使用unittest来对异步代码进行测试，要注意首先测试类要从unittest.IsolatedAsyncioTestCase继承，然后测试函数要以async def定义。并且setup和teardown都要换成它们的异步版本asyncSetup、asyncTeardown。</p>
+<p>注意只有从python 3.8开始，unittest才直接支持异步测试。在python 3.7及之前的版本中，我们需要使用第三方库aiounittest。</p>
+</div>
+<p>我们通过上面的例子演示了fixture。与markers类似，我们可以通过pytest &ndash;fixtures来显示当前环境中所有的fixture。
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>pytest<span class="w"> </span>--fixtures
+
+-------------<span class="w"> </span>fixtures<span class="w"> </span>defined<span class="w"> </span>from<span class="w"> </span>faker.contrib.pytest.plugin<span class="w"> </span>--------------
+faker<span class="w"> </span>--<span class="w"> </span>.../faker/contrib/pytest/plugin.py:24
+<span class="w">    </span>Fixture<span class="w"> </span>that<span class="w"> </span>returns<span class="w"> </span>a<span class="w"> </span>seeded<span class="w"> </span>and<span class="w"> </span>suitable<span class="w"> </span><span class="sb">``</span>Faker<span class="sb">``</span><span class="w"> </span>instance.
+
+-------------<span class="w"> </span>fixtures<span class="w"> </span>defined<span class="w"> </span>from<span class="w"> </span>pytest_asyncio.plugin<span class="w"> </span>-----------------
+event_loop<span class="w"> </span>--<span class="w"> </span>.../pytest_asyncio/plugin.py:511
+<span class="w">    </span>Create<span class="w"> </span>an<span class="w"> </span>instance<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>event<span class="w"> </span>loop<span class="w"> </span><span class="k">for</span><span class="w"> </span>each<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">case</span>.
 
 ...
 
-------------- fixtures defined from tests.test_app ----------------
-event_loop [session scope] -- tests/test_app.py:45
+-------------<span class="w"> </span>fixtures<span class="w"> </span>defined<span class="w"> </span>from<span class="w"> </span>tests.test_app<span class="w"> </span>----------------
+event_loop<span class="w"> </span><span class="o">[</span>session<span class="w"> </span>scope<span class="o">]</span><span class="w"> </span>--<span class="w"> </span>tests/test_app.py:45
 
-db [session scope] -- tests/test_app.py:52
+db<span class="w"> </span><span class="o">[</span>session<span class="w"> </span>scope<span class="o">]</span><span class="w"> </span>--<span class="w"> </span>tests/test_app.py:52
 </code></pre></div></td></tr></table></div></p>
 <p>这里我们看到faker.contrib提供了一个名为faker的fixture, 我们之前安装的、支持异步测试的pytest_asyncio也提供了名为event_loop的fixture(为节省篇幅，其它几个省略了)，以及我们自己测试代码中定义的event_loop和db这两个fixture。</p>
 <p>为了后面讲解方便，我们现在来安装pytest-mock这个插件，看看它提供的fixture。
@@ -1150,7 +1070,7 @@ db [session scope] -- tests/test_app.py:52
 <span class="normal">20</span>
 <span class="normal">21</span>
 <span class="normal">22</span>
-<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pytest-mock
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pytest-mock
 pytest<span class="w"> </span>--fixture
 
 -------<span class="w"> </span>fixtures<span class="w"> </span>defined<span class="w"> </span>from<span class="w"> </span>pytest_mock.plugin<span class="w"> </span>--------
@@ -1175,7 +1095,7 @@ session_mocker<span class="w"> </span><span class="o">[</span>session<span class
 <span class="w">    </span>takes<span class="w"> </span>care<span class="w"> </span>of<span class="w"> </span>automatically<span class="w"> </span>undoing<span class="w"> </span>all<span class="w"> </span>patches<span class="w"> </span>after<span class="w"> </span>each<span class="w"> </span><span class="nb">test</span><span class="w"> </span>method.
 </code></pre></div></td></tr></table></div>
 可以看到pytest-mock提供了5个fixture。后面我们会较多地介绍其中的mocker这个fixture。</p>
-<h3 id="23-mock">2.3. Mock<a class="headerlink" href="#23-mock" title="Permanent link">&para;</a></h3>
+<h3 id="24-mock">2.4. Mock<a class="headerlink" href="#24-mock" title="Permanent link">&para;</a></h3>
 <p>在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接数据库或者真实的第三方微服务等。这时候，我们需要通mock来模拟这些外部接口。mock可能是单元测试中最核心的技术。</p>
 <div class="admonition readmore">
 <p class="admonition-title">Readmore</p>
@@ -1186,9 +1106,9 @@ session_mocker<span class="w"> </span><span class="o">[</span>session<span class
 <p class="admonition-title">Info</p>
 <p>python从3.8起，才对async模式下的mock有比较完备的支持。幸好，在本书发布之前，python 3.7就应该已经走到生命的尽头了。</p>
 </div>
-<p>最常用的mock对象有Mock, MagicMock和patch。MagicMock是Mock的子类。如果你之前接触过其它mock框架的话，可能需要注意，python中的mock是’action -&gt; assertion‘模式，而不是其它语言中常见的'record -&gt; replay’模式。</p>
+<p>最常用的mock对象有Mock, MagicMock和patch。MagicMock是Mock的子类。如果你之前接触过其它mock框架的话，可能需要注意，python中的mock是’action -&gt; assertion‘模式，而不是其它语言中常见的&rsquo;record -&gt; replay’模式。</p>
 <p>在unittest中要使用mock, 我们需要手动导入mock模块。在pytest中，我们可以直接使用mocker这个fixture。
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">unittest example</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -1201,9 +1121,7 @@ session_mocker<span class="w"> </span><span class="o">[</span>session<span class
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># unittest example</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
 
 <span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
@@ -1219,13 +1137,17 @@ session_mocker<span class="w"> </span><span class="o">[</span>session<span class
     <span class="k">assert</span> <span class="s1">&#39;Y&#39;</span> <span class="o">==</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;continure or not? [Y]/n&#39;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
 上面的例子清楚地演示了两个框架中应该如何调用patch方法。如果我们要使用Mock或者MagicMock这两个类，也是一样，只不过在pytest中，我们需要通过mocker这个对象来引用它们。</p>
-<p>现在我们来介绍一下patch方法。patch是一个context manager（也可以当装饰器用），它可以用来mock一个对象。上面的例子已经演示了如何mock一个内置函数。内置函数是指象open、print、input这样的方法，我们可以在程序中无须导入即可直接使用，但是在mock它们时，我们必须通过'builtins'这个名字空间来引用它们，这也是我们在这里特别举例的原因。另一个需要特别说明的内置库是datetime，当你需要mock这个库时，我们的建议是使用freezegun这个库，而不是使用patch。
-```python {class = 'line-numbers'}
-@freeze_time("2021-01-01")
-def test_freezegun():
-    now = datetime.datetime(2021, 1, 1)
-    assert now == datetime.datetime.now()
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<p>现在我们来介绍一下patch方法。patch是一个context manager（也可以当装饰器用），它可以用来mock一个对象。上面的例子已经演示了如何mock一个内置函数。内置函数是指象open、print、input这样的方法，我们可以在程序中无须导入即可直接使用，但是在mock它们时，我们必须通过&rsquo;builtins&rsquo;这个名字空间来引用它们，这也是我们在这里特别举例的原因。另一个需要特别说明的内置库是datetime，当你需要mock这个库时，我们的建议是使用freezegun这个库，而不是使用patch。
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@freeze_time</span><span class="p">(</span><span class="s2">&quot;2021-01-01&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_freezegun</span><span class="p">():</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">now</span> <span class="o">==</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div></p>
+<p>mock自己代码中的方法，或者第三方库中的方法一般来讲是比较容易的，关键是要找到正确的引用方法。在第7章的示例代码中，有这样一小段程序：</p>
+<p><div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">sample/core/foo.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -1240,49 +1162,100 @@ def test_freezegun():
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code>mock自己代码中的方法，或者第三方库中的方法一般来讲是比较容易的，关键是要找到正确的引用方法。在第7章的示例代码中，有这样一小段程序：
-
-```python {class=&#39;line-numbers&#39;}
-# from sample\core\foo.py
-def is_windows():
-    return True
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">is_windows</span><span class="p">():</span>
+    <span class="k">return</span> <span class="kc">True</span>
 
 
-def get_operating_system():
-    return &quot;Windows&quot; if is_windows() else &quot;Linux&quot;
+<span class="k">def</span> <span class="nf">get_operating_system</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Windows&quot;</span> <span class="k">if</span> <span class="n">is_windows</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;Linux&quot;</span>
 
 
-class Foo:
-    def bark(self):
-        return &quot;bark&quot;
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;bark&quot;</span>
 
-# from sample\tests\core\test_foo.py
-def test_get_operating_system(mocker):
-    mocker.patch(&quot;sample.core.foo.is_windows&quot;, return_value=False)
-    assert get_operating_system() == &quot;Linux&quot;
+<span class="c1"># from sample\tests\core\test_foo.py</span>
+<span class="k">def</span> <span class="nf">test_get_operating_system</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+    <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;sample.core.foo.is_windows&quot;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">get_operating_system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Linux&quot;</span>
 </code></pre></div></td></tr></table></div>
-第16行中的"sample.core.foo.is_windows"被称作target，return_value则是我们调用target方法时，所期望返回的值。</p>
-<p>上面的例子中，我们mock了一个普通方法，如果我们要mock一个类的方法呢？此时target的写法应该是'package.package.module.Class.method'。以第10~12行定义的Foo对象的bark方法为例，target的写法应该是'sample.core.foo.Foo.bark'。</p>
-<p>这里我们要指出一个初学者很容易掉进去的坑，就是明明target正确，但是却无法mock成功。在unittest的文档中有这样一句话</p>
+第16行中的&rdquo;sample.core.foo.is_windows&rdquo;被称作target，return_value则是我们调用target方法时，所期望返回的值。</p>
+<p>上面的例子中，我们mock了一个普通方法，如果我们要mock一个类的方法呢？此时target的写法应该是&rsquo;package.package.module.Class.method&rsquo;。以第10~12行定义的Foo对象的bark方法为例，target的写法应该是&rsquo;sample.core.foo.Foo.bark&rsquo;。</p>
+<p>这里我们要指出一个初学者很容易掉进去的坑，就是明明target正确，但是却无法mock成功。在unittest的文档中有这样一句话:</p>
 <div class="admonition quote">
 <p class="admonition-title">Quote</p>
 <p>The basic principle is that you patch where an object is looked up, which is not necessarily the same place as where it is defined. </p>
 </div>
 <p>也就是，patch应用于哪个target对象，取决于被mock对象是在哪里被引用的，而不是在哪里被定义的。</p>
-<p>我们通过一个例子来详细说明这个问题。假设在前面的foo.py之外，还有一个sample\bar.py文件，定义如下：
-```python {class='line-numbers'}</p>
-<h2 id="samplebarpy">sample\bar.py<a class="headerlink" href="#samplebarpy" title="Permanent link">&para;</a></h2>
-<p>from sample.core.foo import Foo, is_windows</p>
-<p>def my_bark() -&gt; str:
-    foo = Foo()
-    return foo.bark()</p>
-<p>def get_operating_system() -&gt; str:
-    return "Windows" if is_windows() else "Linux"
+<p>我们通过一个例子来详细说明这个问题。假设在前面的foo.py之外，还有一个sample/bar.py文件，定义如下：
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">sample/bar.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">sample.core.foo</span> <span class="kn">import</span> <span class="n">Foo</span><span class="p">,</span> <span class="n">is_windows</span>
+
+<span class="k">def</span> <span class="nf">my_bark</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">foo</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">get_operating_system</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;Windows&quot;</span> <span class="k">if</span> <span class="n">is_windows</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;Linux&quot;</span>
+</code></pre></div></td></tr></table></div></p>
+<p>对应的测试文件tests\test_bar.py定义如下：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">sample.bar</span> <span class="kn">import</span> <span class="n">get_operating_system</span><span class="p">,</span> <span class="n">my_bark</span>
+
+<span class="k">def</span> <span class="nf">test_my_bark</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;sample.core.foo.Foo.bark&quot;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="s2">&quot;mock_bark&quot;</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">my_bark</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;mock_bark&quot;</span>
+
+<span class="k">def</span> <span class="nf">test_get_operation_system</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+    <span class="n">target_will_fail</span> <span class="o">=</span> <span class="s2">&quot;sample.core.foo.is_windows&quot;</span>
+    <span class="n">target_will_succeed</span> <span class="o">=</span> <span class="s2">&quot;sample.bar.is_windows&quot;</span>
+    <span class="k">with</span> <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">target_will_fail</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">get_operating_system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Linux&quot;</span>
+</code></pre></div></td></tr></table></div>
+运行测试，发现test_my_bark测试通过，而test_get_operation_system测试失败。说明其中一个mock成功，另一个mock失败。这是为什么呢？</p>
+<p>在test_get_operation_system中，导致测试失败的target是target_will_fail，即sample.core.foo.is_windows，被测试函数get_operating_system来自由bar.py，在它调用is_windows之前，这个is_windows已经被导入到sample.bar这个名字空间里，sample.bar持有了这个引用（应该是以传值的方式），因此当patch方法对sample.core.foo.is_windows进行修改时，这个改动并不会传递给sample.bar中的is_windows。这就是unittest文档中所说的，patch应用于哪个target对象，取决于被mock对象是在哪里被引用的（sample.bar)，而不是在哪里被定义的(sample.core.foo)。</p>
+<p>但上面的理论无法解释为什么test_my_bark测试通过。原因可能还是传值引用的原因。在my_bark中，当调用foo.bark()时，foo对象并没有自己的bark方法，因此它还是会去寻找sample.core.foo.Foo中的bark方法，而这个方法已经被patch了，因此test_my_bark测试通过。</p>
+<p>前面我们讨论了patch的一个用法，即patch一个函数的返回值。有时候我们不关心函数的返回值，而是希望函数在被调用时，能够无条件地抛出某个异常，这时就需要用到<code>side_effect</code>参数。</p>
+<p><div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">tests/test_bar.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="k">def</span> <span class="nf">test_mock_side_effect</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;builtins.input&#39;</span><span class="p">,</span> <span class="n">side_effect</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">input</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+上述代码不仅模拟出了一个ValueError，还检测这个异常是否抛出。通过这种方式，异常处理代码现在也可以轻松覆盖到了。</p>
+<p>side_effect不仅可以用来模拟异常，还可以用来模拟多次调用的返回值。比如，我们希望某个函数在第一次调用时返回1，第二次调用时返回2，第三次调用时返回3，以此类推。这时可以这样写：
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">tests/test_bar.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">test_mock_multiple_return</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;builtins.input&#39;</span><span class="p">,</span> <span class="n">side_effect</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">input</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">input</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="nb">input</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+</code></pre></div></td></tr></table></div>
+我们一共调用了input三次，每次mock都按期望返回了不同的数值。</p>
+<p>上面的例子中，我们给patch传入的target是一个字符串，显然，在patch作用域内，所有的新生成的对象都会被patch。如果在patch之前，对象已经生成了，我们则需要使用<code>patch.object</code>来完成patch。</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">sample/core/foo.py</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -1294,94 +1267,32 @@ def test_get_operating_system(mocker):
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>对应的测试文件tests\test_bar.py定义如下：
-```python {class=&#39;line-numbers&#39;}
-from sample.bar import get_operating_system, my_bark
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;please check if I was called&quot;</span><span class="p">)</span>
 
-def test_my_bark(mocker):
-    with mocker.patch(&quot;sample.core.foo.Foo.bark&quot;, return_value=&quot;mock_bark&quot;):
-        assert my_bark() == &quot;mock_bark&quot;
+    <span class="n">root_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+    <span class="n">root_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;this is not intercepted&quot;</span><span class="p">)</span>
 
-def test_get_operation_system(mocker):
-    target_will_fail = &quot;sample.core.foo.is_windows&quot;
-    target_will_succeed = &quot;sample.bar.is_windows&quot;
-    with mocker.patch(target_will_fail, return_value=False):
-        assert get_operating_system() == &quot;Linux&quot;
+<span class="c1"># test_foo.py</span>
+<span class="kn">from</span> <span class="nn">sample.core.foo</span> <span class="kn">import</span> <span class="n">bar</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;sample.core.foo&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">m</span><span class="p">:</span>
+    <span class="n">bar</span><span class="p">()</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s2">&quot;please check if I was called&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-运行测试，发现test_my_bark测试通过，而test_get_operation_system测试失败。说明其中一个mock成功，另一个mock失败。这是为什么呢？</p>
-<p>在test_get_operation_system中，导致测试失败的target是target_will_fail，即sample.core.foo.is_windows，被测试函数get_operating_system来自由bar.py，在它调用is_windows之前，这个is_windows已经被导入到sample.bar这个名字空间里，sample.bar持有了这个引用（应该是以传值的方式），因此当patch方法对sample.core.foo.is_windows进行修改时，这个改动并不会传递给sample.bar中的is_windows。这就是unittest文档中所说的，patch应用于哪个target对象，取决于被mock对象是在哪里被引用的（sample.bar)，而不是在哪里被定义的(sample.core.foo)。</p>
-<p>但上面的理论无法解释为什么test_my_bark测试通过。原因可能还是传值引用的原因。在my_bark中，当调用foo.bark()时，foo对象并没有自己的bark方法，因此它还是会去寻找sample.core.foo.Foo中的bark方法，而这个方法已经被patch了，因此test_my_bark测试通过。</p>
-<p>前面我们讨论了patch的一个用法，即patch一个函数的返回值。有时候我们不关心函数的返回值，而是希望函数在被调用时，能够无条件地抛出某个异常，这时就需要用到<code>side_effect</code>参数。</p>
-<p>```python {class='line-numbers'}</p>
-<h2 id="teststest_barpy">tests\test_bar.py<a class="headerlink" href="#teststest_barpy" title="Permanent link">&para;</a></h2>
-<p>import pytest
-def test_mock_side_effect(mocker):
-    with mocker.patch('builtins.input', side_effect = ValueError):
-        with pytest.raises(ValueError) as e:
-            input()
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code>上述代码不仅模拟出了一个ValueError，还检测这个异常是否抛出。通过这种方式，异常处理代码现在也可以轻松覆盖到了。
-
-side_effect不仅可以用来模拟异常，还可以用来模拟多次调用的返回值。比如，我们希望某个函数在第一次调用时返回1，第二次调用时返回2，第三次调用时返回3，以此类推。这时可以这样写：
-```python {class=&#39;line-numbers&#39;}
-# tests\test_bar.py
-def def test_mock_multiple_return(mocker):
-    with mocker.patch(&#39;builtins.input&#39;, side_effect = [1, 2, 3]):
-        assert input() == 1
-        assert input() == 2
-        assert input() == 3
-</code></pre></div></td></tr></table></div>
-我们一共调用了input三次，每次mock都按期望返回了不同的数值。</p>
-<p>上面的例子中，我们给patch传入的target是一个字符串，显然，在patch作用域内，所有的新生成的对象都会被patch。如果在patch之前，对象已经生成了，我们则需要使用<code>patch.object</code>来完成patch。</p>
-<p>```python {class='line-numbers'}</p>
-<h2 id="samplecorefoopy">sample\core\foo.py<a class="headerlink" href="#samplecorefoopy" title="Permanent link">&para;</a></h2>
-<p>def bar():
-    logger = logging.getLogger(<strong>name</strong>)
-    logger.info("please check if I was called")</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>root_logger = logging.getLogger()
-root_logger.info(&quot;this is not intercepted&quot;)
-</code></pre></div></td></tr></table></div>
-<h2 id="test_foopy">test_foo.py<a class="headerlink" href="#test_foopy" title="Permanent link">&para;</a></h2>
-<p>from sample.core.foo import bar</p>
-<p>logger = logging.getLogger('sample.core.foo')
-with mock.patch.object(logger, 'info') as m:
-    bar()
-    m.assert_called_once_with("please check if I was called")
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code>两个logger(root_logger和&#39;sample.core.foo&#39;对应的logger)都被调用，但我们只拦截了后一个logger的`info`方法，结果验证它被调用，且仅被调用一次。
-
-这里要提及pytest中mocker.patch与unitest.mock.patch的一个细微差别。后者进行patch时，可以返回mock对象，我们可以通过它进行更多的检查（见上面示例代码中的第14，16行）；但mocker.patch的返回值是None。
-
-## 2.4. 衡量测试的覆盖率
-我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。coverage.py是最常用的测量Python程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别可能已执行但未执行的代码。
-
-覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分正在被测试执行，哪些没有。
-
-我们可以通过下面的方法来安装coverage.py：
-```bash
-pip install coverage
+<p>两个logger(root_logger和&rsquo;sample.core.foo&rsquo;对应的logger)都被调用，但我们只拦截了后一个logger的<code>info</code>方法，结果验证它被调用，且仅被调用一次。</p>
+<p>这里要提及pytest中mocker.patch与unitest.mock.patch的一个细微差别。后者进行patch时，可以返回mock对象，我们可以通过它进行更多的检查（见上面示例代码中的第14，16行）；但mocker.patch的返回值是None。</p>
+<h3 id="25-衡量测试的覆盖率">2.5. 衡量测试的覆盖率<a class="headerlink" href="#25-衡量测试的覆盖率" title="Permanent link">&para;</a></h3>
+<p>我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。coverage.py是最常用的测量Python程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别可能已执行但未执行的代码。</p>
+<p>覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分正在被测试执行，哪些没有。</p>
+<p>我们可以通过下面的方法来安装coverage.py：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>coverage
 </code></pre></div></td></tr></table></div>
 要收集测试覆盖率数据，我们只需要在原来的测试命令前加上coverage run即可。比如，如果我们之前是使用<code>pytest arg1 arg2 arg3</code>来进行测试，则现在我们使用:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>coverage<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>arg1<span class="w"> </span>arg2<span class="w"> </span>arg3
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>coverage<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>arg1<span class="w"> </span>arg2<span class="w"> </span>arg3
 </code></pre></div></td></tr></table></div>
 不过，更多人选择使用pytest-cov插件来进行测试覆盖率的收集。这也是ppw的选择。通过ppw生成的工程，pytest-cov已被加入到测试依赖中，因此也就自然安装到环境中去了。</p>
 <p>当测试运行完成后，我们可以通过<code>coverage report -m</code>来查看测试覆盖率的报告:
@@ -1401,20 +1312,73 @@ TOTAL                        76     10    87%
 <img alt="" src="https://images.jieyu.ai/images/20230120230120204634.png" /></p>
 <p>不过，通过ppw配置的工程，我们一般不需要直接调用coverage命令，而是使用pytest命令来进行测试。pytest-cov插件会自动收集测试覆盖率数据，然后在测试完成后，自动将测试覆盖率报告打印到控制台上。如果希望生成带注释的HTML报告，可以使用<code>pytest --cov-report=html</code>命令。对pytest我们一般也不需要直接调用，而是通过tox来调用。</p>
 <p>默认情况下，coverage.py将测试行（语句）覆盖率，但通过配置，还可以测量分支覆盖率。这需要一些配置。</p>
-<h4 id="241-配置pycoverage">2.4.1. 配置Pycoverage<a class="headerlink" href="#241-配置pycoverage" title="Permanent link">&para;</a></h4>
+<h4 id="251-配置pycoverage">2.5.1. 配置Pycoverage<a class="headerlink" href="#251-配置pycoverage" title="Permanent link">&para;</a></h4>
 <p>配置文件的默认名称是.coveragerc，在ppw生成的工程中，这个文件处在项目根目录下（读者可以回到第4章的结束部分查看ppw生成的文件列表）。</p>
 <p>如果没有使用其他配置文件，Coverage.py 将从其他常用配置文件中读取设置。如果存在，它将自动从“setup.cfg”或“tox.ini”中读取。如果节(section)名称有“coverage:”前缀，则会当成是coverage的配置，比如.coveragerc中有一节名为run，当它出现在tox.ini中，节名字就应该是[coverage:run]。</p>
 <p>我们也可以在pyproject.toml中配置coverage。如果要使用这种方式，需要在pyproject.toml中添加一个名为tool.coverage的节，然后在这个节中添加配置项。</p>
 <p>coverage的配置项遵循ini语法，示例如下：
-```ini {class='line-numbers'}</p>
-<h2 id="coveragerc-to-control-coveragepy">.coveragerc to control coverage.py<a class="headerlink" href="#coveragerc-to-control-coveragepy" title="Permanent link">&para;</a></h2>
-<p>[run]
-branch = True</p>
-<p>[report]</p>
-<h2 id="regexes-for-lines-to-exclude-from-consideration">Regexes for lines to exclude from consideration<a class="headerlink" href="#regexes-for-lines-to-exclude-from-consideration" title="Permanent link">&para;</a></h2>
-<p>exclude_lines =
-    # Have to re-enable the standard pragma
-    pragma: no cover</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">.coveragerc</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">[run]</span>
+<span class="na">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+
+<span class="k">[report]</span>
+<span class="c1"># Regexes for lines to exclude from consideration</span>
+<span class="na">exclude_lines</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="c1"># Have to re-enable the standard pragma</span>
+<span class="w">    </span><span class="na">pragma</span><span class="o">:</span><span class="w"> </span><span class="s">no cover</span>
+
+<span class="w">    </span><span class="c1"># Don&#39;t complain about missing debug-only code:</span>
+<span class="w">    </span><span class="na">def __repr__</span>
+<span class="w">    </span><span class="na">if self\.debug</span>
+
+<span class="w">    </span><span class="c1"># Don&#39;t complain if tests don&#39;t hit defensive assertion code:</span>
+<span class="w">    </span><span class="na">raise AssertionError</span>
+<span class="w">    </span><span class="na">raise NotImplementedError</span>
+
+<span class="w">    </span><span class="c1"># Don&#39;t complain if non-runnable code isn&#39;t run:</span>
+<span class="w">    </span><span class="na">if 0</span><span class="o">:</span>
+<span class="w">    </span><span class="na">if __name__</span><span class="w"> </span><span class="o">=</span><span class="s">= .__main__.:</span>
+
+<span class="w">    </span><span class="c1"># Don&#39;t complain about abstract methods, they aren&#39;t run:</span>
+<span class="w">    </span><span class="na">@(abc\.)?abstractmethod</span>
+
+<span class="na">ignore_errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+
+<span class="k">[html]</span>
+<span class="na">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">coverage_html_report</span>
+</code></pre></div></td></tr></table></div>
+我们前面提到过可以让coverage.py按分支覆盖率来统计，这可以按照第3行一样进行配置。[report]这一节中的配置项可以让coverage.py忽略一些不需要统计的代码，比如debug代码。[html]这一节配置了如果生成的html文件存放在何处。如果没有指定，将存放在htmlcov目录下。</p>
+<p>[run]这一节比较常用的配置项有include和omit，用来特别把某个文件或者目录加入到测试覆盖，或者排除掉。在[report]这一节中，也有相同的配置项，两者有所区别。在[report]中指定omit或者include，都仅适用于报告的生成，但不影响实际的测试覆盖率统计。</p>
+<h4 id="252-发布覆盖率报告">2.5.2. 发布覆盖率报告<a class="headerlink" href="#252-发布覆盖率报告" title="Permanent link">&para;</a></h4>
+<p>如果我们的项目是开源项目，你可能希望把覆盖率报告发布到网上，这样其他人就可以看到你的项目的覆盖率了。这里我们使用codecov.io来发布覆盖率报告。</p>
+<p>codecov是一个在线的代码覆盖率报告服务，它可以从GitHub、Bitbucket、GitLab等代码托管平台上获取代码覆盖率报告，然后生成一个在线的报告。这个报告可以让其他人看到你的项目的覆盖率情况。</p>
+<p>在github中设置codecov集成很简单，在浏览器中打开https://github.com/apps/codecov页面，点击完成安装，然后在CI过程中增加一个上传动作就可以了。在通过ppw创建的项目中，我们已经集成了这一步。如果你想在自己的项目中手动执行，则是：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1428,55 +1392,43 @@ branch = True</p>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code># Don&#39;t complain about missing debug-only code:
-def __repr__
-if self\.debug
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code># linux
+$ curl -Os https://uploader.codecov.io/latest/linux/codecov 
+$ chmod +x codecov 
+$ ./codecov
 
-# Don&#39;t complain if tests don&#39;t hit defensive assertion code:
-raise AssertionError
-raise NotImplementedError
+# windows
+$ ProgressPreference = &#39;SilentlyContinue&#39; 
+$ Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe 
+$ .\codecov.exe
 
-# Don&#39;t complain if non-runnable code isn&#39;t run:
-if 0:
-if __name__ == .__main__.:
-
-# Don&#39;t complain about abstract methods, they aren&#39;t run:
-@(abc\.)?abstractmethod
+# macOS
+$ curl -Os https://uploader.codecov.io/latest/macos/codecov
+$ chmod +x codecov
+$ ./codecov
 </code></pre></div></td></tr></table></div>
-<p>ignore_errors = True</p>
-<p>[html]
-directory = coverage_html_report
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>我们前面提到过可以让coverage.py按分支覆盖率来统计，这可以按照第3行一样进行配置。[report]这一节中的配置项可以让coverage.py忽略一些不需要统计的代码，比如debug代码。[html]这一节配置了如果生成的html文件存放在何处。如果没有指定，将存放在htmlcov目录下。
-
-[run]这一节比较常用的配置项有include和omit，用来特别把某个文件或者目录加入到测试覆盖，或者排除掉。在[report]这一节中，也有相同的配置项，两者有所区别。在[report]中指定omit或者include，都仅适用于报告的生成，但不影响实际的测试覆盖率统计。
-### 2.4.2. 发布覆盖率报告
-如果我们的项目是开源项目，你可能希望把覆盖率报告发布到网上，这样其他人就可以看到你的项目的覆盖率了。这里我们使用codecov.io来发布覆盖率报告。
-
-codecov是一个在线的代码覆盖率报告服务，它可以从GitHub、Bitbucket、GitLab等代码托管平台上获取代码覆盖率报告，然后生成一个在线的报告。这个报告可以让其他人看到你的项目的覆盖率情况。
-
-在github中设置codecov集成很简单，在浏览器中打开https://github.com/apps/codecov页面，点击完成安装，然后在CI过程中增加一个上传动作就可以了。在通过ppw创建的项目中，我们已经集成了这一步。如果你想在自己的项目中手动执行，则是：
-</code></pre></div></td></tr></table></div></p>
-<h2 id="linux">linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h2>
-<p>curl -Os https://uploader.codecov.io/latest/linux/codecov 
-chmod +x codecov 
-./codecov</p>
-<h2 id="windows">windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h2>
-<p>$ProgressPreference = 'SilentlyContinue' 
-Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe 
-.\codecov.exe</p>
-<h2 id="macos">macOS<a class="headerlink" href="#macos" title="Permanent link">&para;</a></h2>
-<p>curl -Os https://uploader.codecov.io/latest/macos/codecov
-chmod +x codecov
-./codecov
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+我们强烈建议仅通过CI来上传覆盖率报告，而不是在本地执行。因为本地执行的覆盖率报告，可能会因为本地环境的不同而产生差异。另一方面，在CI中执行后，我们还能在pull request之后，得到这样的状态报告：
+<img alt="" src="https://images.jieyu.ai/images/2023/01/20230120213255.png" />
+并且还能在pull request的注释中看到覆盖率的变化：
+<img alt="" src="https://images.jieyu.ai/images/2023/01/20230120213318.png" />
+这会让你的开源项目看上去非常专业，不是吗？更重要的是，让你的潜在用户更加信任这是一个高质量的项目。</p>
+<h3 id="26-tox环境矩阵加速测试">2.6. Tox环境矩阵加速测试<a class="headerlink" href="#26-tox环境矩阵加速测试" title="Permanent link">&para;</a></h3>
+<p>如果我们的软件支持3种操作系统，4个python版本，我们就必须在3种操作系统上，分别创建4个虚拟环境，安装上我们的软件和依赖，再执行测试，上传测试报告。这个动作不仅相当繁琐，还很容易引入错误。</p>
+<p>tox与CI结合，就可以帮助我们自动化完成这些环境的创建与测试执行。</p>
+<h4 id="261-什么是tox">2.6.1. 什么是Tox？<a class="headerlink" href="#261-什么是tox" title="Permanent link">&para;</a></h4>
+<p>tox是一个通用的 virtualenv 管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。</p>
+<p>实际上，tox主要完成以下工作：
+1. 根据配置创建基于多个版本的python虚拟环境，并且保证这些虚拟环境的可复制性（需要与poetry或者其它依赖管理工具一起）。
+2. 运行测试和代码检查工具，比如pytest和flake8, black, mypy等。
+3. 隔离环境变量。tox不会从系统传递任何环境变量到虚拟环境中，这样可以保证测试的可重复性。</p>
+<h4 id="262-tox的工作原理">2.6.2. Tox的工作原理<a class="headerlink" href="#262-tox的工作原理" title="Permanent link">&para;</a></h4>
+<p>下图是tox文档显示的工作原理图：</p>
+<p><img alt="" src="https://images.jieyu.ai/images/2023/01/20230120223442.png" /></p>
+<p>根据这张图，tox读取配置文件，打包待测试软件，按照配置文件创建虚拟环境，并安装待测试软件和依赖，然后依次执行测试命令。最终，当所有虚拟环境下的测试都通过后，tox会生成测试报告。</p>
+<p>下面，我们主要通过一个典型的配置文件来介绍tox是如何配置和工作的。</p>
+<h4 id="263-如何配置tox">2.6.3. 如何配置Tox<a class="headerlink" href="#263-如何配置tox" title="Permanent link">&para;</a></h4>
+<p>在ppw生成的项目中，存在以下tox.ini文件：
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">tox.ini</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -1511,99 +1463,45 @@ chmod +x codecov
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code>我们强烈建议仅通过CI来上传覆盖率报告，而不是在本地执行。因为本地执行的覆盖率报告，可能会因为本地环境的不同而产生差异。另一方面，在CI中执行后，我们还能在pull request之后，得到这样的状态报告：
-![](https://images.jieyu.ai/images/20230120230120213255.png)
-并且还能在pull request的注释中看到覆盖率的变化：
-![](https://images.jieyu.ai/images/20230120230120213318.png)
-这会让你的开源项目看上去非常专业，不是吗？更重要的是，让你的潜在用户更加信任这是一个高质量的项目。
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">[tox]</span>
+<span class="na">isolated_build</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<span class="na">envlist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">py38, py39, py310, lint</span>
+<span class="na">skipsdist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
 
-## 2.5. Tox环境矩阵加速测试
-如果我们的软件支持3种操作系统，4个python版本，我们就必须在3种操作系统上，分别创建4个虚拟环境，安装上我们的软件和依赖，再执行测试，上传测试报告。这个动作不仅相当繁琐，还很容易引入错误。
+<span class="k">[gh-actions]</span>
+<span class="na">python</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">3.10</span><span class="o">:</span><span class="w"> </span><span class="s">py310</span>
+<span class="w">    </span><span class="na">3.9</span><span class="o">:</span><span class="w"> </span><span class="s">py39</span>
+<span class="w">    </span><span class="na">3.8</span><span class="o">:</span><span class="w"> </span><span class="s">py38</span>
 
-tox与CI结合，就可以帮助我们自动化完成这些环境的创建与测试执行。
-### 2.5.1. 什么是Tox？
-tox是一个通用的 virtualenv 管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。
+<span class="k">[testenv:lint]</span>
+<span class="na">extras</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">dev</span>
+<span class="w">    </span><span class="na">doc</span>
+<span class="na">deps</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">poetry</span>
+<span class="na">commands</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">poetry run isort {{ cookiecutter.project_slug }}</span>
+<span class="w">    </span><span class="na">poetry run black {{ cookiecutter.project_slug }} tests</span>
+<span class="w">    </span><span class="na">poetry run flake8 {{ cookiecutter.project_slug }}</span>
+<span class="w">    </span><span class="na">poetry build</span>
+<span class="w">    </span><span class="na">poetry run mkdocs build</span>
+<span class="w">    </span><span class="na">poetry run twine check dist/*</span>
 
-实际上，tox主要完成以下工作：
-1. 根据配置创建基于多个版本的python虚拟环境，并且保证这些虚拟环境的可复制性（需要与poetry或者其它依赖管理工具一起）。
-2. 运行测试和代码检查工具，比如pytest和flake8, black, mypy等。
-3. 隔离环境变量。tox不会从系统传递任何环境变量到虚拟环境中，这样可以保证测试的可重复性。
-### 2.5.2. Tox的工作原理
-下图是tox文档显示的工作原理图：
-![](https://images.jieyu.ai/images/20230120230120223442.png)
-
-根据这张图，tox读取配置文件，打包待测试软件，按照配置文件创建虚拟环境，并安装待测试软件和依赖，然后依次执行测试命令。最终，当所有虚拟环境下的测试都通过后，tox会生成测试报告。
-
-下面，我们主要通过一个典型的配置文件来介绍tox是如何配置和工作的。
-### 2.5.3. 如何配置Tox
-在ppw生成的项目中，存在以下tox.ini文件：
-```ini {class = &#39;line-numbers&#39;}
-[tox]
-isolated_build = true
-envlist = py38, py39, py310, lint
-skipsdist = false
-
-[gh-actions]
-python =
-    3.10: py310
-    3.9: py39
-    3.8: py38
-
-[testenv:lint]
-extras =
-    dev
-    doc
-deps =
-    poetry
-commands =
-    poetry run isort {{ cookiecutter.project_slug }}
-    poetry run black {{ cookiecutter.project_slug }} tests
-    poetry run flake8 {{ cookiecutter.project_slug }}
-    poetry build
-    poetry run mkdocs build
-    poetry run twine check dist/*
-
-[testenv]
-passenv = *
-setenv =
-    PYTHONPATH = {toxinidir}
-    PYTHONWARNINGS = ignore
-deps = 
-    poetry
-extras =
-    test
-commands =
-    poetry run pytest -s --cov={{ cookiecutter.project_slug }} --cov-append --cov-report=xml --cov-report term-missing tests
+<span class="k">[testenv]</span>
+<span class="na">passenv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">*</span>
+<span class="na">setenv</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">PYTHONPATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">{toxinidir}</span>
+<span class="w">    </span><span class="na">PYTHONWARNINGS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ignore</span>
+<span class="na">deps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="na">poetry</span>
+<span class="na">extras</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">test</span>
+<span class="na">commands</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">poetry run pytest -s --cov</span><span class="o">=</span><span class="s">{{ cookiecutter.project_slug }} --cov-append --cov-report=xml --cov-report term-missing tests</span>
 </code></pre></div></td></tr></table></div></p>
 <p>配置文件仍然是标准的ini文件格式（tox也支持通过pyproject.toml来进行配置）。我们主要关注以下几个部分：</p>
-<h5 id="2531-tox节">2.5.3.1. [tox]节<a class="headerlink" href="#2531-tox节" title="Permanent link">&para;</a></h5>
+<h5 id="2631-tox节">2.6.3.1. [tox]节<a class="headerlink" href="#2631-tox节" title="Permanent link">&para;</a></h5>
 <p>在测试一个package之前，tox首先需要构建一个sdit分发包。在打包这件事上，python走过了很长的一段历程，打包工具和标准也经历了很多变化，这些我们将用专门的一章来介绍。现在我们需要知道的是，最新的标准是PEP517和PEP518，tox已经支持这两个标准。但是，如果项目本身不支持这两个PEP，那么tox必须回到之前的打包方式。</p>
 <p>因此，tox引入了isolated_build这个选项，如果设置为true，tox会使用PEP517和PEP518的方式来打包项目。如果设置为false，tox会使用传统的方式(setup.py)来打包项目。如果通过poetry创建项目，并且在pyproject.toml中设置了requires和build-backend项的话，那么我们是需要设置isolated_build为true的。</p>
 <p>在所有ppw创建的项目中，我们都设置了isolated_build为true，这样才与pyproject.toml的设置一致。</p>
@@ -1644,8 +1542,10 @@ drwxrwxr-x<span class="w">  </span><span class="m">7</span><span class="w"> </sp
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>ERROR: No pyproject.toml or setup.py file found. The expected locations are:
-  /Users/christophersamiullah/repos/tox_examples/basic/pyproject.toml or /Users/christophersamiullah/repos/tox_examples/basic/setup.py
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>ERROR: No pyproject.toml or setup.py file found. The expected locations are:
+  /Users/christophersamiullah/repos/tox_examples/basic/pyproject.toml or 
+  /Users/christophersamiullah/repos/tox_examples/basic/setup.py
 You can
   1. Create one:
      https://tox.readthedocs.io/en/latest/example/package.html
@@ -1654,7 +1554,7 @@ You can
   3. Configure tox to use an isolated_build
 </code></pre></div></td></tr></table></div>
 这个选项在tox中是默认为false的，多数情况下无须配置。我们出于帮助大家理解tox工作原理的目的介绍它</p>
-<h5 id="2532-testenv">2.5.3.2. [testenv]<a class="headerlink" href="#2532-testenv" title="Permanent link">&para;</a></h5>
+<h5 id="2632-testenv">2.6.3.2. [testenv]<a class="headerlink" href="#2632-testenv" title="Permanent link">&para;</a></h5>
 <p>这一节的配置项适用于所有的虚拟环境。如果在某个虚拟环境下存在特别的选项和动作，需要象[testenv:lint]那样定义在自己的节中。</p>
 <p>这里我们还额外设置了一些环境变量字段。比如设置了PYTHONPATH，另外也忽略了一些警告信息。如果我们使用的一些库没有更新，那么将在测试过程中打印大量的deprecation警告，从而干扰我们检查测试过程中的错误信息。当然，我们也应该至少在测试中打开一次这种警告，以便知道哪些用法已经需要更新。</p>
 <p>一般情况下，tox是不会把宿主机上的环境变量传递给测试环境的。但有一些情况，比如重要服务的账号和口令，并不适合写在配置文件中，只能配置在宿主机的环境变量中。在这种情况下，我们需要通过passenv选项来指定需要传递的环境变量。这个选项的值是一个逗号分隔的字符串，可以是单个的环境变量，也可以象示例中那样，是一个通配符。</p>
@@ -1667,13 +1567,15 @@ You can
 <p>tox在安装被测试包时，一般是不安装声明为extra依赖的。但是，为了运行测试和进行lint，我们必须安装pytest, flake8这些库。在ppw生成的工程中，这些依赖被归类为dev, test和doc这些extra依赖。因此，我们也必须在测试中安装。其中test依赖是所有的环境都需要的，而dev和doc则是lint时所需要的，因此，我们在[testenv]中声明依赖到test，而只在[testenv:lint]中依赖到dev和doc。</p>
 <p>接下来就是commands字段。这是真正执行测试或者lint的地方。这里的命令是：</p>
 <p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code>commands =
-    poetry run pytest -s --cov=%package_under_test% --cov-append --cov-report=xml --cov-report term-missing tests
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>commands =
+    poetry run pytest -s --cov=%package_under_test% --cov-append --cov-report=xml 
+    --cov-report term-missing tests
 </code></pre></div></td></tr></table></div>
-"-s" 是告诉pytest不要捕获控制台输入输出。</p>
-<p>在ppw生成的工程里，我们已经集成了pytest-coverage插件，因此，通过适当的配置，我们就可以在测试时同时完成测试覆盖率的统计。--cov用来指示代码覆盖的范围，这里%package_under_test%需要替换成为我们的库名字。--cov-append表明此次测试的结果，将追加到之前的统计数据中，而不是完全替换之前的数据。--cov-report将测试数据输出为xml格式。--cov-report表明应该如何生成报告。</p>
+&ldquo;-s&rdquo; 是告诉pytest不要捕获控制台输入输出。</p>
+<p>在ppw生成的工程里，我们已经集成了pytest-coverage插件，因此，通过适当的配置，我们就可以在测试时同时完成测试覆盖率的统计。&ndash;cov用来指示代码覆盖的范围，这里%package_under_test%需要替换成为我们的库名字。&ndash;cov-append表明此次测试的结果，将追加到之前的统计数据中，而不是完全替换之前的数据。&ndash;cov-report将测试数据输出为xml格式。&ndash;cov-report表明应该如何生成报告。</p>
 <p>最后，tests是我们测试代码所在的文件夹。</p>
-<h5 id="2533-testenvlint">2.5.3.3. [testenv.lint]<a class="headerlink" href="#2533-testenvlint" title="Permanent link">&para;</a></h5>
+<h5 id="2633-testenvlint">2.6.3.3. [testenv.lint]<a class="headerlink" href="#2633-testenvlint" title="Permanent link">&para;</a></h5>
 <p>这一节的语法与[testenv]并无二致。只不过要运行的命令不一样。这里就不再一一解释。</p>
 
 

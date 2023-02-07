@@ -643,19 +643,19 @@
 
 <p>我们的探索之旅，就要接近Python开发流水线的终点了。终点站的主题是如何打包和发布应用。</p>
 <p>Python开发项目的成果，可能是一个Python库(package)，也可能是一个独立运行的应用程序（桌面应用程序或者后台服务）。</p>
-<p>Python库主要是供程序员之间复用代码（库）来使用的。PyPA（PyPA是Python软件基金会 -- Python Software Foundation，简称PSF资助的一个核心项目）通过PyPI和一系列工具，为Python库的分发提供了事实上的标准和基础设施。</p>
-<p>分发应用程序则要复杂不少。取决于我们使用的框架、技术和用户的使用方式，我们的应用程序可能需要分发到服务平台（Serivce platforms）-- 这一般适用于构建托管的SaaS服务，比如那些部署在Heroku， Google App Engine平台上的服务；也可能是部署在云上（无论是公有云还是私有云）的单个或者一组相互合作的容器 -- 这些都是适合于服务的模式；也有可能这是个面向消费级用户的App，可能需要通过App store, Android市场，或者Windows商店来分发 -- 这就还涉及到向导式安装程序的制作，以及如何运行Python程序的问题。</p>
+<p>Python库主要是供程序员之间复用代码（库）来使用的。PyPA（PyPA是Python软件基金会 &ndash; Python Software Foundation，简称PSF资助的一个核心项目）通过PyPI和一系列工具，为Python库的分发提供了事实上的标准和基础设施。</p>
+<p>分发应用程序则要复杂不少。取决于我们使用的框架、技术和用户的使用方式，我们的应用程序可能需要分发到服务平台（Serivce platforms）&ndash; 这一般适用于构建托管的SaaS服务，比如那些部署在Heroku， Google App Engine平台上的服务；也可能是部署在云上（无论是公有云还是私有云）的单个或者一组相互合作的容器 &ndash; 这些都是适合于服务的模式；也有可能这是个面向消费级用户的App，可能需要通过App store, Android市场，或者Windows商店来分发 &ndash; 这就还涉及到向导式安装程序的制作，以及如何运行Python程序的问题。</p>
 <p>Python项目应该使用哪种方式进行分发，取决于用户的使用方式，以及是否涉及到安装定制化。一些Python库可以通过console script的方式，在命令行下运行。如果一个Python库以<code>pip</code>的方式安装后无须配置即可运行，并且用户自己知道如何安装Python（及可能会创建虚拟环境），这样来分发应用也是允许的。但对多数消费级应用的用户而言，他们恐怕并不懂得如何通过<code>pip</code>来安装应用，并在命令行下启动应用。此外，通过<code>pip</code>安装时，安装过程中接受用户输入是不被允许的，因此，安装过程无法定制（比如，用户可以需要选择安装目的地、或者需要用户输入账户信息等）。</p>
 <h2 id="1-以python库的方式打包和分发">1. 以Python库的方式打包和分发<a class="headerlink" href="#1-以python库的方式打包和分发" title="Permanent link">&para;</a></h2>
 <p>在程序库的分发上，很多语言都建立了中央存储库和包管理器生态，比如Java的Maven，Ruby的RubyGems，Node.js的npm，Rust的Cargo，甚至C/C++的Conan。与其它语言类似，Python库的分发也是通过一个中央索引库(The Python Package Index)来实现的，简称PyPI，启用于2003年。PyPI的启用是Python得以加速发展的重要因素，因为Python广受欢迎的原因之一就是它的生态系统非常丰富，PyPI则正是构建这个生态系统的核心。</p>
 <p>让我们把时间拉回到2000年。当Python 1.6发布时，它添加了一个有意思的功能，distutils，奠定了Python的打包工具的开端。彼时它的功能还很简单，只提供了简单的打包功能，没有声明依赖和自动安装依赖的功能。</p>
-<p>2004年， distutils演化成为setuptools，引入了新的打包格式 -- egg。把包格式命为egg是一种程序员式的浪漫和幽默，因为蟒蛇是通过下蛋来实现繁殖的，而Python库正是Python开枝散叶的一个重要载体。同样的类比在其它语言中也存在，比如Ruby语言与gems的关系。 egg文件实际上就是一个zip包，只不过名字不同而已。这一阶段的setuptools还提供了一个新的命令，easy_install，用来安装python eggs，不过这个命令在2.7之后就被移除了。</p>
+<p>2004年， distutils演化成为setuptools，引入了新的打包格式 &ndash; egg。把包格式命为egg是一种程序员式的浪漫和幽默，因为蟒蛇是通过下蛋来实现繁殖的，而Python库正是Python开枝散叶的一个重要载体。同样的类比在其它语言中也存在，比如Ruby语言与gems的关系。 egg文件实际上就是一个zip包，只不过名字不同而已。这一阶段的setuptools还提供了一个新的命令，easy_install，用来安装python eggs，不过这个命令在2.7之后就被移除了。</p>
 <p>2008年，PyPA发布pip，替换掉了easy_install，随后将打包工具的行为标准化为PEP 438。</p>
 <p>在2012年时，随着PEP 427的通过，一种新的打包格式，即Wheel格式取代了egg格式，成为构建和打包（二进制）Python库的标准格式。今天你仍然能看到Python库安装后，会留下.egg-info文件，这个名字只是巨蟒经过后，留下的岁月痕迹，由pip在安装时临时生成，而与egg无关。</p>
-<p>尽管在《zen of Python》中写道，"永远都应该只有一种显而易见的解决之道"，但是，理想照进现实的过程总要经过曲折的投影。我们一路讲述下来，读者已经发现，Python在虚拟环境、依赖解析和打包构建等领域都先后出现了好多个方案来解决相似的问题，出现了让人莫衷一是的”百花齐放“，如果没有经过系统的梳理，很多人会难免感到困惑，不知道哪一个方案能够通向未来，自己掌握的技术与资讯，是否已经被社区抛弃。好在Python社区现在已经通过一系列的PEP回答了标准问题，相关的工具和生态逐渐在遵循标准的基础上建立起来了，今后的这样的”百花齐放“，可能会少一些。是否遵循最新的PEP，也正是<code>ppw</code>工具和本书选择某项技术的标尺。</p>
+<p>尽管在《zen of Python》中写道，&rdquo;永远都应该只有一种显而易见的解决之道&rdquo;，但是，理想照进现实的过程总要经过曲折的投影。我们一路讲述下来，读者已经发现，Python在虚拟环境、依赖解析和打包构建等领域都先后出现了好多个方案来解决相似的问题，出现了让人莫衷一是的”百花齐放“，如果没有经过系统的梳理，很多人会难免感到困惑，不知道哪一个方案能够通向未来，自己掌握的技术与资讯，是否已经被社区抛弃。好在Python社区现在已经通过一系列的PEP回答了标准问题，相关的工具和生态逐渐在遵循标准的基础上建立起来了，今后的这样的”百花齐放“，可能会少一些。是否遵循最新的PEP，也正是<code>ppw</code>工具和本书选择某项技术的标尺。</p>
 <p>在<code>ppw</code>中，我们的发布是在Github Actions中完成的。这部分我们已经在<a href="../chap09/">持续集成</a>那一章讲过了。万一你存在手工发布的需求，那么请回顾<a href="../chap05/#基于Poetry进行发行包的构建">基于Poetry进行发行包的构建</a>那一节。</p>
 <p>这里简要地提及一下，在Poetry出现之前，我们是如何发布Python库的，以防读者偶尔还会遇到需要维护老旧的Python项目的情况。我们需要通过<code>twine</code>这个命令来发布Python库。这个命令可以通过<code>pip</code>来安装：
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>pip install twine
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>twine
 </code></pre></div></td></tr></table></div></p>
 <p>尽管<code>ppw</code>生成的项目中，我们使用了别的技术来发布Python库，但这个命令也保留了下来。用在<code>poetry build</code>之后，检查构建物是否合乎PyPI的规定，以提前预防发布失败。</p>
 <h3 id="11-打包和分发流程">1.1. 打包和分发流程<a class="headerlink" href="#11-打包和分发流程" title="Permanent link">&para;</a></h3>
@@ -666,7 +666,7 @@
 <p>准备一个描述包元数据（名称、版本等）以及如何创建构建工件的配置文件。对于大多数库，这将是一个 pyproject.toml 文件，在源代码树中手动维护。</p>
 </li>
 <li>
-<p>创建要发送到库分发服务（通常是 PyPI）的构建结果；生成工作的格式是"sdist"和（或）"wheel"。这些是由构建工具使用上一步中的配置文件创建的。</p>
+<p>创建要发送到库分发服务（通常是 PyPI）的构建结果；生成工作的格式是&rdquo;sdist&rdquo;和（或）&rdquo;wheel&rdquo;。这些是由构建工具使用上一步中的配置文件创建的。</p>
 </li>
 <li>
 <p>将构建的结果上传到包分发服务。</p>
@@ -744,7 +744,7 @@ This package was created with the [ppw](https://zillionare.github.io/python-proj
 <p><strong>Classifier字段：</strong>分类器描述了这个项目的一些分类属性。这些属性会在PyPI上显示，并且可以作为筛选条件来进行查找和过滤，请参见下图：</p>
 <p><img alt="" src="../assets/img/chap11/meta_classifier.png" /></p>
 <p>PyPI的分类系统是一个树形结构。最顶层的分类是框架（Framework)， 主题（Topic），开发状态（Development Status），操作系统（Operating System）等10个大类别。其实，PyPi上的第三方库可谓浩如烟海，人工查询这些分类意义并不大。这些分类符有助于PyPI组织和管理所有的库，但并不是强制的，对包的安装也没有帮助。但是，PyPA仍然推荐在任何项目中，都至少声明该库工作的Python版本、license, 操作系统等。</p>
-<p>此外，新加入的'Typing'分类符比较有意思。它的作用是告诉PyPI这个项目是一个类型注解的项目。如果我们的项目是一个类型注解的项目，那么我们应该在项目的源代码目录下加入py.typed文件，并在pyproject.toml中加入这个分类符：
+<p>此外，新加入的&rsquo;Typing&rsquo;分类符比较有意思。它的作用是告诉PyPI这个项目是一个类型注解的项目。如果我们的项目是一个类型注解的项目，那么我们应该在项目的源代码目录下加入py.typed文件，并在pyproject.toml中加入这个分类符：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">classifiers</span><span class="o">=</span><span class="p">[</span>
@@ -848,42 +848,42 @@ This package was created with the [ppw](https://zillionare.github.io/python-proj
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code>pip install tea
-Collecting tea
-  Downloading tea-1.9.8-py2.py3-none-any.whl (346 kB)
-     |████████████████████████████████| 346 kB 10.4 MB/s
-Collecting spoon==2.27.0
-  Downloading spoon-2.27.0-py2.py3-none-any.whl (312 kB)
-     |████████████████████████████████| 312 kB 19.2 MB/s
-Collecting cup&gt;=1.6.0
-  Downloading cup-3.22.0-py2.py3-none-any.whl (397 kB)
-     |████████████████████████████████| 397 kB 28.2 MB/s
-INFO: pip is looking at multiple versions of this package to determine
-which version is compatible with other requirements.
-This could take a while.
-  Downloading cup-3.21.0-py2.py3-none-any.whl (395 kB)
-     |████████████████████████████████| 395 kB 27.0 MB/s
-  Downloading cup-3.20.0-py2.py3-none-any.whl (394 kB)
-     |████████████████████████████████| 394 kB 24.4 MB/s
-  Downloading cup-3.19.1-py2.py3-none-any.whl (394 kB)
-     |████████████████████████████████| 394 kB 21.3 MB/s
-  Downloading cup-3.19.0-py2.py3-none-any.whl (394 kB)
-     |████████████████████████████████| 394 kB 26.2 MB/s
-  Downloading cup-3.18.0-py2.py3-none-any.whl (393 kB)
-     |████████████████████████████████| 393 kB 22.1 MB/s
-  Downloading cup-3.17.0-py2.py3-none-any.whl (382 kB)
-     |████████████████████████████████| 382 kB 23.8 MB/s
-  Downloading cup-3.16.0-py2.py3-none-any.whl (376 kB)
-     |████████████████████████████████| 376 kB 27.5 MB/s
-  Downloading cup-3.15.1-py2.py3-none-any.whl (385 kB)
-     |████████████████████████████████| 385 kB 30.4 MB/s
-INFO: pip is looking at multiple versions of this package to determine
-which version is compatible with other requirements.
-This could take a while.
-  Downloading cup-3.15.0-py2.py3-none-any.whl (378 kB)
-     |████████████████████████████████| 378 kB 21.4 MB/s
-  Downloading cup-3.14.0-py2.py3-none-any.whl (372 kB)
-     |████████████████████████████████| 372 kB 21.1 MB/s
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>tea
+Collecting<span class="w"> </span>tea
+<span class="w">  </span>Downloading<span class="w"> </span>tea-1.9.8-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">346</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">346</span><span class="w"> </span>kB<span class="w"> </span><span class="m">10</span>.4<span class="w"> </span>MB/s
+Collecting<span class="w"> </span><span class="nv">spoon</span><span class="o">==</span><span class="m">2</span>.27.0
+<span class="w">  </span>Downloading<span class="w"> </span>spoon-2.27.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">312</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">312</span><span class="w"> </span>kB<span class="w"> </span><span class="m">19</span>.2<span class="w"> </span>MB/s
+Collecting<span class="w"> </span>cup&gt;<span class="o">=</span><span class="m">1</span>.6.0
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.22.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">397</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">397</span><span class="w"> </span>kB<span class="w"> </span><span class="m">28</span>.2<span class="w"> </span>MB/s
+INFO:<span class="w"> </span>pip<span class="w"> </span>is<span class="w"> </span>looking<span class="w"> </span>at<span class="w"> </span>multiple<span class="w"> </span>versions<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>package<span class="w"> </span>to<span class="w"> </span>determine
+which<span class="w"> </span>version<span class="w"> </span>is<span class="w"> </span>compatible<span class="w"> </span>with<span class="w"> </span>other<span class="w"> </span>requirements.
+This<span class="w"> </span>could<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span><span class="k">while</span>.
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.21.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">395</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">395</span><span class="w"> </span>kB<span class="w"> </span><span class="m">27</span>.0<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.20.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">394</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">394</span><span class="w"> </span>kB<span class="w"> </span><span class="m">24</span>.4<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.19.1-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">394</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">394</span><span class="w"> </span>kB<span class="w"> </span><span class="m">21</span>.3<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.19.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">394</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">394</span><span class="w"> </span>kB<span class="w"> </span><span class="m">26</span>.2<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.18.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">393</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">393</span><span class="w"> </span>kB<span class="w"> </span><span class="m">22</span>.1<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.17.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">382</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">382</span><span class="w"> </span>kB<span class="w"> </span><span class="m">23</span>.8<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.16.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">376</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">376</span><span class="w"> </span>kB<span class="w"> </span><span class="m">27</span>.5<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.15.1-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">385</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">385</span><span class="w"> </span>kB<span class="w"> </span><span class="m">30</span>.4<span class="w"> </span>MB/s
+INFO:<span class="w"> </span>pip<span class="w"> </span>is<span class="w"> </span>looking<span class="w"> </span>at<span class="w"> </span>multiple<span class="w"> </span>versions<span class="w"> </span>of<span class="w"> </span>this<span class="w"> </span>package<span class="w"> </span>to<span class="w"> </span>determine
+which<span class="w"> </span>version<span class="w"> </span>is<span class="w"> </span>compatible<span class="w"> </span>with<span class="w"> </span>other<span class="w"> </span>requirements.
+This<span class="w"> </span>could<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span><span class="k">while</span>.
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.15.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">378</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">378</span><span class="w"> </span>kB<span class="w"> </span><span class="m">21</span>.4<span class="w"> </span>MB/s
+<span class="w">  </span>Downloading<span class="w"> </span>cup-3.14.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">372</span><span class="w"> </span>kB<span class="o">)</span>
+<span class="w">     </span><span class="p">|</span>████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">372</span><span class="w"> </span>kB<span class="w"> </span><span class="m">21</span>.1<span class="w"> </span>MB/s
 </code></pre></div></td></tr></table></div>
 在这里，<code>tea</code>依赖于<code>hot-water</code>, <code>spoon</code>, <code>cup</code>。当安装<code>tea</code>时，<code>pip</code>下载了最新的<code>spoon</code>和<code>cup</code>，发现两者不兼容，于是它不得不向前搜索兼容的版本，这个功能被称之为回溯，是从20.3起才有的功能。由于依赖信息不能通过查询PyPI得到，所以它不得不一次又一次的下载早前版本的包，从这些包中提取依赖信息，看是否与<code>spoon</code>兼容，不断重复这个过程直到找到一个兼容的版本。</p>
 <p>这个过程我们在Poetry进行依赖解析时也看到过。我们在<a href="../chap05/#poetry依赖解析的工作原理">第5章 poetry依赖解析的工作原理</a>中解释过，PyPI上并没有某个库的依赖树，所以，Poetry要知道某个库的依赖项，就必须先把它下载下来。这个说法其实只是部分正确。在读过<a href="./#分发包的源数据">分发包的源数据</a>那一节之后，我们已经知道，这些信息已经上传到了PyPI，只是由于某些历史原因，PyPI并没有把它们单独提取出来以供使用而已。</p>
@@ -948,13 +948,13 @@ flake8-docstrings = { version = &quot;^1.6.0&quot;, optional = true }
 <p>makeself<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup>是一个可用以Unix/Linux和MacOs下的自解压工具。如果用户使用Windoes，则在安装了cygwin的前提下，也可使用（不过这样一来，基本上就将普通用户排除在外了，所以并不是好的方案）。makeself本身是一个小型 shell 脚本，可从指定目录生成可自解压的压缩文档。生成的文件显示为 shell 脚本，并且可以在shell下启动执行，执行后，这个压缩文档将自行解压缩到一个临时目录，并执行可选的任意命令（例如安装脚本）。这与在 Windows 世界中使用 WinZip Self-Extractor 生成的档案非常相似。Makeself 档案还包括用于完整性自我验证的校验和（CRC 和/或 MD5/SHA256 校验和）。</p>
 <p>我们介绍这个工具，是因为在运维领域它应用非常广泛，在Github上也有过千stars。另外，对于Python开发者来说，这个概念很可能并不陌生。如果你在Ubuntu下安装过Anaconda，你应该知道，Anaconda的安装包就是一个类似于shell脚本的压缩包，不确定的是，它是用makeself打包的，还是用其它工具打包的。</p>
 <p>Makeself 的使用方法也非常简单，几乎没有学习成本。在Ubuntu下，它可以通过以下命令安装:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>sudo apt-get install makeself
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>makeself
 </code></pre></div></td></tr></table></div>
 在其它操作系统上，您可能需要从其官网<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup>下载安装。也可以通过<code>conda</code>命令来安装：
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$ conda install -c conda-forge makeself
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>makeself
 </code></pre></div></td></tr></table></div></p>
 <p>它的用法如下：</p>
-<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$ makeself.sh [args] archive_dir file_name label startup_script [script_args]
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>makeself.sh<span class="w"> </span><span class="o">[</span>args<span class="o">]</span><span class="w"> </span>archive_dir<span class="w"> </span>file_name<span class="w"> </span>label<span class="w"> </span>startup_script<span class="w"> </span><span class="o">[</span>script_args<span class="o">]</span>
 </code></pre></div></td></tr></table></div>
 args是Makeself的可选参数。参数比较多，涵盖了如何压缩、是否加密、解压缩行为等，这里就不一一详述。请读者在需要时参考官方文档<sup id="fnref4:2"><a class="footnote-ref" href="#fn:2">2</a></sup>。
 archive_dir是包含归档文件的目录名，比如项目下的dist文件夹；file_name是要创建的归档文件名，比如install_sample.sh；label是归档文件的描述，比如“Install sample”;startup_script是归档文件解压后执行的脚本，比如install.sh；script_args是startup_script的参数。</p>
@@ -977,25 +977,25 @@ archive_dir是包含归档文件的目录名，比如项目下的dist文件夹�
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
-<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code>#!/bin/bash
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="ch">#!/bin/bash</span>
 
-poetry build
-rm -rf /tmp/sample
-mkdir /tmp/sample
+poetry<span class="w"> </span>build
+rm<span class="w"> </span>-rf<span class="w"> </span>/tmp/sample
+mkdir<span class="w"> </span>/tmp/sample
 
-version=`poetry version | awk &#39;{print $2}&#39;`
+<span class="nv">version</span><span class="o">=</span><span class="sb">`</span>poetry<span class="w"> </span>version<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="sb">`</span>
 
-echo &quot;version is $version&quot;
-# prepare archive
-cp dist/sample-$version-py3-none-any.whl /tmp/sample/
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;version is </span><span class="nv">$version</span><span class="s2">&quot;</span>
+<span class="c1"># prepare archive</span>
+cp<span class="w"> </span>dist/sample-<span class="nv">$version</span>-py3-none-any.whl<span class="w"> </span>/tmp/sample/
 
-# prepare install script
-echo &quot;#! /bin/bash&quot; &gt; /tmp/sample/install.sh
-echo &quot;pip install ./sample-$version-py3-none-any.whl&quot; &gt;&gt; /tmp/sample/install.sh
-chmod +x /tmp/sample/install.sh
+<span class="c1"># prepare install script</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#! /bin/bash&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/sample/install.sh
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;pip install ./sample-</span><span class="nv">$version</span><span class="s2">-py3-none-any.whl&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/tmp/sample/install.sh
+chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/sample/install.sh
 
-# packaging with makeself
-makeself /tmp/sample install_sample.sh &quot;sample package made by makeself&quot; ./install.sh
+<span class="c1"># packaging with makeself</span>
+makeself<span class="w"> </span>/tmp/sample<span class="w"> </span>install_sample.sh<span class="w"> </span><span class="s2">&quot;sample package made by makeself&quot;</span><span class="w"> </span>./install.sh
 </code></pre></div></td></tr></table></div>
 非常轻巧和干净，这正是我们介绍它的目的。我们这里使用了一个名为<code>install.sh</code>的脚本作为启动脚本。在这个脚本里，我们仅仅演示了如何执行安装命令，一个安整的安装脚本可能需要：
 1. 检查符合版本要求的Python是否可用，如果不可用，下载并安装。这里也可以询问用户意见，如果用户不接受，则退出安装。
@@ -1006,7 +1006,7 @@ makeself /tmp/sample install_sample.sh &quot;sample package made by makeself&quo
 6. 安装应用程序：<code>pip install ./sample-$version-py3-none-any.whl</code>。安装完成后，这个whl文件也可以删除。
 7. 创建一个启动脚本（假设名字为start.sh），这个启动脚本的作用是通过虚拟环境中的python来调用我们的应用程序<code>sample</code>。如果<code>sample</code>程序提供了<code>console script</code>，那么启动脚本的任务就是直接调用它；否则，就要看<code>sample</code>的入口程序是如何提供的了。这部分只能交给读者自行完成了。
 8. 创建一个软链接，将启动脚本链接到<code>/usr/local/bin</code>下，这样就可以在任何地方通过<code>sample</code>来启动我们的应用程序了。命令是:
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>sudo ln -s path/to/your/app/start.sh /usr/local/bin/sample
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>path/to/your/app/start.sh<span class="w"> </span>/usr/local/bin/sample
 </code></pre></div></td></tr></table></div></p>
 <h4 id="212-pyinstaller和nuitka">2.1.2. PyInstaller和Nuitka<a class="headerlink" href="#212-pyinstaller和nuitka" title="Permanent link">&para;</a></h4>
 <p>这两者都是打包工具。其目标都是将Python程序打包成一个自包含的可执行文件（也可能是文件夹）。这样，我们就可以将其分发给客户，无论客户的目标机器上是否安装有Python，都可以直接运行，并且所有的依赖都已经包含了。除了上述功能外，两个工具都还有加密Python程序的能力，这也是国内不少开发者所需要的功能。</p>
@@ -1048,7 +1048,7 @@ Nuitka-Options:WARNING: that is intended.
 Nuitka:WARNING: Using very slow fallback for ordered sets, please install &#39;orderedset&#39; PyPI package for best Python
 Nuitka:WARNING: compile time performance.
 </code></pre></div></td></tr></table></div>
-对我们这个简单的程序，这些警告不会有任何影响。如果你的程序中使用了<code>set</code>，那么你应该安装<code>orderedset</code>，这样可以提高编译速度。但接下来，它要求下载并安装MinGW64和ccache。这个下载可能会失败，如果是这样，你需要自行下载，并且将下载的压缩包解压缩后，按提示放到指定的位置，比如'C:\Users\Administrator\AppData\Local\Nuitka\Nuitka\Cache\downloads\gcc\x86_64\11.3.0-14.0.3-10.0.0-msvcrt-r3'。这个位置可能会因为你的系统不同而不同，但都会打印在命令行窗口中。</p>
+对我们这个简单的程序，这些警告不会有任何影响。如果你的程序中使用了<code>set</code>，那么你应该安装<code>orderedset</code>，这样可以提高编译速度。但接下来，它要求下载并安装MinGW64和ccache。这个下载可能会失败，如果是这样，你需要自行下载，并且将下载的压缩包解压缩后，按提示放到指定的位置，比如&rsquo;C:\Users\Administrator\AppData\Local\Nuitka\Nuitka\Cache\downloads\gcc\x86_64\11.3.0-14.0.3-10.0.0-msvcrt-r3&rsquo;。这个位置可能会因为你的系统不同而不同，但都会打印在命令行窗口中。</p>
 <p>接下来，它开始进行真正的编译：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -1074,23 +1074,23 @@ Nuitka:INFO: Keeping build directory &#39;greetings.build&#39;.
 Nuitka:INFO: Successfully created &#39;greetings.exe&#39;.
 Nuitka:INFO: Execute it by launching &#39;greetings.cmd&#39;, the batch file needs to set environment.
 </code></pre></div></td></tr></table></div>
-根据提示，我们看到它将python代码转换成c的源码，并进一步编译成windows上可以运行的原生程序。最终，我们得到了两个文件，一个是'greetings.exe'，另一个是'greetings.cmd'。如果我们是在刚刚进行打包的窗口中，则可以直接运行<code>greetings.exe</code>，否则，我们应该运行<code>greetings.cmd</code>。</p>
+根据提示，我们看到它将python代码转换成c的源码，并进一步编译成windows上可以运行的原生程序。最终，我们得到了两个文件，一个是&rsquo;greetings.exe&rsquo;，另一个是&rsquo;greetings.cmd&rsquo;。如果我们是在刚刚进行打包的窗口中，则可以直接运行<code>greetings.exe</code>，否则，我们应该运行<code>greetings.cmd</code>。</p>
 <p>运行结果如下：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>$ greetings.exe greeting aaron
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>greetings.exe<span class="w"> </span>greeting<span class="w"> </span>aaron
 
-hi aaron
+hi<span class="w"> </span>aaron
 </code></pre></div></td></tr></table></div>
-这仅仅是一个命令行程序，所以看上去可能不那么令人兴奋。但如果我们打算从资源管理器里找到它，双击并运行它，我们会被提示缺少某些python的dll。为了使这个程序完全独立，我们需要在打包时加上--standalone参数：
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$ python -m nuitka --standalone --follow-imports greetings.py
+这仅仅是一个命令行程序，所以看上去可能不那么令人兴奋。但如果我们打算从资源管理器里找到它，双击并运行它，我们会被提示缺少某些python的dll。为了使这个程序完全独立，我们需要在打包时加上&ndash;standalone参数：
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>nuitka<span class="w"> </span>--standalone<span class="w"> </span>--follow-imports<span class="w"> </span>greetings.py
 </code></pre></div></td></tr></table></div>
 这一次，又会提示下载一些东西，主要是msvc的运行时，但这次下载会非常顺利。最终，编译成功，我们得到了一个名为greetings.dist的文件夹。现在，我们可以直接双击运行greetings.exe了（由于我们的greetings程序需要接收用户输入，所以我们还是得从命令行中打开它。不过这次，我们可以将新生成的文件夹拷贝到另一个机器，没有安装python和nuitka的机器上，然后在命令行下运行greetings.exe）：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>$ greetings.exe greeting aaron
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>greetings.exe<span class="w"> </span>greeting<span class="w"> </span>aaron
 
-hi aaron
+hi<span class="w"> </span>aaron
 </code></pre></div></td></tr></table></div></p>
 <p>Nuitka的打包构建过程已经可以和poetry整合，我们只需要这样修改<code>pyproject.toml</code>即可工作：
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -1109,23 +1109,23 @@ hi aaron
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code>[build-system]
-requires = [&quot;setuptools&gt;=42&quot;, &quot;wheel&quot;, &quot;nuitka&quot;, &quot;toml&quot;]
-build-backend = &quot;nuitka.distutils.Build&quot;
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">[build-system]</span>
+<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;setuptools&gt;=42&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;wheel&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;nuitka&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;toml&quot;</span><span class="p">]</span>
+<span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;nuitka.distutils.Build&quot;</span>
 
-[nuitka]
-# These are not recommended, but they make it obvious to have effect.
+<span class="k">[nuitka]</span>
+<span class="c1"># These are not recommended, but they make it obvious to have effect.</span>
 
-# boolean option, e.g. if you cared for C compilation commands, leading
-# dashes are omitted
-show-scons = true
+<span class="c1"># boolean option, e.g. if you cared for C compilation commands, leading</span>
+<span class="c1"># dashes are omitted</span>
+<span class="n">show-scons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 
-# options with single values, e.g. enable a plugin of Nuitka
-enable-plugin = pyside2
+<span class="c1"># options with single values, e.g. enable a plugin of Nuitka</span>
+<span class="n">enable-plugin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pyside2</span>
 
-# options with several values, e.g. avoiding including modules, accepts
-# list argument.
-nofollow-import-to = [&quot;*.tests&quot;, &quot;*.distutils&quot;]
+<span class="c1"># options with several values, e.g. avoiding including modules, accepts</span>
+<span class="c1"># list argument.</span>
+<span class="n">nofollow-import-to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;*.tests&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;*.distutils&quot;</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div></p>
 <p>现在，我们来思考一下，PyInstaller和Nuitka的定位。它们是打包程序，显然。但他们并不是安装程序。通过它们打包，我们实现的目标是让这些程序可以在用户的桌面操作系统上，在不安装Python和依赖的情况下，就可以直接运行，但是，它只适合无须安装的“绿色程序”，如果我们的程序需要创建桌面快捷方式，修改注册表，那么它将无能为力。</p>
 <p>如果您的程序需要有一个较华丽的安装界面，建议您查看一下Inno Setup<sup id="fnref2:4"><a class="footnote-ref" href="#fn:4">4</a></sup>或者Wix<sup id="fnref:9"><a class="footnote-ref" href="#fn:9">9</a></sup>。</p>
@@ -1137,7 +1137,7 @@ nofollow-import-to = [&quot;*.tests&quot;, &quot;*.distutils&quot;]
 <p><img alt="" src="../assets/img/chap11/kivy_go.png" width="50%" /></p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>如果你对围棋感兴趣，这里推荐一个名为KaTrain的围棋训练软件，它也是用Python和Kivy开发的。它基于KataGo -- 最强算力的开源围棋AI，一些谣传认为，某些商业软件，包括某些国家队用以训练的AI围棋软件，都“借鉴”了KataGo的算法。</p>
+<p>如果你对围棋感兴趣，这里推荐一个名为KaTrain的围棋训练软件，它也是用Python和Kivy开发的。它基于KataGo &ndash; 最强算力的开源围棋AI，一些谣传认为，某些商业软件，包括某些国家队用以训练的AI围棋软件，都“借鉴”了KataGo的算法。</p>
 </div>
 <p>Kivy的短板可能也在于它的独特的UI设计语言。Kivy的UI toolkit保证了基于Kivy的应用程序可以很好在运行在Android, iOS, Linux甚至Raspberry Pi上，但是也使得它缺少了原生应用程序的某些操作能力。</p>
 <h4 id="beeware">BeeWare<a class="headerlink" href="#beeware" title="Permanent link">&para;</a></h4>
@@ -1185,22 +1185,22 @@ nofollow-import-to = [&quot;*.tests&quot;, &quot;*.distutils&quot;]
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code>version=`poetry version | awk &#39;{print $2}&#39;`
-wheel=&quot;/root/sample/sample-$version-py3-none-any.whl&quot;
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nv">version</span><span class="o">=</span><span class="sb">`</span>poetry<span class="w"> </span>version<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="sb">`</span>
+<span class="nv">wheel</span><span class="o">=</span><span class="s2">&quot;/root/sample/sample-</span><span class="nv">$version</span><span class="s2">-py3-none-any.whl&quot;</span>
 
-poetry build
+poetry<span class="w"> </span>build
 
-# 将wheel包拷贝到rootfs目录下以便构建镜像时进行安装。我们也可以将wheel包上传到pypi，然后在
-# Dockerfile中通过pip install sample安装。
-cp ../dist/*$version*.whl rootfs/root/sample/
+<span class="c1"># 将wheel包拷贝到rootfs目录下以便构建镜像时进行安装。我们也可以将wheel包上传到pypi，然后在</span>
+<span class="c1"># Dockerfile中通过pip install sample安装。</span>
+cp<span class="w"> </span>../dist/*<span class="nv">$version</span>*.whl<span class="w"> </span>rootfs/root/sample/
 
-# 移除上一次编译生成的镜像，重新构建。这将生成一个名为sample的镜像。
-# 注意我们在构建过程中通过--build-arg传入编译期变量给镜像
-docker rmi sample
-docker build --build-arg version=$version --build-arg wheel=$wheel . -t sample
+<span class="c1"># 移除上一次编译生成的镜像，重新构建。这将生成一个名为sample的镜像。</span>
+<span class="c1"># 注意我们在构建过程中通过--build-arg传入编译期变量给镜像</span>
+docker<span class="w"> </span>rmi<span class="w"> </span>sample
+docker<span class="w"> </span>build<span class="w"> </span>--build-arg<span class="w"> </span><span class="nv">version</span><span class="o">=</span><span class="nv">$version</span><span class="w"> </span>--build-arg<span class="w"> </span><span class="nv">wheel</span><span class="o">=</span><span class="nv">$wheel</span><span class="w"> </span>.<span class="w"> </span>-t<span class="w"> </span>sample
 
-# 启动服务
-docker run -d --name sample -p 7080:7080 sample
+<span class="c1"># 启动服务</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>sample<span class="w"> </span>-p<span class="w"> </span><span class="m">7080</span>:7080<span class="w"> </span>sample
 </code></pre></div></td></tr></table></div>
 在这个构建脚本里，我们首先构建了sample项目的wheel包，然后将它拷贝到rootfs目录下。接着，我们执行<code>docker build</code>命令，构建了一个名为sample的镜像，最后，我们以此镜像为基础，启动了一个名为sample的容器，并且将端口7080映射为主机端口。</p>
 <p>Dockerfile是这一节的核心，现在，我们来看看Dockerfile的内容：
@@ -1218,28 +1218,28 @@ docker run -d --name sample -p 7080:7080 sample
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code>FROM python:3.8-alpine3.17
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.8-alpine3.17</span>
 
-WORKDIR /
-COPY rootfs ./
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/</span>
+<span class="k">COPY</span><span class="w"> </span>rootfs<span class="w"> </span>./
 
-ARG version
-ARG pypi=https://pypi.tuna.tsinghua.edu.cn/simple
-ARG wheel
-ENV PORT=7080
+<span class="k">ARG</span><span class="w"> </span>version
+<span class="k">ARG</span><span class="w"> </span><span class="nv">pypi</span><span class="o">=</span>https://pypi.tuna.tsinghua.edu.cn/simple
+<span class="k">ARG</span><span class="w"> </span>wheel
+<span class="k">ENV</span><span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">7080</span>
 
-RUN pip config set global.index-url ${pypi} \
-    &amp;&amp; pip install ${wheel}
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>global.index-url<span class="w"> </span><span class="si">${</span><span class="nv">pypi</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="si">${</span><span class="nv">wheel</span><span class="si">}</span>
 
-EXPOSE $PORT
-ENTRYPOINT [&quot;/root/entrypoint.sh&quot;]
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">$PORT</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/root/entrypoint.sh&quot;</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
-构建任何镜像时，我们都是从一个基础的镜像开始。这个基础镜像可以是象Linux Alpine或者Ubuntu这样的操作系统，也可以是构建在操作系统之上的应用镜像。镜像的标识符一般是"开发者/镜像名:版本"的形式，比如python:3.8-alpine3.17。这里冒号之后的字符串是标签，一般是其版本号，如果不指定版本，那么默认是latest。如果没有指定开发者，意味着这是一个来自于官方的镜像，或者是我们自己构建的本地镜像。</p>
+构建任何镜像时，我们都是从一个基础的镜像开始。这个基础镜像可以是象Linux Alpine或者Ubuntu这样的操作系统，也可以是构建在操作系统之上的应用镜像。镜像的标识符一般是&rdquo;开发者/镜像名:版本&rdquo;的形式，比如python:3.8-alpine3.17。这里冒号之后的字符串是标签，一般是其版本号，如果不指定版本，那么默认是latest。如果没有指定开发者，意味着这是一个来自于官方的镜像，或者是我们自己构建的本地镜像。</p>
 <p>镜像的分发是一个二级架构。如果在本地不存在python:3.8-alpine3.17这个镜像，docker就会去Docker Hub<sup id="fnref:12"><a class="footnote-ref" href="#fn:12">12</a></sup>上查找。Docker Hub，类似于PyPI，是一个公共的镜像仓库，它提供了大量的镜像供我们使用。现在，我们来看看Docker Hub上的python:3.8-alpine3.17这个镜像，它究竟是什么。在Docker Hub上，我们要通过镜像名（即不带版本标签）来搜索。这样我们得到如下结果：</p>
 <p><img alt="" src="../assets/img/chap11/docker_hub_python.png" width="50%" /></p>
 <p>这个镜像被下载超过10亿次。对比java镜像，仅被下载1亿次。这不仅说明Python的使用有多么广泛，也说明了Python在后台服务开发上有多重要。</p>
-<p>点击上图中的链接，我们可以进入详情页，找到3.8-alpine3.17这个标签，点击进去，我们会跳转到Github上，查看其Dockerfile的内容：
-<img alt="" src="../assets/img/chap11/python3.8_alpine_dockerfile.png" width="50%" /></p>
+<p>点击上图中的链接，我们可以进入详情页，找到3.8-alpine3.17这个标签，点击进去，我们会跳转到Github上，查看其Dockerfile的内容：</p>
+<p><img alt="" src="../assets/img/chap11/python3.8_alpine_dockerfile.png" width="50%" /></p>
 <p>Alpine是一个轻量级的Linux发行版，基于Alpine构建的镜像，其大小只有5M左右，因此常常是构建微服务的首选。我们的镜像，最终也是使用的这个操作系统内核。</p>
 <p>然后我们指定当前的工作目录为根目录，并将rootfs目录下的文件拷贝到容器的根目录下。接着，它安装了sample项目的wheel包。最后，它设置了容器的入口点为/root/entrypoint.sh。</p>
 <p>我们用<code>ARG</code>来传递docker编译期变量。这里的version和wheel是两个编译器变量，它们是由build.sh通过<code>--arg $version</code>传递进来的。<code>EXPOSE</code>是将端口暴露出来。我们在<code>entrypoint.sh</code>中启动了一个监听在$PORT上的HTTP服务，我们必须把这个端口暴露给主机，以便我们可以从主机上访问这里的服务。</p>
@@ -1254,7 +1254,7 @@ python3 -m http.server -d /root/sample $PORT
 <p>当我们在本地测试通过后，就可以在Docker Hub上注册账号，将我们的镜像发布上去，供其它人下载，这样就完成了基于容器的应用发布。当然，我们也可以建立一个私有云的镜像仓库，将镜像发布到私有云上，供内部部署使用。最终我们构建的镜像只有66MB左右。实际上，由于docker文件系统的分层设计，如果其它人从Docker Hub上下载我们的镜像，他们实际上要下载的数据量会更小。</p>
 <p>这就是构建基于容器的服务的全部过程，是不是出人意料地简单和可靠？在本书中，我们用了非常多的篇幅来讲如何进行隔离，这里提供了又一种方式，它甚至比之前所有的方式都更加简单和可靠。运行在容器中的服务，独占了文件系统和计算资源，无论是与宿主机、还是与运行在同一宿主机上的其它容器都互不干扰。而且，我们可以无限次地从同一镜像，生成相同的容器。可复现的部署终于得到完美的实现。</p>
 <p>我们在<code>build.sh</code>中，指定了容器的端口为7080。现在，容器已经启动，服务也正在运行，让我们访问它吧：</p>
-<p><img alt="" src="../assets/img/chap11/end.png" /></p>
+<p><img alt="" src="../assets/img/chap11/end.png" width="80%" /></p>
 <p>我们在第一章里看到过这张图。</p>
 <p>就让我们从这里开始，也在这里结束。现在，是你开始自己的火星探索之旅的时刻了。</p>
 <div class="footnote">
