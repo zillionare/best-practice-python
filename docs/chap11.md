@@ -437,15 +437,13 @@ BeeWare[^11]同样是一个跨平台的Python框架。它基于BSD License，完
 
 移动端的差异远大于桌面端，因此，能利用移动设备的最新特性，对打造一款吸引人的移动应用是十分重要的。出于这个考虑，也许Python目前仍不是最适合的开发语言。但是，不管是Kivy，还是BeeWare，都为Python开发移动应用提供了一种选择。
 # 3. 基于云的应用部署
-比起桌面应用程序，Python似乎更擅长开发后台服务程序。在微服务架构下，多进程+异步IO，使得Python无法发挥硬件性能的短板被极大地补齐，而它简洁、高效开发和丰富的生态的优势则得到了充分的发挥。
+比起桌面应用程序，Python似乎更擅长开发后台服务程序。在微服务架构下，多进程+异步IO，使得Python无法充分利用硬件性能的短板被补齐，而它简洁、高效和丰富的生态的优势则得到了充分的发挥。
 
-Python的云部署有Heroku, GoogleApp等方式。但可能更广泛使用的方式是使用公有云或者私有云部署。要使用这种云部署，核心是通过容器来打包我们的Python服务。
+Python的云部署有Heroku, GoogleApp等方式。但更广泛使用的方式可能是基于云的容器化部署。容器是一种轻量化的虚拟机，它与虚拟机不同的是，它不需要一个完整的操作系统，而是直接使用宿主机的内核。这样，容器的启动速度比虚拟机快很多，而且它们的资源占用也更少。一般地，我们使用容器来运行某个服务，当该服务停止时，容器也就终结了。
 
-一个运行Python服务的docker容器，通常由一个操作系统内核，一个Python解释器，以及我们的Python服务组成。这些组件可以通过Dockerfile来描述。Dockerfile是一个文本文件，它包含了一系列命令和参数，用以构建一个镜像。镜像是一个只读的模板，它描述了一个Docker容器应该如何运行。当镜像被Docker运行时拉取到本地并执行时，就会生成一个容器。我们的服务此时就运行在服务器里。
+Docker是目前最流行的容器化部署工具。构建基于容器的服务，一般分为两个步骤：构建镜像和运行容器。镜像是通常由一个操作系统内核，一个Python解释器，以及我们的Python服务组成。这些组件可以通过Dockerfile来描述。Dockerfile是一个文本文件，它包含了一系列命令和参数，用以构建一个镜像。镜像是一个只读的模板，它描述了一个Docker容器应该如何运行。当镜像被Docker运行时拉取到本地并执行时，就会生成一个容器，并且服务就在容器中运行。
 
-容器是一种轻量化的虚拟机，它与虚拟机不同的是，它不需要一个完整的操作系统，而是直接使用宿主机的内核。这样，容器的启动速度比虚拟机快很多，而且它们的资源占用也更少。一般地，我们使用容器来运行某个服务，当该服务停止时，容器也就终结了。
-
-下面我们通过一个例子来说明如何构建和运行一个Python服务的容器。我们仍以sample项目为例，但这次，我们需要在项目根目录下增加一个目录，名为docker，其中包含以下文件:
+下面我们通过一个例子来说明如何构建和运行一个Python服务的容器。示例的源代码在code/chap11/docker目录下。我们仍然是通过`ppw`来创建一个名为sample的项目。与以往不同的是，我们将在项目根目录下创建一个名为`docker`（名字可任意）的目录，其中包含以下文件:
 ```
 .
 ├── build.sh
@@ -457,27 +455,36 @@ Python的云部署有Heroku, GoogleApp等方式。但可能更广泛使用的方
             ├── index.html
             └── mars.jpg
 ```
-其中，build.sh是一个脚本，用于构建镜像。dockerfile是Dockerfile文件，用于描述镜像。rootfs是一个目录，用于存放镜像中的文件。在构建镜像时，它将被映射为容器的根目录。build.sh主要的工作是构建sample项目，将相应的文件拷贝到rootfs下，再执行`docer build`命令来构建镜像。
+所有跟构建镜像相关的文件都放在这个目录下。
+
+其中，build.sh是一个脚本，用于构建镜像。dockerfile用于描述镜像。rootfs是一个目录，用于存放我们需要带到镜像中的文件。在构建镜像时，它将被映射为容器的根目录。
+
+build.sh主要的工作是构建sample项目，将相应的文件拷贝到rootfs下，再执行`docer build`命令来构建镜像。
 
 以下是build.sh的主要内容：
 ```
 version=`poetry version | awk '{print $2}'`
 wheel="/root/sample/sample-$version-py3-none-any.whl"
-echo "packaging sample version = $version"
-echo "the wheel file is $wheel"
+
 poetry build
+
+# 将wheel包拷贝到rootfs目录下以便构建镜像时进行安装。我们也可以将wheel包上传到pypi，然后在
+# Dockerfile中通过pip install sample安装。
 cp ../dist/*$version*.whl rootfs/root/sample/
+
+# 移除上一次编译生成的镜像，重新构建。这将生成一个名为sample的镜像。
+# 注意我们在构建过程中通过--build-arg传入编译期变量给镜像
 docker rmi sample
 docker build --build-arg version=$version --build-arg wheel=$wheel . -t sample
 
-# launch the container
+# 启动服务
 docker run -d --name sample -p 7080:7080 sample
 ```
 在这个构建脚本里，我们首先构建了sample项目的wheel包，然后将它拷贝到rootfs目录下。接着，我们执行`docker build`命令，构建了一个名为sample的镜像，最后，我们以此镜像为基础，启动了一个名为sample的容器，并且将端口7080映射为主机端口。
 
-现在，我们来看看Dockerfile的内容：
+Dockerfile是这一节的核心，现在，我们来看看Dockerfile的内容：
 ```
-FROM python:3.8
+FROM python:3.8-alpine3.17
 
 WORKDIR /
 COPY rootfs ./
@@ -493,7 +500,20 @@ RUN pip config set global.index-url ${pypi} \
 EXPOSE $PORT
 ENTRYPOINT ["/root/entrypoint.sh"]
 ```
-这个Dockerfile文件的内容很简单，它首先基于python:3.8镜像，然后将rootfs目录下的文件拷贝到容器的根目录下。接着，它安装了sample项目的wheel包。最后，它设置了容器的入口点为/root/entrypoint.sh。
+构建任何镜像时，我们都是从一个基础的镜像开始。这个基础镜像可以是象Linux Alpine或者Ubuntu这样的操作系统，也可以是构建在操作系统之上的应用镜像。镜像的标识符一般是"开发者/镜像名:版本"的形式，比如python:3.8-alpine3.17。这里冒号之后的字符串是标签，一般是其版本号，如果不指定版本，那么默认是latest。如果没有指定开发者，意味着这是一个来自于官方的镜像，或者是我们自己构建的本地镜像。
+
+镜像的分发是一个二级架构。如果在本地不存在python:3.8-alpine3.17这个镜像，docker就会去Docker Hub[^12]上查找。Docker Hub，类似于PyPI，是一个公共的镜像仓库，它提供了大量的镜像供我们使用。现在，我们来看看Docker Hub上的python:3.8-alpine3.17这个镜像，它究竟是什么。在Docker Hub上，我们要通过镜像名（即不带版本标签）来搜索。这样我们得到如下结果：
+
+![](assets/img/chap11/docker_hub_python.png){width="50%"}
+
+这个镜像被下载超过10亿次。对比java镜像，仅被下载1亿次。这不仅说明Python的使用有多么广泛，也说明了Python在后台服务开发上有多重要。
+
+点击上图中的链接，我们可以进入详情页，找到3.8-alpine3.17这个标签，点击进去，我们会跳转到Github上，查看其Dockerfile的内容：
+![](assets/img/chap11/python3.8_alpine_dockerfile.png){width="50%"}
+
+Alpine是一个轻量级的Linux发行版，基于Alpine构建的镜像，其大小只有5M左右，因此常常是构建微服务的首选。我们的镜像，最终也是使用的这个操作系统内核。
+
+然后我们指定当前的工作目录为根目录，并将rootfs目录下的文件拷贝到容器的根目录下。接着，它安装了sample项目的wheel包。最后，它设置了容器的入口点为/root/entrypoint.sh。
 
 我们用`ARG`来传递docker编译期变量。这里的version和wheel是两个编译器变量，它们是由build.sh通过`--arg $version`传递进来的。`EXPOSE`是将端口暴露出来。我们在`entrypoint.sh`中启动了一个监听在$PORT上的HTTP服务，我们必须把这个端口暴露给主机，以便我们可以从主机上访问这里的服务。
 
@@ -505,13 +525,17 @@ python3 -m http.server -d /root/sample $PORT
 ```
 由于这只是个演示性的程序，我们在这里并没有用到sample的任何功能。您只需要知道，如果您想使用`sample`的功能，您可以在这里调用它的命令即可。这与我们在别的地方调用它没有任何不同。在这里，我们只是简单地通过python的内置的`http`模块来启动了一个简单的HTTP服务。
 
+当我们在本地测试通过后，就可以在Docker Hub上注册账号，将我们的镜像发布上去，供其它人下载，这样就完成了基于容器的应用发布。当然，我们也可以建立一个私有云的镜像仓库，将镜像发布到私有云上，供内部部署使用。最终我们构建的镜像只有66MB左右。实际上，由于docker文件系统的分层设计，如果其它人从Docker Hub上下载我们的镜像，他们实际上要下载的数据量会更小。
+
+这就是构建基于容器的服务的全部过程，是不是出人意料地简单和可靠？在本书中，我们用了非常多的篇幅来讲如何进行隔离，这里提供了又一种方式，它甚至比之前所有的方式都更加简单和可靠。运行在容器中的服务，独占了文件系统和计算资源，无论是与宿主机、还是与运行在同一宿主机上的其它容器都互不干扰。而且，我们可以无限次地从同一镜像，生成相同的容器。可复现的部署终于得到完美的实现。
+
 我们在`build.sh`中，指定了容器的端口为7080。现在，容器已经启动，服务也正在运行，让我们访问它吧：
 
 ![](assets/img/chap11/end.png)
 
 我们在第一章里看到过这张图。
 
-就让我们从这里开始，也在这里结束。
+就让我们从这里开始，也在这里结束。现在，是你开始自己的火星探索之旅的时刻了。
 
 [^1]: 在[Python官方文档](https://packaging.python.org/en/latest/overview/#packaging-python-applications)(https://packaging.python.org/en/latest/overview/#packaging-python-applications)中，还提到了其它几种打包。
 [^2]: [Makeself](https://makeself.io/)的官网地址是：https://makeself.io/
@@ -524,3 +548,4 @@ python3 -m http.server -d /root/sample $PORT
 [^9]: [WiX](https://wixtoolset.org/)的官网地址是: https://wixtoolset.org/
 [^10]: [Kivy](https://kivy.org)的官网地址是：https://kivy.org
 [^11]: [BeeWare](https://beeware.org/)的官网地址是：https://beeware.org/
+[^12]: [Docker Hub](https://hub.docker.com)的官网地址是：https://hub.docker.com
