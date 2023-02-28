@@ -1,0 +1,45 @@
+.img-center-50 {
+    display: block;
+    margin: 0em auto;
+    width: 50%;
+}
+
+.img-center-75 {
+    display: block;
+    margin: 0em auto;
+    width: 75%;
+}
+
+.img-center-25 {
+    display: block;
+    margin: 0em auto;
+    width: 25%;
+}
+
+h3 {
+    margin: 1em 0 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+}
+
+h2 {
+    margin: 1.2em 0 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+}
+
+h1 {
+    margin: 1.5em 0 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+}
+
+p {
+    color: #636363 !important;
+    margin: 1em 0 !important;
+    font-size: medium;
+}
+
+.md-grid {
+    max-width: 1024px;
+}
