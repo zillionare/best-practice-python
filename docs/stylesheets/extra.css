@@ -20,24 +20,27 @@ h3 {
     margin: 1em 0 !important;
     color: #000 !important;
     font-weight: bold !important;
+    font-size: large !important;
 }
 
 h2 {
     margin: 1.2em 0 !important;
     color: #000 !important;
     font-weight: bold !important;
+    font-size: larger !important;
 }
 
 h1 {
     margin: 1.5em 0 !important;
     color: #000 !important;
     font-weight: bold !important;
+    font-size: x-large !important;
 }
 
 p {
     color: #636363 !important;
     margin: 1em 0 !important;
-    font-size: medium;
+    font-size: medium !important;
 }
 
 .md-grid {

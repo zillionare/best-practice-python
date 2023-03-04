@@ -35,11 +35,13 @@ theme:
     - toc.integrate
     - content.code.copy
     - content.code.annotate
+extra_css:
+  - stylesheets/extra.css
 markdown_extensions:
   - toc:
       permalink: true
-      toc_depth: 5
-      baselevel: 2
+      toc_depth: '2-4'
+      baselevel: 1
       slugify: !!python/name:pymdownx.slugs.uslugify
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji

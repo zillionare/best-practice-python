@@ -5,17 +5,18 @@ description = ""
 authors = ["aaron yang <aaron_yang@jieyu.ai>"]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<3.11"
-mkdocs = "^1.4.2"
-mkdocs-autorefs = "^0.4.1"
-mkdocs-include-markdown-plugin = "^4.0.3"
-mkdocs-material = "livereload"
-mkdocstrings = "^0.20.0"
-livereload = "mkdocs-material"
-mkdocs-custom-fences = "^0.1.2"
-mkdocs-print-site-plugin = "^2.3.4"
+python = ">=3.8,<3.9"
+mkdocs  = { version = "^1.2.3"}
+mkdocs-include-markdown-plugin  = { version = "^3.2.3"}
+mkdocs-material  = { version = "^8.1.11"}
+mkdocstrings  = { version = "^0.18.0"}
+mkdocs-material-extensions  = { version = "^1.0.3"}
+mkdocs-autorefs = {version = "^0.3.1"}
+livereload = {version = "^2.6.3"}
+mike = { version="^1.1.2", optional=true}
+mkdocs-awesome-pages-plugin = "^2.8.0"
+pre-commit = {version = "^2.17.0"}
 
-[tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
