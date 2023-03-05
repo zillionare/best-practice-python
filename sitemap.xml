@@ -2,67 +2,72 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://www.jieyu.ai/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap01/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap02/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap03/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap04/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap05/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap06/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap07/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap08/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap09/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap10/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/chap11/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://www.jieyu.ai/outline/</loc>
-         <lastmod>2023-02-07</lastmod>
+         <lastmod>2023-03-05</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://www.jieyu.ai/video_scripts/chap01/action_1/</loc>
+         <lastmod>2023-03-05</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
