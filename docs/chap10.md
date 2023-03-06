@@ -640,7 +640,7 @@ markdown_extensions:
 - pymdownx.details
 - admonition
 - toc:
-    baselevel: 2
+    baselevel: '2-4'
     permalink: true
     slugify: !!python/name:pymdownx.slugs.uslugify
 - meta
@@ -659,6 +659,8 @@ version:
 mkdocs.yml的配置大致可以分为站点设置、文档布局、主题设置、构建工具设置和附加信息这么几项。
 
 文档布局以关键字`nav`引起，后面跟随一个yaml的列表，定义了全局站点导航菜单及子菜单结构。列表中的每一项都是一个文档的标题和对应的文件名。这里的文件名是相对于docs目录的。例如，上面的例子中，`home`对应的文件是`docs/index.md`，`usage`对应的文件是`docs/usage.md`，等等。
+
+注意这里的toc配置项中的baselevel。默认值为`2-4`。注意在HTML5规范中，只能存在一个H1标签（或者Article标签），所以，Toc列表中的层级，只能从第2级开始列。不仅如此，您在撰写Markdown文档时，也应该遵循这个约定。
 
 文档布局支持多级嵌套，比如：
 ```

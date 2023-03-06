@@ -8,7 +8,7 @@ nav:
   - 大型项目上，Python是个烂语言吗:
     - 序: index.md
     - 第一章 为什么是Python: chap01.md
-    - 第二章 Python的编程开发环境: chap02.md
+    - 第二章 Python编程开发环境: chap02.md
     - 第三章 构建Python虚拟环境: chap03.md
     - 第四章 项目布局和项目生成向导: chap04.md
     - 第五章 管理版本、依赖和构建 -- 基于Poetry: chap05.md
@@ -40,8 +40,8 @@ extra_css:
 markdown_extensions:
   - toc:
       permalink: true
-      toc_depth: '2-4'
-      baselevel: 1
+      toc_depth: '2-5'
+      baselevel: 2
       slugify: !!python/name:pymdownx.slugs.uslugify
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji

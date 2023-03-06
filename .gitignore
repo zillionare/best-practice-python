@@ -110,3 +110,4 @@ site/
 # vscode extension - local history
 .history/
 **/.DS_Store
+word_document/*.docx
