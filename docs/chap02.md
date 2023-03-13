@@ -111,11 +111,12 @@ goto lxssDetect
 
 然后我们编写一个start.vbs脚本，来执行control.bat：
 
-``` basic title="start.vbs"
+```vb title="start.vbs"
 ' 脚本来源于 https://github.com/troytse/wsl-autostart/
 ' Start services
 Set UAC = CreateObject("Shell.Application")
-command = "/c """ + CreateObject("Scripting.FileSystemObject").GetParentFolderName(WScript.ScriptFullName) + "\control.bat"" start"
+command = "/c """ + CreateObject("Scripting.FileSystemObject").
+                GetParentFolderName(WScript.ScriptFullName) + "\control.bat"" start"
 UAC.ShellExecute "C:\Windows\System32\cmd.exe", command, "", "runas", 0
 Set UAC = Nothing
 ```
