@@ -264,7 +264,7 @@ CI已设置为自动发布文档到git pages。但您需要在您的项目中启
 ![](https://images.jieyu.ai/images/202211/20221225094224.png)
 
 ### 1.3.10. 自动化脚本
-对初次使用github的人来说，从创建git仓库开始的一些操作可能会比较困难；即使是对熟练使用github的人，这些步骤也会比较繁琐易错。因此，在python project wizard创建的项目中，都会存在一个github.sh脚本:
+对初次使用github的人来说，从创建git仓库开始的一些操作可能会比较困难；即使是对熟练使用github的人，这些步骤也会比较繁琐易错。因此，在python project wizard创建的项目中，都会存在一个repo.sh脚本:
 
 ```bash
 #!/bin/bash

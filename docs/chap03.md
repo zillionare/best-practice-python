@@ -1,9 +1,9 @@
 在上一章里，我们讨论了构建开发环境的基本步骤，如选择操作系统、选择集成开发环境等。现在我们可以着手编写代码了，但要能运行和调试程序，还需要指定Python运行时（或者称之为解释器）。特别地，如果你使用的开发工具是VS Code，那么这一步是必须的：因为VS Code并不是只为开发Python应用程序而设计的，它支持好多种开发语言。因此，要使得VS Code知道你的工程项目是基于Python的，就必须为它指定Python运行时。
 
-Python有两个主要的运行时版本，Python 2.x和Python 3.x。Python 3.x是对2.x版本的破坏性升级。当前，需要在3.x版本下运行的应用程序和组件越来越多了，然而，象MacOs或者Ubuntu这样的操作系统，它的一些老旧版本仍然依赖Python 2.x来运行一些核心功能，比如包管理。因此，在这些系统上，Python 2.x仍然是缺省安装的Python运行时版本。
+Python有两个主要的运行时版本，Python 2.x和Python 3.x。Python 3.x是对2.x版本的破坏性升级。当前，需要在3.x版本下运行的应用程序和组件越来越多了，然而，像MacOs或者Ubuntu这样的操作系统，它的一些老旧版本仍然依赖Python 2.x来运行一些核心功能，比如包管理。因此，在这些系统上，Python 2.x仍然是缺省安装的Python运行时版本。
 
 !!!info
-    Python 2.7是Python 2.x系列的最后一个版本，已于2020年1月1日终止维护；Python 3.6也于2021年12月23日终止维护。Python 3.7则将于2023年1月27日终止维护。因此，当您开始一个新的项目时，应该尽可能避开这些老旧的Python版本。
+    Python 2.7是Python 2.x系列的最后一个版本，已于2020年1月1日终止维护；Python 3.7则于2023年6月27日终止维护。因此，当您开始一个新的项目时，应该尽可能避开这些老旧的Python版本。
 
 这会是你在开发Python应用时的将会遇到的第一个问题：你想要开发一个Python应用程序，使用了最新的Python版本，有着大量酷炫的新特征和新功能。但当你的应用程序部署时，可能被部署到各种各样的机器上，这些机器上缺省安装的Python版本，并不是你开发时指定的版本。如果强行升级系统缺省安装的Python版本，则可能会破坏其它应用程序；而如果不进行升级，则又没办法运行你的程序。
 
@@ -19,12 +19,12 @@ Python有两个主要的运行时版本，Python 2.x和Python 3.x。Python 3.x�
 
 依赖地狱并不是Python独有的问题。所有的程序开发语言都会遇到类似的问题。解决这个问题的方法之一，就是将程序的运行环境彼此隔离起来。比如，应用程序所依赖的第三方库，不是安装到系统目录中，而是安装到单独的目录，比如，随着该应用程序一起安装到该应用程序所占的目录中，并且，只从这个目录中加载依赖的第三方库。
 
-Python本身也可以看成一个普通的应用程序。因此，当我们安装一个Python应用程序时，可以将该程序依赖的Python运行时，及相关的第三方库，都安装到一个独立的目录中。这样，当我们运行该应用程序时，就从该目录中启动Python，如果Python只从（或者优先）该目录加载第三方库的话，我们就实现了某种程度的隔离。这种思想，就是虚拟运行环境的思想，它是解决Python依赖地狱问题的一个主要方法。
+Python解释器本身也可以看成一个普通的应用程序。因此，当我们安装一个Python应用程序时，可以将该程序依赖的Python运行时，及相关的第三方库，都安装到一个独立的目录中。这样，当我们运行该应用程序时，就从该目录中启动Python，如果Python只从（或者优先）该目录加载第三方库的话，我们就实现了某种程度的隔离。这种思想，就是虚拟运行环境的思想，它是解决Python依赖地狱问题的一个主要方法。
 
 既然我们提到了“隔离”一词，我们不妨再稍稍引申一下。在第二章我们提到了虚拟机和Docker容器，这些是解决资源冲突，对资源进行隔离的方法。现在，通过容器以(微)服务的方式来部署Python应用程序也越来越常见，其中也有简化安装环境、避免依赖地狱等方面的考虑。
 
 在这一章我们主要讲如何构建虚拟运行环境，这样可以完全解决运行时与其它应用程序之间可能发生的依赖地狱问题。然而，依赖地狱还有其它多种表现形式，我们后面还会在讲述Poetry那一章再探讨这个问题。
-# 2. 使用虚拟环境以避免依赖地狱
+# 2. 使用虚拟环境逃出依赖地狱
 Python的虚拟环境方案可谓源远流长，种类繁多。如果你接触Python已经有一段时间了，那么你很可能听说过annaconda, virutalenv, venv, pip, pipenv, poetry, pyenv, pyvenv, pyenv-virtualenv, virtualenvwrapper, pyenv-virtualenvwrapper等相似概念。   
 
 !!! Info
@@ -32,13 +32,13 @@ Python的虚拟环境方案可谓源远流长，种类繁多。如果你接触Py
     There should be one -- and preferably only one -- obvious way to do it.
     永远都应该只有一种显而易见的解决之道
 
-    从Python的虚拟环境解决方案之多来看，要达到这样的境界似乎是困难的。人们试图建造巴别塔，但上帝会毁灭它。
+    从Python的虚拟环境解决方案之多来看，要达到这样的境界似乎是困难的。人们试图建造巴别塔，但上帝会毁灭它。不过，类似的困境并非 Python 独有。比如， Javascript 在其高歌猛进、攻城掠寨式的行进中，自身的语法也在发生剧烈的改变，以至于有人不得不开发一个模块来翻译不同版的 Javascript 语法，这个模块就叫 Babel （巴别塔），倒也恰如其分。
 
 在上面这些令人眼花缭乱的词语中，Annaconda(以下简称conda)和Virtualenv是一对儿对手，Pipenv则和Poetry相互竞争。而Venv则是其中血统最为纯正的一个，得到了Python官方的祝福。
 
 pipenv和poetry，尽管常常被人在讨论虚拟环境的场合下提起，也确实与虚拟环境相关，但他们所做的工作都远远超过了虚拟环境本身——它们的主要功能是提供依赖管理，poetry还提供了构建和打包功能。因此，我们将在第五章——Poetry那一章中来详细讲述。
 
-venv不是一个独立的工具，它只是一个模块。venv是从Python 3.8起，标准库提供的一个模块，你可以使用python -m venv来运行它。它的目标与virtualenv比较接近，但只提供了virutalenv的一个命令子集。由于它是标准库提供的，因此许多工具，比如poetry, pyenv现在都是基于它来构建的。因此，如果你是某个工具的开发者，我想你需要熟悉它；否则，你会在使用poetry等工具时，自然而然地接触和使用到它。
+venv不是一个独立的工具，它只是一个模块。venv是从Python 3.8起，标准库里提供的一个模块，你可以使用`python -m venv`来运行它。它的目标与virtualenv比较接近，但只提供了virutalenv的一个命令子集。由于它是标准库提供的，因此许多工具，比如poetry, pyenv现在都是基于它来构建的。因此，如果你是某个工具的开发者，我想你需要掌握它；否则，你会在使用poetry等工具时，自然而然地接触和使用到它。
 
 conda和Virtualenv都是用来创建和管理Python虚拟环境的工具，有着相似的命令行接口，不同之处在于：
 
@@ -56,7 +56,7 @@ conda和Virtualenv都是用来创建和管理Python虚拟环境的工具，有�
 1. pyenv是一个脚本，不能在windows环境下使用。它的作用是拦截你对python工具链的调用，为你选择正确的python版本。此外，你也可以使用它来安装多个版本的python。它的功能完全可以诸如annaconda之类的工具替代。但如果你使用virtualenv的话，那么很有可能你仍然需要使用pyenv来安装和选择python版本。它目前在github上有超过28k的start。
 2. pyenv-virtualenv则是pyenv的一个插件，它将pyenv和virtualenv结合在一起，从而你可以同时更方便地使用两者的命令。如果不在乎这种便利性，也可以分别使用pyenv和virtualenv。
 3. Virtualenvwrapper是virtualenv的一个扩展集，提供了诸如mkvirtualenv, lssitepackages, workon等命令。workon是用来在不同的virtualenv目录中进行切换的命令。
-4. pyenv-virutalenvwrapper则是pyenv的另一个插件，由pyenv的作者开发，它将pyenv和virtualenvwrapper的功能集成在一起。基于这些扩展，virtualevn就拥有了类似conda的全部功能。
+4. pyenv-virutalenvwrapper则是pyenv的另一个插件，由pyenv的作者开发，它将pyenv和virtualenvwrapper的功能集成在一起。基于这些扩展，virtualenv就拥有了类似conda的全部功能。
 5. pyvenv（请不要与pyenv相混淆）是仅在python3.3到python3.7才有的一个官方脚本，但从python3.8开始，它已经被标准库venv代替了。
 ## 2.1. Anaconda：一站式管理的虚拟环境
 Anaconda包揽了从安装python版本、创建虚拟环境和切换虚拟环境的所有功能。它的官方网站是[Anaconda.org](https://www.anaconda.org/)。它是所有从事数据科学或者深度学习的人理所当然的首选工具。它自带的包管理系统，提供了许多流行的机器学习库预编译版本，因此你不用自己去熟悉gcc和c/c++代码的编译过程。
