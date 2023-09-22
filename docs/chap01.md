@@ -37,21 +37,25 @@ Python 2.0 发布于千禧年（2000 年）。最重要的改变，不是 2.0 �
 
 2008 年，Python 3.0 版本发布，因其与 2.x 完全不兼容（Python 2.7 成为 Python 2.x 的最终版），成为 Python 历史上最具争议的一个版本，但也就此甩掉了长期以来积累的沉重包袱。此后 Python 轻装上阵，直到 3.6 版本开始，成为 Python 3 系列第一个比较稳定可靠的版本。也是在这个过程中，随着大数据、机器学习与人工智能的快速演进，Python 进一步发挥出它的优势，被越来越多的人认识和使用。
 
-Python 是一门优雅迷人、易于学习和高效的开发语言。从一开始起，它就把优美易读，接近自然语言和易于开发作为第一目标，把编程的快乐重新还给开发者。在 1999 年，创始人 Guido Van Rossum 发起了一项名为 CP4E(Computer Programming for Everybody) 的运动，旨在让几乎所有人都能编写和改进计算机程序。这项运动的发起宣言在这里 [^CP4E]。它写道，若干年前，施乐公司曾经提出了让每个桌面都摆上一台计算机的宏大愿景，这个愿景现在早已实现。但是，计算机还不够灵活。如果让每一个人都有能力为他们的计算机编程，会怎样？
+Python 是一门优雅迷人、易于学习和高效的开发语言。从一开始起，它就把优美易读，接近自然语言和易于开发作为第一目标，把编程的快乐重新还给开发者。在 1999 年，创始人 Guido Van Rossum 发起了一项名为 CP4E(Computer Programming for Everybody) 的运动，旨在让几乎所有人都能编写和改进计算机程序。这项运动的发起宣言在这里[^CP4E]。它写道，若干年前，施乐公司曾经提出了让每个桌面都摆上一台计算机的宏大愿景，这个愿景现在早已实现。但是，计算机还不够灵活。如果让每一个人都有能力为他们的计算机编程，会怎样？
 
 这项运动的目标之一，就是为中学生设计一门编程语言课。我们看到，国内很多省已经开始要求中学生开始学习 Python 编程，可以说，这项运动的理念，潜移默化地，在世界范围内得到了认同。实际上，正是由于 Python 语言的简洁优美，接近自然语言、无须编译的特性，才使得 CP4E 的目标有可能实现。
 
 如果说优雅迷人还有些主观的成分，毕竟每个人心中的女神可能不尽相同。但很少会有人不承认 Python 的简洁高效。“人生苦短，我用 Python”不仅是一句口号，也是 Python 程序开发高效率的一个真实写照。
 
-与其它开发语言相比，实现同样的功能，在不借助于函数库的前提下，Python 代码始终是最简单、最易读的。如果在 C、Java 和 Python 三者间进行比较的话，Java 是代码量最大的语言，要比 C 语言长 1.5 倍，而比 Python 则长 3~4 倍。我们以输出一个数组的元素为例来体验一下：
+与其它开发语言相比，实现同样的功能，在不借助于函数库的前提下，Python 代码始终是最简单、最易读的。如果在 C、Java 和 Python 三者间进行比较的话，Java 是代码量最大的语言，要比 C 语言长 1.5 倍，而比 Python 则长 3~4 倍。我们以输出一个数组的元素为例来体验一下。
 
-```python title="Python"
+这是Python的例子：
+
+```python
 arr = ["Hello, World!", "Hi there, Everyone!", 6]
 for i in arr:
     print(i)
 ```
 
-```Java title="Java"
+这是Java的例子：
+
+```Java
 public class Test {
     public static void main(String args[]) {
         String array[] = {"Hello, World", "Hi there, Everyone", "6"};
@@ -64,7 +68,7 @@ public class Test {
 
 仅看定义和输出数组元素值的那部分。两种语言都需要三行代码，但是 Python 的代码明显更短，更不要说 Python 还有所谓的“pythonic"的写法：
 
-```python title="Python"
+```python
 [print(i) for i in ["Hello, World!", "Hi there, Everyone!", 6]]
 ```
 
@@ -72,7 +76,7 @@ public class Test {
 
 我们再看一个变量交换的例子：
 
-```c title="C 语言示例"
+```c
 // C program to swap two variables in single line
 #INCLUDE <STDIO.H>
 int main()
@@ -88,7 +92,7 @@ int main()
 }
 ```
 
-```Java title="Java 示例"
+```Java
 class GFG {
 	public static void main(String[] args)
 	{
@@ -103,7 +107,7 @@ class GFG {
 }
 ```
 
-```python title="Python 示例"
+```python
 x, y = 5, 10
 x, y = y, x
 print("After Swapping values of x and y are", x, y)
@@ -111,16 +115,19 @@ print("After Swapping values of x and y are", x, y)
 
 Python 的语法显然更简单，它就像我们每天使用的自然语言一样，似乎不借助任何复杂的技巧、甚至不需要懂所谓的编程知识，就能够实现这些功能。C 和 Java 虽然也都能不借助第三个变量，实现一行代码完成变量的值交换，但这样的代码需要一定的技巧，因而容易出错。
 
-简洁（但不需要借助于复杂的技巧）的代码显然更加容易阅读和理解，从而大大加快了开发的速度。的确，在这个信息过载的时代，简洁越来越显示出强大的力量：json 取代 xml 成为更多人传递数据的工具；Markdown 则取代了 Html、reStructuredText 和 Word 成为我们的文档格式。
+简洁（但不需要借助于复杂的技巧）的代码显然更加容易阅读和理解，从而大大加快了开发的速度。的确，在这个信息过载的时代，简洁越来越显示出强大的力量：json 取代 xml 成为更多人用来传递数据的工具；Markdown 则取代了 Html、reStructuredText 和 Word 成为我们的文档格式。
 
 删繁就简三秋树，标新立异二月花。繁琐、夸张的巴洛克艺术，无论其多么精致、多么吸引眼球，都无法在这个高度内卷的年代逃脱批判。我们需要那些能够成为我们直觉的工具、符号和思想，以便让我们能够快速响应这日益复杂的世界。
 
-!!! Info
+::: note
     简单即是美。这种哲学思想大致起源于奥卡姆。达芬奇也有类似的思想：“简单是极致的精巧”，尽管精巧才是那个时代的审美。如果你对这些思想感兴趣，可以进一步阅读 John Maeda 撰写的书籍《The Laws of Simplicity》。
+:::
 
 语言的简洁、优美在 Python 中的地位是如此重要，以至于它被写进了 Python“宪章” -- PEP20[^PEP20]： 
 
-!!! Cite "Zen of Python -  by Tim Peters[^Tim_Peters]"     
+!!! Cite 
+    "Zen of Python -  by Tim Peters[^Tim_Peters]"   
+      
     Beautiful is better than ugly.
     优美胜于丑陋
 
@@ -188,7 +195,7 @@ python -c 'import this'
 
 PEP20 还藏着另一个彩蛋。我们说它应该有 20 条规则，但实际上我们只能看到 19 条，这是为什么呢？
 
-实际上，这第 20 条规则，是留给 Guido 的特权，多年来，社区一直在等待他来添加这一条规则。这也反映了社区对 Guido 的挚爱。不过，10 多年过去了，迄今为止，Guido 都没有使用这一特权，这第 20 条"军规"，也就一直空缺到现在。
+实际上，这第 20 条规则，是留给 Guido 的特权，多年来，社区一直在等待他来添加这一条规则。这也反映了社区对 Guido 的尊敬与热爱。不过，10 多年过去了，迄今为止，Guido 都没有使用这一特权，这第 20 条"军规"，也就一直空缺到现在。
 
 其次，Python 的高效，还体现在它无需编译即可运行上。象 C，Java 这样的编译型语言，如果你写完一小段程序，想看看它是如何运行的，你必须等待它完成编译 -- 这个时间可能是几十秒或者以分钟、甚至小时计 — 这将导致程序员的工作被打断。下面的讽刺漫画反映了这种情况：
 

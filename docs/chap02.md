@@ -33,7 +33,7 @@ WSL 是 Windows 10 的一个新功能。通过 WSL，在 Windows 之上，运行
 
 如果您的 windows 10 是 2004 及更高版本，或者是 Windows 11，则安装只需要一条命令即可完成：
 
-``` shell title="PowerShell"
+```shell
 wsl --install --set-defalut-version=1
 ```
 
@@ -370,5 +370,4 @@ Spyder 包含在 Anaconda 发行版之内，所以一旦安装了 Anaconda，就
 [^6-sigma]: 在统计学中，6 sigma 意味着置信度是 99.99966%，在质量检验场景下，表明产品达到了很高的质量标准。从 1970 年代开始，摩托罗拉发现了提高质量与降低生产成本之间的正相关关系，于是发展出一整套改善工业流程、消除残疵的方法。1986 年，摩托罗拉正式将其命名为 6-sigma。它强调持续改进，稳定和预测性地提高流程结果；生产和商业流程可以透过测量、分析、提高和控制进行改善等等。随着摩托罗拉影响力的衰落，6-sigma 的影响力也日渐式微，但它的核心观点和方法，比如持续改进等，仍然得到广泛认同和传播。
 [^kite]: https://www.kite.com/
 [^Github Copilot]: https://www.copilot.ai/
-[^tabnine]: https://www.tabnine.com/
 [^spyder]: https://www.spyder-ide.org/
