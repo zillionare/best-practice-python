@@ -1,6 +1,6 @@
 local admonitions = {
   warning   = {pandoc.Str("警告！")},
-  info        = {pandoc.Str("信息：")},
+  info        = {pandoc.Str("信息")},
   note      = {pandoc.Str("注意！")},
   tip       = {pandoc.Str("小贴士")},
   important = {pandoc.Str("重要!")},
