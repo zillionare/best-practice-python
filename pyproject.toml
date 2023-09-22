@@ -17,7 +17,10 @@ mike = { version="^1.1.2", optional=true}
 mkdocs-awesome-pages-plugin = "^2.8.0"
 pre-commit = {version = "^2.17.0"}
 fire = "^0.5.0"
-pymarkdown = "^0.1.4"
+markdown = "^3.4.4"
+beautifulsoup4 = "^4.12.2"
+pypandoc = "^1.11"
+docxtpl = "^0.16.7"
 
 
 [build-system]
