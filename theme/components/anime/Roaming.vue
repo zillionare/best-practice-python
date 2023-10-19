@@ -42,7 +42,7 @@ const props = defineProps({
     },
     z: {
         type: String,
-        default: "1"
+        default: "30"
     }
 })
 

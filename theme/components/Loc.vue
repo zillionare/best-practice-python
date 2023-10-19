@@ -38,7 +38,7 @@ const props = defineProps({
   },
   z: {
         type:String,
-        default:"90"
+        default:"10"
     }
 })
 
@@ -61,7 +61,6 @@ const style = computed(() => {
         "background-color": props.fc,
         "z-index": parseInt(props.z)
     }
-    console.log(s)
     return s
 })
 

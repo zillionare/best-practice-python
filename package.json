@@ -10,6 +10,7 @@
     "@slidev/cli": "^0.42.5",
     "@slidev/theme-default": "latest",
     "animejs": "^3.2.1",
+    "vue3-carousel": "^0.3.1",
     "vuewordcloud": "^19.0.0"
   },
   "devDependencies": {

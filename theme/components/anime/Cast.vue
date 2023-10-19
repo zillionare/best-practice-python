@@ -23,11 +23,16 @@ const props = defineProps({
   },
   z: {
     type: String,
-    default: "10"
+    default: "20"
   },
   fc: {
     type: String,
     default: ""
+  },
+  dur: {
+    type: String,
+    // 5 seconds
+    default: "5"
   }
 })
 
@@ -67,6 +72,7 @@ const style = computed(()=>{
 
 function rock_roll(){
     var cast = document.querySelector(".cast")
+    cast.style.opacity = 1
     if (cast == null){
         return
     }
@@ -76,8 +82,11 @@ function rock_roll(){
     cast.style.top = `${containerHeight - 20}px`
 
     var i = containerHeight - 20
+    var speed = (myHeight + containerHeight) / (props.dur * 1000)
+    var step = speed * 10 
+
     var timer = setInterval(function(){
-        i = i - 1
+        i = i - step
         cast.style.top = `${i}px`
 
         var arr = document.querySelectorAll(".cast li")
@@ -98,7 +107,6 @@ function rock_roll(){
 
 
             op *= 2
-
             item.style.opacity = op
         }
         
@@ -132,6 +140,7 @@ function rock_roll(){
 
 .cast {
     position: absolute;
+    opacity: 0;
 }
 
 .cast ul {
