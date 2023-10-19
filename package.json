@@ -1,0 +1,19 @@
+{
+  "name": "slides",
+  "private": false,
+  "scripts": {
+    "build": "slidev build",
+    "dev": "slidev --open",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^0.42.5",
+    "@slidev/theme-default": "latest",
+    "animejs": "^3.2.1",
+    "vuewordcloud": "^19.0.0"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.1.52",
+    "playwright-chromium": "^1.38.1"
+  }
+}
