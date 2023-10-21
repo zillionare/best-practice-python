@@ -81,13 +81,15 @@ function calcAndScale(target, cursor){
         return
 
     if (scale == 1.2)
-        img.style.border = "3px solid rgba(200,200,200,0.8)"
+        // img.style.border = "3px solid rgba(200,200,200,0.8)"
+        img.style.boxShadow = "0 0 5px gold"
     else{
-        img.style.border = ""
+        // img.style.border = ""
+        img.style.boxShadow = ""
     }
     // img.style.transform = `scale(${scale}) translateY(${(1-scale)*100}%)`
 }
-function set_nav(){
+function set_nav(unit){
     const slides = document.querySelectorAll(".slide");
     let total_slides = slides.length / 2
 
@@ -97,7 +99,7 @@ function set_nav(){
 
     // loop through slides and set each slides translateX property to index * 100% 
     slides.forEach((slide, indx) => {
-        slide.style.transform = `translateX(${indx * 120}%)`;
+        slide.style.transform = `translateX(${indx * unit}px)`;
         calcAndScale(indx, curSlide)
     });
 
@@ -115,7 +117,7 @@ function set_nav(){
         console.info(`cur slide is ${curSlide}, ${total_slides - parseInt(props.n / 2)}`)
 
         slides.forEach((slide, indx) => {
-            slide.style.transform = `translateX(${(indx - curSlide + parseInt(props.n / 2)) * 120}%)`;
+            slide.style.transform = `translateX(${(indx - curSlide + parseInt(props.n / 2)) * unit}px)`;
             calcAndScale(indx, curSlide)
         });
     });
@@ -131,7 +133,7 @@ function set_nav(){
         }
 
         slides.forEach((slide, indx) => {
-            slide.style.transform = `translateX(${(indx - curSlide + parseInt(props.n / 2)) * 120}%)`;
+            slide.style.transform = `translateX(${(indx - curSlide + parseInt(props.n / 2)) * unit}px)`;
             calcAndScale(indx, curSlide, slides)
         });
     });
@@ -145,20 +147,48 @@ const hasCircle = computed(()=>{
 })
 
 onMounted(()=>{
-    set_nav()
+    // 计算每个slide的宽度
+
+    var wrapper = document.querySelector(".carousel")
+    var unit = parseInt(wrapper.clientWidth) / props.n
+    var slide_width = unit * 0.9
+
+    var slide_height = 0
+    document.querySelectorAll(".carousel .slide").forEach((item)=>{
+        item.style.width = `${slide_width}px`
+        slide_height = Math.max(slide_height, item.clientHeight)
+    })
+
+    // 设置 carousel-wrapper的高度
+    document.querySelector(".carousel-wrapper").style.height = `${slide_height}px`
+    set_nav(unit)
 })
+function p3text(text){
+    return (text.split("|")[2] || "").replace("\n", "<br>")
+}
 </script>
 <template>
+<div class="carousel-wrapper">
+
 <div class="carousel" :style="style">
     <div v-for="(item, index) in all_slides" class="slide">
     <div class="img-wrapper"><img :id="'carousel-' + index" :src="item.img" class="img" :class="hasCircle" :style="imgStyle"></div>
-    <div class="img-caption">{{ item.caption }}</div>
+    <div class="img-desc">
+        <div class="p1"> {{ item.text.split("|")[0] || "" }}</div>
+        <div class="p2"> {{  item.text.split("|")[1] || "" }}</div>
+        <div class="p3" v-html="p3text(item.text)">  </div>
     </div>
+    </div>
+</div>
 </div>
 <button class="btn btn-next"></button>
 <button class="btn btn-prev"></button>
 </template>
 <style>
+
+.carousel-wrapper {
+    overflow-x: hidden;
+}
 
 .carousel {
     position: relative;
@@ -172,7 +202,6 @@ onMounted(()=>{
   position: absolute;
 }
 
-
 .circle {
     border-radius: 50%;
 }
@@ -184,23 +213,41 @@ onMounted(()=>{
   padding: 10px;
   border: none;
   border-radius: 50%;
-  z-index: 10px;
+  z-index: 10;
   cursor: pointer;
   background-color:grey;
   font-size: 18px;
   opacity: 0.02;
+  top:0;
 }
 .btn:active {
   transform: scale(1.1);
 }
 .btn-prev {
-  top: 45%;
   left: 2%;
 }
 
 .btn-next {
-  top: 45%;
   right: 2%;
 }
 
+.img-desc {
+    .p1 {
+        color: lightgray;
+        font-size: small;
+    }
+    .p2 {
+        color: darkorchid;
+        margin: 0;
+        padding: 0;
+    }
+    .p3 {
+        font-size:xx-small;
+    }
+}
+
+.carousel .img-wrapper img {
+    margin: 5px;
+    box-shadow: 0 0 5px rgba(0.2,0.2,0.2,0.8);
+}
 </style>
