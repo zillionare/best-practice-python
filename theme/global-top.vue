@@ -21,8 +21,8 @@
         @apply text-sm;
         letter-spacing: 0.3vw;
         color: transparent;
-        background: url('/public/text-clip-4.png') 80% 50% no-repeat;
-        background-clip: text;
+        /* background: url('/public/text-clip-4.png') 80% 50% no-repeat; */
+        /* background-clip: text; */
     }
 
     header {

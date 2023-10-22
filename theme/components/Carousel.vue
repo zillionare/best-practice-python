@@ -82,10 +82,12 @@ function calcAndScale(target, cursor){
 
     if (scale == 1.2)
         // img.style.border = "3px solid rgba(200,200,200,0.8)"
-        img.style.boxShadow = "0 0 5px gold"
+        // img.style.boxShadow = "0 0 5px gold"
+        img.style.animation = "glow 1.5s infinite alternate"
     else{
         // img.style.border = ""
-        img.style.boxShadow = ""
+        // img.style.boxShadow = ""
+        img.style.animation = ""
     }
     // img.style.transform = `scale(${scale}) translateY(${(1-scale)*100}%)`
 }
@@ -164,7 +166,7 @@ onMounted(()=>{
     set_nav(unit)
 })
 function p3text(text){
-    return (text.split("|")[2] || "").replace("\n", "<br>")
+    return (text.split("|")[2] || "").replaceAll("\n", "<br>")
 }
 </script>
 <template>
@@ -243,11 +245,12 @@ function p3text(text){
     }
     .p3 {
         font-size:xx-small;
+        color: #404040;
     }
 }
 
 .carousel .img-wrapper img {
-    margin: 5px;
+    margin: 15px;
     box-shadow: 0 0 5px rgba(0.2,0.2,0.2,0.8);
 }
 </style>

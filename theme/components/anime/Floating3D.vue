@@ -61,7 +61,7 @@ const words = computed(() =>{
 
 <style>
 .container {
-    font-family: "QuanYi MicroHei", sans-serif;
+    font-family: "WenQuanYi MicroHei", sans-serif;
     /* background: #f4d03f; */
     position: absolute;
     text-align: center;
@@ -75,7 +75,7 @@ const words = computed(() =>{
 
 .words span {
     display: inline-block;
-    animation: move 5s ease-in-out infinite;
+    animation: move 3s ease-in-out infinite;
     margin: 0 3px;
 }
 

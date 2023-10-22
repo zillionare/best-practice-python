@@ -10,16 +10,16 @@ const props = defineProps({
     type: String,
   },
   w: {
-    default: "100%"
+    default: "auto"
   },
   left: {
-    default: "0"
+    default: "55%"
   },
   top: {
-    default: "0"
+    default: "10vh"
   },
   h: {
-    default: "100%"
+    default: "auto"
   },
   position: {
     default: "absolute"
@@ -28,7 +28,7 @@ const props = defineProps({
     default: "1"
   },
   padding: {
-    default: "0"
+    default: ""
   },
   fc: {
     default: "white"
