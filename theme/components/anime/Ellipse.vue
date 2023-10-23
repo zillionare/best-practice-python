@@ -1,14 +1,25 @@
 <style>
-.ellipse:hover {
-    opacity: 100%;
+.ellipse{
+    position: absolute;
+    border-radius: 50%;
+    --border-width: 5px;
+    border-width: var(--border-width);
+    /* box-shadow: 3px 3px rgba(0,0,0,0.2); */
+    /* transition-duration: 1s; */
+    animation: glow 1s infinite alternate;
 }
 
-.ellipse{
-    border-radius: 50%;
-    border-width: 5px;
-    box-shadow: 3px 3px rgba(0,0,0,0.2);
-    opacity: 0%;
-    transition-duration: 1s;
+
+@keyframes glow {
+  from {
+    /* box-shadow: 0 0 var(--border-width) calc(-1 * var(--border-width)) hsl(calc(360 * var(--hue1)) 50% 80%); */
+    box-shadow: 0 0 var(--border-width) calc(-1 * var(--border-width))  rgba(0,0,0,0.8);
+  }
+  to {
+    /* box-shadow: 0 0 var(--border-width) var(--border-width) hsl(calc(360 * var(--hue1)) 50% 50%); */
+    box-shadow: 0 0 var(--border-width) var(--border-width) rgba(0,0,0,0.2);
+    filter: blur(1px);
+  }
 }
 </style>
 
@@ -16,10 +27,6 @@
 import { computed} from 'vue'
 
 const props = defineProps({
-    position: {
-        type: String,
-        default: "absolute"
-    },
     top: {
         type: String,
         default: "50%"
@@ -36,9 +43,6 @@ const props = defineProps({
         type: String,
         default: "3px"
     },
-    d: {
-        type: Boolean
-    },
     s: {
         type: Number,
         default: 200,
@@ -52,15 +56,10 @@ const style = computed(()=>{
     let style = {
         "height": props.s / 2 + "px",
         "width": props.s + "px",
-        "position": props.position,
         "top": props.top,
         "left": props.left,
         "border-color": props.color,
-        "border-width": props.lw,
-        "z-index": 999
-    }
-    if (props.d){
-        style["opacity"] = 0.8
+        "border-width": props.lw
     }
 
     if (props.at){
