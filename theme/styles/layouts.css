@@ -20,11 +20,14 @@
 
     h1 {
         @apply text-4xl text-left ml-2 mb-8 mt-8;
+        color: var(--slidev-theme-secondary);
     }
 
 
     h2 {
         @apply text-3xl text-left ml-4 mb-4 text-$slidev-theme-secondary;
+        color: var(--slidev-theme-three);
+        padding-left: 0px;
     }
 
     h3 {
@@ -53,6 +56,7 @@
 
     h1 {
         @apply text-6xl text-left h-80 ml-2;
+        color: white;
     }
 
 }
@@ -95,7 +99,7 @@
         @apply text-5xl font-500 leading-20 ml-10 mb-1;
         border-bottom-width: 1px;
         border-bottom-style: solid;
-        border-image: linear-gradient(to right, var(--slidev-theme-primary), white) 1;
+        border-image: linear-gradient(to right, var(--slidev-theme-secondary), white) 1;
     }
 
     h1:after {

@@ -12,8 +12,8 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "subtitles",
-                "pages/ppz-b01-01.md"
+                "split",
+                "pages/ppz-b01-03.md"
             ]
         }
     ]

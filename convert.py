@@ -180,12 +180,9 @@ def _split_by_punctuation(lines: List[str]):
     return "\n<!--\n" + stripped.translate(trans) + "\n-->\n"
 
 
-def split_lines(chap: str):
+def split_lines(file: str, write_file=True):
     """对slide稿按标点符号切分成行"""
-    if not chap.endswith(".md"):
-        chap = chap + ".md"
-
-    file = os.path.join("/apps/cheese_course/docs/courseware/pages/", chap)
+    file = os.path.abspath(file)
     with open(file, "r") as f:
         lines = f.readlines()
 
@@ -200,17 +197,22 @@ def split_lines(chap: str):
         else:
             istart += 1
             buffer.append(line)
+    if not write_file:
+        return "".join(buffer)
 
-    tmp_file = os.path.join("/tmp/", chap)
-    bak_file = os.path.join("/tmp/", f"{chap}.bak")
+    tmp_file = os.path.join("/tmp/", os.path.basename(file))
+    os.makedirs(os.path.dirname(tmp_file), exist_ok=True)
+    bak_file = os.path.join("/tmp/", f"{os.path.basename(file)}.bak")
     with open(tmp_file, "w") as f:
         f.write("".join(buffer))
 
     shutil.copyfile(file, bak_file)
     shutil.copyfile(tmp_file, file)
 
+    return "".join(buffer)
 
-def subtitles(file: str):
+
+def subtitles(file: str, since: int = 1, to: int = -1):
     """从pages中提取subtitles"""
     if file.startswith("~"):
         file = os.path.expanduser(file)
@@ -233,6 +235,7 @@ def subtitles(file: str):
 if __name__ == "__main__":
     fire.Fire(
         {
+            "split": split_lines,
             "subtitles": subtitles,
         }
     )
