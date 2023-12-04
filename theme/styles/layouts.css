@@ -19,7 +19,7 @@
     }
 
     h1 {
-        @apply text-4xl text-left ml-2 mb-8 mt-8;
+        @apply text-4xl text-left ml-2 mb-8 mt-0;
         color: var(--slidev-theme-secondary);
     }
 
