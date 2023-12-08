@@ -2,6 +2,7 @@
 
 本章首先介绍 Python 开发的操作系统环境，然后介绍几个最流行的集成 IDE，并对他们的特点进行了比较，供读者选择。
 ## 1. 选择哪一种操作系统？
+
 看上去操作系统是一个与编程语言无关的话题，特别是像 Python 这样的开发语言，它编写的程序几乎可以运行在任何一种操作系统上。但是，仍然有一些微妙的差异需要我们去考虑。首先，Python 更适合于数据分析、人工智能和后台开发，而不是用于开发桌面和移动端应用。而无论是大数据分析和人工智能，还是后台开发，往往都部署在 Linux 服务器环境下。而且，这些应用所依赖的生态，也往往构建在 Linux 下（比如大数据平台和分布式计算平台）。一些重要的的程序库，尽管最终可能都会兼容多个操作系统，但由于操作系统之间的差异，它们在不同操作系统下的版本发布计划往往是不一样的。一些开源的程序和类库往往会优先考虑 Linux 操作系统，它们在 Linux 上的测试似乎也更充分。
 
 我们可以举出很多这样的例子，比如，量化交易是 Python 应用最广泛的领域之一。而 pytalib 则是其中常用的一个技术分析库。该库使用了一个 C 的模块，需要在安装时进行编译。在 Windows 下进行编译，需要下载和配置一系列的 Visual C++的编译工具，对 Python 程序员而言，这些操作会有一定难度，因为很多概念都是 Python 程序员并不熟悉的。而如果你使用的是 Linux 操作系统，尽管编译仍然是必须的，但安装和编译只需要运行一个脚本即可。
@@ -12,7 +13,7 @@
 
 如果这些理由还不能说服您，我们还可以看看多数资深程序员是如何选择操作系统的。下图是 StackOverflow[^stackoverflow] 网站在 2022 年的一个调查：
 
-![](https://images.jieyu.ai/images/2023/03/20230304160004.png){: .img-center-75}
+![](https://images.jieyu.ai/images/2023/03/20230304160004.png)
 
 从图中可以看出，如果把 Linux 自身的使用量与 WSL 的使用量（WSL 是一种 Linux）加在一起，Linux 已经是排名第一的操作系统。
 
@@ -23,6 +24,7 @@
 好消息是，MacOS 和 Linux 都是所谓的“类 Unix”操作系统，它们之间有极高的相似度。所以，如果您的电脑是 MacOS 操作系统，您大可不必另外安装一个 Linux。如果您的电脑是 Windows 操作系统，我们在下面也提供了三种方案，让您的机器也能运行一个虚拟的 Linux 操作系统用于开发。
 
 ## 2. Windows 下的 Linux 环境
+
 在 Windows 下有三种构建 Linux 虚拟环境的方式。其中之一是 Windows 的原生方案，即使用 Windows Subsystem for Linux（以下简称 WSL），其它两种方案则分别是 Docker 和虚拟机方案。
 ### 2.1. WSL 方案
 WSL 是 Windows 10 的一个新功能。通过 WSL，在 Windows 之上，运行了一个 GNU/Linux 环境。在这个环境里，绝大多数 Linux 命令行工具和服务都可以运行，而不需要设置双系统，或者承担虚拟机带来的额外代价。
@@ -41,7 +43,7 @@ wsl --install --set-defalut-version=1
 
 1. 首先，启用“适用于 Linux 的 Windows 子系统”功能：
 
-    ![](http://images.jieyu.ai/images/2020-05/20200503185200[1].png){width="50%"}
+    ![](http://images.jieyu.ai/images/2020-05/20200503185200[1].png)
 
 2. 设置后，需要重启一次电脑。
 3. 从 Windows 应用商店搜索安装一个 Linux 发行版，这里的示例中我们使用 Ubuntu:
@@ -68,7 +70,7 @@ wsl --install --set-defalut-version=1
 
 然后，我们编写一个批处理脚本，用以启动 WSL，并执行上述命令：
 
-```bat title="control.bat"
+```bat
 REM 脚本来源于 https://github.com/troytse/wsl-autostart/
 @echo off
 REM Goto the detect section.
@@ -122,9 +124,9 @@ Set UAC = Nothing
 
 最后，我们向计划任务程序中添加一个新的开机启动任务：
 
-![](http://images.jieyu.ai/images/202106/20210616215338.png){width="50%"}
+![](http://images.jieyu.ai/images/202106/20210616215338.png)
 
-![](http://images.jieyu.ai/images/202106/20210616215237.png){width="50%"}
+![](http://images.jieyu.ai/images/202106/20210616215237.png)
 
 需要说明的是，通过 Windows 应用商店安装的 Ubuntu 子系统，它应该已经安装好了 ssh-server，我们在上述操作中所做的事，只不过是让它随 WSL 一起启动而已。但是，如果您发现您的 WSL 中并没有安装 ssh-server，您也可以自行安装。毕竟，这就是一台 Linux 服务器，您可以在上面安装 Linux 上的绝大多数软件。
 
@@ -141,11 +143,11 @@ WSL 的出现要比 Docker 晚。如果您购机时间较早，那么您的 Wind
 
 安装 Docker 可以从其官方网站 [^docker] 下载，安装完成后，首次运行需要手动启动。可以从搜索框中搜索"Docker"，然后选择"Docker Desktop"来启动，见下图：
 
-![](http://images.jieyu.ai/images/202108docker-app-search.png){: .img-center-50}
+![](http://images.jieyu.ai/images/202108docker-app-search.png)
 
 当 Docker 启动后，就会在系统托盘区显示一个通知图标：
 
-![](http://images.jieyu.ai/images/202108whale-icon-systray.png){: .img-center-50}
+![](http://images.jieyu.ai/images/202108whale-icon-systray.png)
 
 上图中第三个，鲸鱼图标，即是 Docker 正在运行的标志。点击它可以进入管理界面。首次运行时需要做一些设置，可以参考官方文档。
 
@@ -156,12 +158,14 @@ WSL 的出现要比 Docker 晚。如果您购机时间较早，那么您的 Wind
 也有可能您的机器既不支持安装 WSL，也不支持安装 Docker。这种情况下，您可以通过安装 VirtualBox[^virtualbox] 等虚拟机来运行 Linux。这方面的技术大家应该很熟悉了，因此不再赘述。
 
 ### 2.4. 小结
+
 我们介绍了三种在 Windows 上构建 Linux 开发环境的方案。只要有可能，您首先应该安装的是 WSL。WSL 可以在运行在几乎所有的 Windows 10 以上的发行版上，包括 Win10 Home。
 
 如果您的机器不支持安装 WSL，也可以考虑安装 Docker。即使您的机器支持 WSL，出于练习 CI/CD 的考虑，也可以安装 Docker，以便体验容器化构建和部署。当然，这需要您的机器有更强劲的 CPU 和内存。
 
 对于较早的机型，在无法升级到较新版本的 Windows 时，可以考虑使用虚拟机，比如免费版的 VirtualBox。
 ## 3. 集成开发环境（IDE）
+
 作为一种脚本语言，Python 可以无须编译即可运行，因此，几乎所有的文本编辑器都可以作为 Python 开发工具。然而，要进行真正严肃的开发，要在开发进度和开发质量之间取得最佳平衡，就需要一个更专业的工具。
 
 集成开发环境（IDE）是一种提高开发效率的工具，它可以让开发者在编写代码时，得到各种代码提示，更早发现语法错误，还可以直接在编辑器中进行调试。
@@ -169,6 +173,7 @@ WSL 的出现要比 Docker 晚。如果您购机时间较早，那么您的 Wind
 Pycharm 和 VS Code 是进行 Python 应用程序开发的两个首选工具。对于从事数据分析和人工智能领域的开发者，还可以考虑 Jupyter Lab（升级版的 Notebook）和 Anaconda 的 Spyder。
 
 ### 3.1. VS Code vs Pycharm：使用哪一个 IDE？
+
 Pycharm 是用于开发 Python 的老牌 IDE，Visual Studio Code（通常被称为 VS Code）则是近几年的后起之秀。VS Code 完全免费，Pycharm 则提供了社区版和专业版两个版本，专业版本功能更强大，但需要付费。下表简要说明了两个 IDE 最重要的差异：
 
 | 特性       | Pycharm      | VS Code          | 说明                                                                                                                                            |
@@ -186,15 +191,16 @@ Pycharm 是用于开发 Python 的老牌 IDE，Visual Studio Code（通常被称
 由于我们更倾向于使用 VS Code，也由于 Pycharm 简单易上手，基本上无需教学，所以我们这里略过对 Pycharm 的介绍，重点讲述如何配置 VS Code 开发环境。
 
 ### 3.2. VS Code 及扩展
+
 VS Code 是一个支持多语言编辑开发的平台，它本身只提供了文本编辑器、代码管理（Git）、扩展管理等基础功能。具体到某个语言的开发，则是通过加载该语言的扩展来完成的。因此，安装 VS Code 之后，还需要配置一系列的扩展。
 
 安装好 VS Code 之后，在侧边栏上就会出现如下图所示工具栏：
 
-![](http://images.jieyu.ai/images/20210820210809145433.png){: .img-center-50}
+![](http://images.jieyu.ai/images/20210820210809145433.png)
 
 被圆形框框住的图标对应着扩展管理。上部的矩形框可以用来搜索某个扩展，找到对应的扩展并点击，就可以在右边的窗口中看到该扩展的详细信息，如下图所示：
 
-![](http://images.jieyu.ai/images/20210820210809145930.png){: .img-center-50}
+![](http://images.jieyu.ai/images/20210820210809145930.png)
 
 在这个详细信息页，提供了安装按钮。
 
@@ -219,13 +225,13 @@ Jupyter 是一个允许你在 VS Code 中阅读、开发 notebook 的扩展。�
 
 在 Python 扩展安装完成之后，就可以进行 Python 开发了。在开发之前，需要为工程选择 Python 解释器。可以从命令面板中输入 Python: Select Interpreter 来完成，也可以点击状态栏中的选择图标，如下图所示：
 
-![](http://images.jieyu.ai/images/20210820210806163607.png){: .img-center-75}
+![](http://images.jieyu.ai/images/20210820210806163607.png)
 
 #### 3.2.2. Remote - SSH
 
 这是一个非常有用的扩展，是微软官方开发的扩展之一。它可以让你在 VS Code 中直接打开远程机上的文件夹，编辑并调试运行。如果您使用过 Pycharm 等 IDE，就会知道，尽管这些 IDE 也支持远程开发，但它们是在本地创建文件，调试运行前先要上传同步到远程机器上。频繁同步不仅降低了效率，而且也常常出现未能同步，导致行为与预期不一致，浪费时间查找问题的情况。这也是也是 VS Code 优于 Pycharm 的一个重要特性。
 
-![](http://images.jieyu.ai/images/20210820210809145039.png){: .img-center-75}
+![](http://images.jieyu.ai/images/20210820210809145039.png)
 
 安装好这个扩展之后，在侧边栏会出现一个远程连接图标。同时，如果当前已经连接到远程机器，则在状态栏最左侧，还会显示该连接的概要信息。
 #### 3.2.3. 版本管理相关扩展
@@ -239,18 +245,18 @@ VS Code 虽然提供了 git 的集成，但是许多功能并未通过 GUI 提�
 为实现上述功能，我们需要继续安装扩展。首先是 GitLens。
 ##### 3.2.3.1. GitLens
 
-![](https://images.jieyu.ai/images/2023/03/20230306194047.png){: .img-center-75}
+![](https://images.jieyu.ai/images/2023/03/20230306194047.png)
 
 Gitlens 的功能十分强大，是团队开发中常用的一个扩展。它的功能包括：
 
    1. 在文件修改历史中快速导航
    2. 在代码行中提示 blame 信息，如下图所示：
     
-    ![](http://images.jieyu.ai/images/202108hovers-current-line.png){: .img-center-75}
+![](http://images.jieyu.ai/images/202108hovers-current-line.png)
 
    3. gutter change，如下图所示：
       
-    ![](http://images.jieyu.ai/images/20210820210809160826.png){: .img-center-75}
+![](http://images.jieyu.ai/images/20210820210809160826.png)
 
     gutter change 是指在上图中，在编辑区行号指示的右侧，通过一个线条来指示当前区域存在变更，当你点击这个线条时，会弹出一个窗口，显示当前区域的变更历史，并且允许你回滚变更、或者提交变更。这个功能实际上是 git 的 interactive staging 功能，只不过在命令行下使用这个功能时，它的易用性不太好。
     
@@ -258,22 +264,23 @@ Gitlens 的功能十分强大，是团队开发中常用的一个扩展。它的
 
    4. GitLens 在侧边栏提供了丰富的工具条，如下图所示：
 
-     ![](http://images.jieyu.ai/images/202108views-layout-gitlens.png){: .img-center-50}
+     ![](http://images.jieyu.ai/images/202108views-layout-gitlens.png)
 
 通过这些工具条，你不再需要记忆太多的 git 命令，并且这些命令的结果也以可视化的方式展示，这也会比控制台界面效率高不少。在这些工具栏里，提供了提交视图、仓库视图、分支视图、文件历史视图、标签视图等。
 
 简单来说，GitLens 将几乎所有的 Git 功能进行了图形化展示和重构，提供了一个丰富的操作界面，让你可以更加方便地操作 Git 和理解代码变更。
 
 ##### 3.2.3.2. 编辑提交信息的扩展
+
 常用 PyCharm 的程序员不会不记得它的 git commit 对话框。遗憾的是，到目前为止，VS Code 及其扩展都没能补充这一短板。不过，仍然有一些小众但好用的扩展，不仅可以帮助我们实现图形化界面下的 commit 消息编辑，还能帮助我们规范化地管理 commit message。
 
 这里我们推荐一个名为 git-commit-plugin 的扩展：
 
-![](https://images.jieyu.ai/images/2023/03/20230306195918.png){: .img-center-50}
+![](https://images.jieyu.ai/images/2023/03/20230306195918.png)
 
 这个扩展会将 commit message 进行分类，并且给每个类别加上 emoji 图标，以便我们更快捷地识别类别：
 
-![](https://images.jieyu.ai/images/202109/20210926101451.png){: .img-center-50}
+![](https://images.jieyu.ai/images/202109/20210926101451.png)
 
 给代码正确地分类是非常重要的一个任务。如果我们在每一次代码提交时都进行了正确地分类，那么在发行新的版本时，我们就可以根据这些历史提交信息，自动生成 release notes。这样生成的 release notes 也许还需要稍微进行一些修改，但绝对可以避免遗漏重要的修改。
 
@@ -300,13 +307,13 @@ Pycharm 提供了一个非常好用的本地文件历史的功能。在 VS Code 
 
 读者可以安装这个扩展：
 
-![](https://images.jieyu.ai/images/2023/03/20230306195816.png){: .img-center-75}
+![](https://images.jieyu.ai/images/2023/03/20230306195816.png)
 
 需要注意的是，这个扩展会在工作区生成一个名为.history 的文件夹，以存放本地文件历史。这个文件夹必须被加入到.gitignore 文件中，否则，您很可能会把这个文件夹提交到代码仓库中。这可是一大堆垃圾文件！
 
 下图展示了这个扩展对代码变动的跟踪情况：
 
-![](https://images.jieyu.ai/images/202109/20210926114236.png){: img-center-75}
+![](https://images.jieyu.ai/images/202109/20210926114236.png)
 #### 3.2.4. 代码辅助与自动完成
 
 代码辅助与自动完成是我们使用 IDE，而不是文本编辑器来编写代码最重要的原因。根据 Kite[^kite] 的统计，使用 kite 来进行辅助编程，可以省去最多 47%的代码键入，从而使得代码编写更加轻松和更为快速。
@@ -314,7 +321,7 @@ Pycharm 提供了一个非常好用的本地文件历史的功能。在 VS Code 
 当然，您可能并不同意键入速度会左右编程效率这一观点，毕竟，在编程中，我们大量的时间都是在思考算法和功能如何实现、回忆某个库函数应该如何调用、以及我们自己定义的变量、常量名等。令人吃惊的是，随着人工智能能力的增强，现在这类工作的很大部分，都可以由代码辅助与自动完成工具来完成了。
 
 !!! Info
-    公司曾经有位女程序员。她妆容精致，长长的指甲上镌刻着一些美丽的图案，流光溢彩，敲起键盘来，指甲上的图案，就象蝴蝶一样翩翩起舞。我自己知道指甲刮蹭在键盘帽上的声音多让人难受，因此自己总是保持剪指甲的习惯，以保证键入时不受干扰。但接触一段时间后，我发现她的工作效率一点也不低 — 尽管在键入速度上，可能还是会受一些影响。
+    公司曾经有位女程序员。她妆容精致，长长的指甲上镌刻着一些美丽的图案，流光溢彩，敲起键盘来，指甲上的图案，就象蝴蝶一样翩翩起舞。我自己知道指甲刮蹭在键盘帽上的声音多让人难受，因此自己总是保持剪指甲的习惯，以保证键入时不受干扰，因此会担心长指甲对键入速度的影响。但接触一段时间后，我发现她的工作效率一点也不低 — 尽管在键入速度上，可能还是会受到长指甲的影响。
 
     尽管 Kite 的数据表明他们帮码农省去了 47%的键入时间，但从上面的例子可以看出，由此带来的效率的提升，可能并没有 Kite 想像的那么大。后面我们还会有机会回顾 Kite 这家公司的故事：如果努力的方向错了，那么再勤奋也是无济于事。
 
@@ -326,7 +333,7 @@ Pycharm 提供了一个非常好用的本地文件历史的功能。在 VS Code 
 
 现在，有了人工智能的加持，代码辅助已进化到了令人惊叹的程度。实际上，这本书就是在 Github Copilot[^Github Copilot] 的帮助下完成的，我们可以看一下这个例子：
 
-![](https://images.jieyu.ai/images/202109/20210926150605.png){: .img-center-75}
+![](https://images.jieyu.ai/images/202109/20210926150605.png)
 
 Copilot 根据前面的输入，自动生成了一个语法通顺的句子（这个句子在上图中显示为灰色），并且与上下文相当协调。这里我并不想使用它提示的用词（主要是担心读者并不愿意看一本机器写的书），但是，必须承认，除非是写诗，我们不必像象古人一样，吟安一个字，拈断数根须，文章并不是每一句都需要精雕细琢，有时候，完全可以使用 Copilot 提示的字句来进行过渡。更多的时候，在写文章时，Copilot 可以起到开拓思路的作用，这无疑是大有裨益的。
 
@@ -340,6 +347,7 @@ Copilot 根据前面的输入，自动生成了一个语法通顺的句子（这
 
 ## 4. 其他开发环境
 ### 4.1. Jupyter Notebook
+
 Pycharm 和 VS Code 都是大型开发工具，适合开发大型复杂应用程序。但在 Python 领域中，有一类问题更适合探索式编程，比如数据分析任务。我们拿到一些数据，通过统计方法查看它们的特性，进行一些可视化的分析。然后对数据进行预处理，进而编写一些机器学习算法，如果结果不理想，则推倒重来，探索新的算法。
 
 这种方法被称为探索式编程：探索式的工作重于遵循设计模式，代码中夹杂着大量的解释性文档和输出结果（包含图表和图像），它们都作为最终结果的一部分，而不是象传统的编程一样，代码、文档和输出结果是分离的。
@@ -352,6 +360,7 @@ Jupyter Notebook 是探索式编程的利器。它提供了一个基于网页的
 
 当前，Jupyter Notebook 的开发者在力推 Jupyter Lab，以替代 Jupyter Notebook。不过，由于 VS Code 和 Pycharm 对 Jupyter Notebook 的集成，因此 Notebook 还将存在相当长的时间。
 ### 4.2. Spyder
+
 Spyder[^spyder] 是专门为科学家、数据分析师、工程师打造的一款开源的编程环境。它具有集成开发环境的高级编辑、分析、调试和 profiling 功能与科学库的数据探索、交互式执行、深度检查和精美可视化功能的独特组合。 我们很容易从它的界面上看出这一点：
 
 ![](https://images.jieyu.ai/images/202109/20210927163158.png)
