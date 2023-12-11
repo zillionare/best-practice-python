@@ -770,4 +770,4 @@ virtualenvs.path = "{cache-dir}/virtualenvs"  # /path/to/cache/directory/virtual
 virtualenvs.prefer-active-python = false
 virtualenvs.prompt = "{project_name}-py{python_version}"
 ```
-这里面比较重要的有配置 pypi-token，以便发布你的项目。
+这里面比较重要的有配置 pypi-token，配置之后，就可以免登录进行项目发布。不过，我们建议对重要项目，不要在本地配置这个token， 我们应该只在CI/CD系统中配置这个token，以实现仅从CI/CD进行发布。
