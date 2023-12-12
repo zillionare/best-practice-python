@@ -39,7 +39,7 @@ def test_get_time_of_day(datetime_obj, expect, mocker):
 在这个示例中，我们希望用不同的时间参数，来测试 get_time_of_day 这个方法。如果使用 unittest，我们需要写一个循环，依次调用 get_time_of_day()，然后对比结果。而在 pytest 中，我们只需要使用 parametrize 这个注解，就可以传入参数数组（包括期望的结果），进行多次测试，不仅代码量要少不少，更重要的是，这种写法更加清晰。
 
 基于以上原因，在后面的内容中，我们将以 pytest 为例进行介绍。
-# 1. 测试代码的组织
+## 1. 测试代码的组织
 
 我们一般将所有的测试代码都归类在项目根目录下的 tests 文件夹中。每个测试文件的名字，要么使用 test_*.py，要么使用*_test.py。这是测试框架的要求。如此以来，当我们执行命令如``pytest tests``时，测试框架就能从这些文件中发现测试用例，并组合成一个个待执行的 suite。
 
@@ -63,7 +63,7 @@ sample
 ```
 注意这里面的__init__.py 文件，如果缺少这个文件的话，tests 就不会成为一个合法的包，从而导致 pytest 无法正确导入测试用例。
 
-# 2. PYTEST
+## 2. PYTEST
 使用 pytest 写测试用例很简单。假设 sample\app.py 如下所示：
 ```python
 # 示例 7 - 2
@@ -81,7 +81,7 @@ def test_inc():
 ```
 这比 unittest 下的代码要简洁很多。
 
-## 2.1. 测试用例的组装
+### 2.1. 测试用例的组装
 在 pytest 中，pytest 会按传入的文件（或者文件夹），搜索其中的测试用例并组装成测试集合 (suite)。除此之外，它还能通过 pytest.mark 来标记哪些测试用例是需要执行的，哪些测试用例是需要跳过的。
 
 ```python
@@ -127,11 +127,11 @@ test_server.py::test_send_http PASSED                                [100%]
 5. pytest.mark.parametrize, 给测试用例添加参数化标记，可以根据参数化的参数执行多次测试用例。
 
 这些标记可以用 pytest --markers 命令查看。
-## 2.2. pytest 断言
+### 2.2. pytest 断言
 
 在测试时，当我们调用一个方法之后，会希望将其返回结果与期望结果进行比较，以决定该测试是否通过。这被称之为测试断言。
 
-pytest中的断言巧妙地拦截并复用了python内置的函数assert，由于您很可能已经接触过assert了，因而使得这一部分的学习成本变得非常低。
+pytest 中的断言巧妙地拦截并复用了 python 内置的函数 assert，由于您很可能已经接触过 assert 了，因而使得这一部分的学习成本变得非常低。
 
 ```python {.line-numbers}
 # 示例 7 - 5
@@ -186,11 +186,11 @@ def test_assertion():
         assert False
 ```
 上述代码看上去逻辑正确，但它混淆了异常处理和断言，使得他人一时难以分清这段代码究竟是在处理测试代码中的异常呢，还是在测试被调用函数能否正确抛出异常，明显不如异常断言那样清晰。
-## 2.3. pytest fixture
+### 2.3. pytest fixture
 一般而言，我们的测试用例很可能需要依赖于一些外部资源，比如数据库、缓存、第三方微服务等。这些外部资源的初始化和销毁，我们希望能够在测试用例执行前后自动完成，即自动完成 setup 和 teardown 的操作。这时候，我们就需要用到 pytest 的 fixture。
 
 !!! Info
-    在单元测试中是否需要使用外部资源是一个见仁见智的问题。有的看法认为，一旦引入外部资源，测试用例就不再是单元测试，而是集成测试。时代总在发展，特别是进入容器化时代后，在测试中快速创建一个专属的数据库服务器变得十分快捷和容易，这可能要比我们通过大量的mock来进行外部资源隔离更容易，因此我们也没必要于拘泥于这些过去的看法。
+    在单元测试中是否需要使用外部资源是一个见仁见智的问题。有的看法认为，一旦引入外部资源，测试用例就不再是单元测试，而是集成测试。时代总在发展，特别是进入容器化时代后，在测试中快速创建一个专属的数据库服务器变得十分快捷和容易，这可能要比我们通过大量的 mock 来进行外部资源隔离更容易，因此我们也没必要于拘泥于这些过去的看法。
 
 假定我们有一个测试用例，它需要连接数据库，代码如下（参见 code/chap07/sample/app.py)
 
@@ -222,7 +222,7 @@ import pytest_asyncio
 import asyncio
 
 # PYTEST-ASYNCIO 已经提供了一个 EVENT_LOOP 的 FIXTURE, 但它是 FUNCTION 级别的
-# 这里我们需要一个session级别的fixture，所以我们需要重新实现
+# 这里我们需要一个 SESSION 级别的 FIXTURE，所以我们需要重新实现
 @pytest.fixture(scope="session")
 def event_loop():
     policy = asyncio.get_event_loop_policy()
@@ -250,7 +250,7 @@ async def test_add_user(db):
 
 fixture 是一些函数，pytest 会在执行测试函数之前（或之后）加载运行它们。但与 unitest 中的 setup 和 teardown 不同，pytest 中的 fixture 依赖是显式声明的。比如，在上面的 test_add_user 显式依赖了 db 这个 fixture（通过在函数声明中传入 db 作为参数），而 db 则又显示依赖 event_loop 这个 fixture。即使文件中还存在其它 fixture, test_add_user 也不会依赖到这些 fixture，因为依赖必须显式声明。
 
-上面的代码中，我们演示的是对异步函数add_user的测试。显然，异步函数必须在某个event loop中执行，并且相关的初始化(setup)和退出操作(teardown)也必须在同一个loop中执行。这里是分别通过pytest.mark.asyncio, pytest_asyncio等fixture来实现的：
+上面的代码中，我们演示的是对异步函数 add_user 的测试。显然，异步函数必须在某个 event loop 中执行，并且相关的初始化 (setup) 和退出操作 (teardown) 也必须在同一个 loop 中执行。这里是分别通过 pytest.mark.asyncio, pytest_asyncio 等 fixture 来实现的：
 
 首先，我们需要将测试用例标注为异步执行，即上面的代码第 21 行。其次，test_add_user 需要一个数据库连接，该连接由 fixture `db`来提供。这个连接的获得也是异步的，因此，我们不能使用 pytest.fixutre 来声明该函数，而必须使用@pytest_asyncio.fixture 来声明该函数。
 
@@ -265,7 +265,7 @@ fixture 是一些函数，pytest 会在执行测试函数之前（或之后）�
     
     注意只有从 python 3.8 开始，unittest 才直接支持异步测试。在 python 3.7 及之前的版本中，我们需要使用第三方库 aiounittest。
 
-我们通过上面的例子演示了fixture。与markers类似，要想知道我们的测试环境中存在哪些fixtures，可以通过pytest --fixtures来显示当前环境中所有的fixture。
+我们通过上面的例子演示了 fixture。与 markers 类似，要想知道我们的测试环境中存在哪些 fixtures，可以通过 pytest --fixtures 来显示当前环境中所有的 fixture。
 ```shell
 $ pytest --fixtures
 
@@ -287,7 +287,7 @@ db [session scope] -- tests/test_app.py:52
 
 这里我们看到 faker.contrib 提供了一个名为 faker 的 fixture, 我们之前安装的、支持异步测试的 pytest_asyncio 也提供了名为 event_loop 的 fixture（为节省篇幅，其它几个省略了），以及我们自己测试代码中定义的 event_loop 和 db 这两个 fixture。
 
-Pytest还提供了一类特别的fixture，即pytest-mock。为了讲解方便，我们先安装pytest-mock这个插件，看看它提供的fixture。
+Pytest 还提供了一类特别的 fixture，即 pytest-mock。为了讲解方便，我们先安装 pytest-mock 这个插件，看看它提供的 fixture。
 
 ```shell
 $ pip install pytest-mock
@@ -315,26 +315,29 @@ session_mocker [session scope] -- .../pytest_mock/plugin.py:419
     takes care of automatically undoing all patches after each test method.
 ```
 
-可以看到pytest-mock提供了5个不同级别的fixture。关于什么是mock，这是下一节的内容。
+可以看到 pytest-mock 提供了 5 个不同级别的 fixture。关于什么是 mock，这是下一节的内容。
 
-# 2.4. Mock
-在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接无法独占的数据库或者第三方微服务等。这时候，我们需要通mock来模拟这些外部接口。mock可能是单元测试中最核心的技术。
+## 3. MOCK 魔法
+在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接无法独占的数据库或者第三方微服务等。这时候，我们需要通 mock 来模拟出这些外部接口。mock 可能是单元测试中最核心的技术。
 
 !!! Readmore
     感谢容器技术！现在单元测试中，越来越多地连接数据库、缓存和第三方微服务了。因为对有一些接口进行 mock 的代价，已经超过了 launch 一个容器，初始化数据库再开始测试了。
 
-无论是 unittest 还是 pytest，都是直接或者间接使用了 unittest 中的 mock 模块。所以，当你遇到 mock 相关的问题，请参阅 [mock](https://docs.python.org/3/library/unittest.mock.html)。我们接下来关于mock的介绍，也将以Unittest中的mock为主。不过，两个框架的mock，在基本概念上都是相通的。
+无论是 unittest 还是 pytest，都是直接或者间接使用了 unittest 中的 mock 模块。所以，当你遇到 mock 相关的问题，请参阅 [mock](https://docs.python.org/3/library/unittest.mock.html)。我们接下来关于 mock 的介绍，也将以 Unittest 中的 mock 为主。不过，两个框架的 mock，在基本概念上都是相通的。
 
 !!! info
-    python从3.8起，才对async模式下的mock有比较完备的支持。由于Python 3.7已经走到生命尽头，所以本书也不介绍Python 3.7中， async模式下的mock如何实现了。
+    python 从 3.8 起，才对 async 模式下的 mock 有比较完备的支持。由于 Python 3.7 已经走到生命尽头，所以本书也不介绍 Python 3.7 中， async 模式下的 mock 如何实现了。
 
-unittest.mock模块提供了最核心的Mock类。当我们用Mock类的一个实例来替换被测试系统的某些部分之后，我们就可以对它的使用方式做出断言。这包括检查哪些方法（属性）被调用以及调用它们的参数如何。我们还可以设定返回值或者令其抛出异常，以改变执行路径。
+unittest.mock 模块提供了最核心的 Mock 类。当我们用 Mock 类的一个实例来替换被测试系统的某些部分之后，我们就可以对它的使用方式做出断言。这包括检查哪些方法（属性）被调用以及调用它们的参数如何。我们还可以设定返回值或者令其抛出异常，以改变执行路径。
 
-除此之外，mock模块还提供了 patch 方法和MagicMock子类。MagicMock区别于Mock的地方在于，它自动实现了对Python中类对象中的魔法函数的mock（这是它的名字的来源！），比如__iter__等。patch则是一个带上下文管理的工具，它能自动复原我们对系统的更改。
+除此之外，mock 模块还提供了 patch 方法和 MagicMock 子类。MagicMock 区别于 Mock 的地方在于，它自动实现了对 Python 中类对象中的魔法函数的 mock（这是它的名字的来源！），比如__iter__等。patch 则是一个带上下文管理的工具，它能自动复原我们对系统的更改。
 
-## 基础概念与基本使用
+!!! Info
+    实际上，多数时候，我们用到的是 MagicMock 对象，而不是 Mock。
 
-最基础的Mock的概念可以通过下面的代码得到演示：
+### 3.1. 基础概念与基本使用
+
+最基础的 mock 的概念可以通过下面的代码得到演示：
 
 ```python
 # 示例 7 - 9
@@ -346,11 +349,11 @@ thing.method(3, 4, 5, key='value')
 thing.method.assert_called_with(3, 4, 5, key='value')
 ```
 
-这段代码假设我们有一个被测试类ProductionClass，当我们调用它的method方法时，它有一些不便在单元测试下运行的情况（比如需要连接数据库），因此，我们希望能跳过对它的调用，而直接返回我们指定的一些值。
+这段代码假设我们有一个被测试类 ProductionClass，当我们调用它的 method 方法时，它有一些不便在单元测试下运行的情况（比如需要连接数据库），因此，我们希望能跳过对它的调用，而直接返回我们指定的一些值。
 
-在这里我们能拿到ProductionClass实例对像的引用，所以，我们可以直接修改它的method属性，使之指向一个MagicMock对象。Mock和MagicMock对象有一些重要的属性和方法。
+在这里我们能拿到 ProductionClass 实例对像的引用，所以，我们可以直接修改它的 method 属性，使之指向一个 MagicMock 对象。MagicMock 对象有一些重要的属性和方法。
 
-这里出现的return_value是第一个重要的属性。它的意思时，当被替换的对象（这里是method）被调用时，返回值应该是3。与之类似的另一个属性是side_effect。它同样也在mock被调用时，返回设置的值。但return_value与side_effect有重要区别：两者的返回值都可以设置为数组（或者其它可迭代对象），但通过side_effect设置返回值时，每次调用mock，它都返回side_effect中的下一个迭代值；而return_value则会将设置值全部返回。另外，如果两者同时设置，side_effect优先返回。请看下面的示例：
+这里出现的 return_value 是第一个重要的属性。它的意思时，当被替换的对象（这里是 method）被调用时，返回值应该是 3。与之类似的另一个属性是 side_effect。它同样也在 mock 被调用时，返回设置的值。但 return_value 与 side_effect 有重要区别：两者的返回值都可以设置为数组（或者其它可迭代对象），但通过 side_effect 设置返回值时，每次调用 mock，它都返回 side_effect 中的下一个迭代值；而 return_value 则会将设置值全部返回。另外，如果两者同时设置，side_effect 优先返回。请看下面的示例：
 
 ```python
 # 示例 7 - 10
@@ -363,7 +366,7 @@ for _ in side_effect:
     print(m())
 ```
 
-输出结果将是:
+输出结果将是：
 
 ```
 1
@@ -373,31 +376,31 @@ foo
 5
 ```
 
-我们给side_effect设置了5个值，在5次重复测试时，它分别依次返回下一个迭代值。注意这里我们通过unittest.mock.DEFAULT，来让其中一次迭代，返回了return_value的设置值。当然，本质上，这仍然是对side_effect的一个迭代结果。
+我们给 side_effect 设置了 5 个值，在 5 次重复测试时，它分别依次返回下一个迭代值。注意这里我们通过 unittest.mock.DEFAULT，来让其中一次迭代，返回了 return_value 的设置值。当然，本质上，这仍然是对 side_effect 的一个迭代结果。
 
 这里还出现了它的一个重要方法，assert_called_with，即检查被替换的方法是否被以期望的参数调用了。除此之外，还可以断言被调用的次数，等等。
 
 !!! note:
     如果你之前接触过其它 mock 框架的话，可能需要注意，python 中的 mock 是`action -> assertion`模式，而不是其它语言中常见的`record -> replay`模式。
 
-这个例子非常简单。但它也演示了使用Mock的精髓，即生成Mock实例，设置行为（比如返回值），替换生产系统中的对象（方法、属性等），最后，检验结果。
+这个例子非常简单。但它也演示了使用 Mock 的精髓，即生成 Mock 实例，设置行为（比如返回值），替换生产系统中的对象（方法、属性等），最后，检验结果。
 
-很多时候，我们会通过patch的方式来使用mock。又有两种主要的方式：
+很多时候，我们会通过 patch 的方式来使用 mock。又有两种主要的方式：
 
-### 作为装饰器使用
+#### 3.1.1. 作为装饰器使用
 
-假如我们有一个文件系统相关的操作，为了正常运行，必须在测试环境下构建目录，增加某些文件。为了简单起见，我们希望通过mock来模拟这个环境。
+假如我们有一个文件系统相关的操作，为了正常运行，必须在测试环境下构建目录，增加某些文件。为了简单起见，我们希望通过 mock 来模拟这个环境。
 
 ```python {.line-numbers}
 # 示例 7 - 11
 import os
 
-# function under test
+# FUNCTION UNDER TEST
 class Foo:
     def get_files(self, dir_: str):
         return os.list_dir(dir_)
 
-# testing code
+# TESTING CODE
 from unittest.mock import patch
 from unittest import TestCase
 
@@ -412,26 +415,29 @@ test = FooTest()
 test.test_get_files()
 ```
 
-我们对关键代码进行一些解释。首先，通过装饰器语法进行mock时，我们的测试函数会多一个参数（这里是mocked，但名字可以由我们任意指定）。这里使用多个patch装饰器也是可以的，每增加一个装饰器，测试函数就会多增加一个参数。
+我们对关键代码进行一些解释。首先，通过装饰器语法进行 mock 时，我们的测试函数会多一个参数（这里是 mocked，但名字可以由我们任意指定）。这里使用多个 patch 装饰器也是可以的，每增加一个装饰器，测试函数就会多增加一个参数。
 
-其次，我们要对Foo.get_files进行mock，但我们在Foo.get_files之前，加上了一个__main__的前缀。这是由于类Foo的定义处在顶层模块中。在Python中，任何一个符号（类、方法或者变量）都处在某个模块（module）之下。如果这段代码存为磁盘文件foo.py，那么模块名就是foo；我们在别的模块中引入Foo.get_files时，应该使用foo.Foo.get_files。但在这里，由于我们是同模块引用，因此它的前缀是__main__。
+其次，我们要对 Foo.get_files 进行 mock，但我们在 Foo.get_files 之前，加上了一个__main__的前缀。这是由于类 Foo 的定义处在顶层模块中。在 Python 中，任何一个符号（类、方法或者变量）都处在某个模块（module）之下。如果这段代码存为磁盘文件 foo.py，那么模块名就是 foo；我们在别的模块中引入 Foo.get_files 时，应该使用 foo.Foo.get_files。但在这里，由于我们是同模块引用，因此它的前缀是__main__。
 
-通过装饰器语法传入进来的mock对象，它的行为是未经设置的。因此，我们要在这里先设置它的返回值，然后再调用业务逻辑函数foo.get_files -- 由于它已经被mock了，所以会返回我们设置的返回值。
+!!! info
+    使用 mock 的关键，是要找到引用被 mock 对象的正确方式。在 Python 中，一切都是对象。这些对象通过具有层次结构的命名空间来进行寻址。以 patch 方法为例，它处在 mock 模块之中，而 mock 模块又是包 unittest 的下级模块，因此，我们就使用 unittest.mock.patch 来引用它，这也与导入路径是一致的。<br><br>但是，像这里的脚本，如果一个对象不是系统内置对象，又不存在于任何包中，那么它的名字空间就是__main__，正如这里的示例__main__.Foo 一样。关于寻址，还存在其它的情况，我们会在后面介绍 builtin 对象以及错误的引用那两节中进行介绍。
 
-### 在块级代码中使用
+通过装饰器语法传入进来的 mock 对象，它的行为是未经设置的。因此，我们要在这里先设置它的返回值，然后再调用业务逻辑函数 foo.get_files -- 由于它已经被 mock 了，所以会返回我们设置的返回值。
 
-当我们通过装饰器来使用mock时，实际上它仍然是有上下文的，在函数退出之后，mock对系统的更改就复原了。但是，有时候我们更希望使用代码块级别的patch，一方面可以更精准地限制mock的使用范围，另一方面，它的语法会更简练，因为我们可以一行代码完成mock行为的设置。
+#### 3.1.2. 在块级代码中使用
+
+当我们通过装饰器来使用 mock 时，实际上它仍然是有上下文的，在函数退出之后，mock 对系统的更改就复原了。但是，有时候我们更希望使用代码块级别的 patch，一方面可以更精准地限制 mock 的使用范围，另一方面，它的语法会更简练，因为我们可以一行代码完成 mock 行为的设置。
 
 ```python{.line-numbers}
 # 示例 7 - 12
 import os
 
-# function under test
+# FUNCTION UNDER TEST
 class Foo:
     def get_files(self, dir_: str):
         return os.list_dir(dir_)
 
-# testing code
+# TESTING CODE
 from unittest.mock import patch
 from unittest import TestCase
 
@@ -446,189 +452,13 @@ test.test_get_files()
 ```
 这里仅用一行代码就完成了替换和设置。
 
-在实践中，使用mock可能并不像看起来那么容易。有一些情景对初学者而言会比较难以理解。一旦熟悉之后，你会发现，你对Python的底层机制，有了更深入的理解。下面，我们就介绍这些场景下如何使用mock。
+在实践中，使用 mock 可能并不像看起来那么容易。有一些情景对初学者而言会比较难以理解。一旦熟悉之后，你会发现，你对 Python 的底层机制，有了更深入的理解。下面，我们就介绍这些场景下如何使用 mock。
 
-## 一些特殊场合下的mock
-### 异步对象
-从3.8起，unittest.mock一般就不再区分同步和异步对象，比如：
+### 3.2. 特殊场合下的 mock
+#### 3.2.1. 修改实例的属性
+前面的例子中，我们给 patch 传入的 target 是一个字符串，显然，在 patch 作用域内，所有的新生成的对象都会被 patch。如果在 patch 之前，对象已经生成了，我们则需要使用`patch.object`来完成 patch。这样做的另一个好处是，我们可以有选择性地 patch 部分对象。
 
-```python
-# function under test
-
-class Foo:
-    async def bar():
-        return "hello world!"
-        
-# testing code
-class FooTest(TestCase):
-    async def test_bar(self):
-        foo = Foo()
-        with patch("__main__.Foo.bar", return_value="hello from async mock!"):
-            res = await foo.bar()
-            print(res)
-            
-test = FooTest()
-await test.test_bar()
-```
-
-被mock的方法bar是一个异步函数，我们如果只需要mock它的返回值的话，仍然是用同样的方法，直接给return_value赋值就好。如果我们要将其替换成另一个函数，则该函数需要声明成为异步函数。
-
-但是，如果我们要mock的是一个异步的生成器，则方法会有所不同：
-
-```python
-# function under test
-from unittest import mock
-
-class Foo:
-    async def bar():
-        for i in range(5):
-            yield f"called {i}th"
-    
-# testing code
-class FooTest(TestCase):
-    async def test_bar(self):
-        foo = Foo()
-        with mock.patch(
-            "__main__.Foo.bar"
-        ) as mocked:
-            mocked.return_value.__aiter__.return_value = [0, 2, 4, 6, 8]
-            print([i async for i in foo.bar()])
-
-            
-test = FooTest()
-await test.test_bar()
-```
-理解这段代码的关键是，我们mocked的对象是bar方法，它的返回值（即mocked.return_value）是一个coroutine。我们需要对该coroutine的__aiter__方法设置返回值，这样才能得到正确的结果。此外，由于__aiter__本身就是迭代器的意思，所以，即使我们设置它的return_value，而不是side_effect为一个列表，它也会按次返回迭代结果，而不是整个list。这是与我们前面介绍return_value和side_effect的区别时所讲的内容相区别的。
-
-同样需要特别注意的是async with方法。你需要mock住它的__aexit__，将其替换成你要实现的方法。
-
-
-## 特殊对象的mock
-1. builtin
-2. 时间
-3. exception
-### 错误的引用
-
-
-在 unittest 中要使用 mock, 我们需要手动导入 mock 模块。在 pytest 中，我们可以直接使用 mocker 这个 fixture。
-```python title="unittest example"
-# 示例 7 - 12
-import unittest
-from unittest import mock
-
-class Test(unittest.TestCase):
-    def test_mock(self):
-        # 在 UNITTEST 中，我们通过 MOCK 模块来调用 PATCH 方法
-        with mock.patch('builtins.input', return_value = 'Y') as m:
-            self.assertEqual('Y', input('continure or not? [Y]/n'))
-
-# PYTEST EXAMPLE
-def test_mock(mocker):
-    # 在 PYTEST 中，我们通过 MOCKER 这个 FIXTURE 来调用 PATCH 方法
-    mocker.patch('builtins.input', return_value = 'Y')
-    assert 'Y' == input('continure or not? [Y]/n')
-```
-上面的例子清楚地演示了两个框架中应该如何调用 patch 方法。如果我们要使用 Mock 或者 MagicMock 这两个类，也是一样，只不过在 pytest 中，我们需要通过 mocker 这个对象来引用它们。
-
-现在我们来介绍一下 patch 方法。patch 是一个 context manager（也可以当装饰器用），它可以用来 mock 一个对象。上面的例子已经演示了如何 mock 一个内置函数。内置函数是指象 open、print、input 这样的方法，我们可以在程序中无须导入即可直接使用，但是在 mock 它们时，我们必须通过'builtins'这个名字空间来引用它们，这也是我们在这里特别举例的原因。另一个需要特别说明的内置库是 datetime，当你需要 mock 这个库时，我们的建议是使用 freezegun 这个库，而不是使用 patch。
-```python
-# 示例 7 - 13
-@freeze_time("2021-01-01")
-def test_freezegun():
-    now = datetime.datetime(2021, 1, 1)
-    assert now == datetime.datetime.now()
-```
-
-mock 自己代码中的方法，或者第三方库中的方法一般来讲是比较容易的，关键是要找到正确的引用方法。在第 7 章的示例代码中，有这样一小段程序：
-
-```python title="sample/core/foo.py"
-# 示例 7 - 14
-def is_windows():
-    return True
-
-def get_operating_system():
-    return "Windows" if is_windows() else "Linux"
-
-class Foo:
-    def bark(self):
-        return "bark"
-
-# FROM SAMPLE\TESTS\CORE\TEST_FOO.PY
-def test_get_operating_system(mocker):
-    mocker.patch("sample.core.foo.is_windows", return_value=False)
-    assert get_operating_system() == "Linux"
-```
-第 16 行中的"sample.core.foo.is_windows"被称作 target，return_value 则是我们调用 target 方法时，所期望返回的值。
-
-上面的例子中，我们 mock 了一个普通方法，如果我们要 mock 一个类的方法呢？此时 target 的写法应该是'package.package.module.Class.method'。以第 10~12 行定义的 Foo 对象的 bark 方法为例，target 的写法应该是'sample.core.foo.Foo.bark'。
-
-这里我们要指出一个初学者很容易掉进去的坑，就是明明 target 正确，但是却无法 mock 成功。在 unittest 的文档中有这样一句话：
-
-!!! quote
-    The basic principle is that you patch where an object is looked up, which is not necessarily the same place as where it is defined. 
-
-也就是，patch 应用于哪个 target 对象，取决于被 mock 对象是在哪里被引用的，而不是在哪里被定义的。
-
-我们通过一个例子来详细说明这个问题。假设在前面的 foo.py 之外，还有一个 sample/bar.py 文件，定义如下：
-```python title="sample/bar.py"
-# 示例 7 - 15
-from sample.core.foo import Foo, is_windows
-
-def my_bark() -> str:
-    foo = Foo()
-    return foo.bark()
-
-def get_operating_system() -> str:
-    return "Windows" if is_windows() else "Linux"
-```
-
-对应的测试文件 tests\test_bar.py 定义如下：
-```python 
-# 示例 7 - 16
-from sample.bar import get_operating_system, my_bark
-
-def test_my_bark(mocker):
-    with mocker.patch("sample.core.foo.Foo.bark", return_value="mock_bark"):
-        assert my_bark() == "mock_bark"
-
-def test_get_operation_system(mocker):
-    target_will_fail = "sample.core.foo.is_windows"
-    target_will_succeed = "sample.bar.is_windows"
-    with mocker.patch(target_will_fail, return_value=False):
-        assert get_operating_system() == "Linux"
-```
-运行测试，发现 test_my_bark 测试通过，而 test_get_operation_system 测试失败。说明其中一个 mock 成功，另一个 mock 失败。这是为什么呢？
-
-在 test_get_operation_system 中，导致测试失败的 target 是 target_will_fail，即 sample.core.foo.is_windows，被测试函数 get_operating_system 来自由 bar.py，在它调用 is_windows 之前，这个 is_windows 已经被导入到 sample.bar 这个名字空间里，sample.bar 持有了这个引用（应该是以传值的方式），因此当 patch 方法对 sample.core.foo.is_windows 进行修改时，这个改动并不会传递给 sample.bar 中的 is_windows。这就是 unittest 文档中所说的，patch 应用于哪个 target 对象，取决于被 mock 对象是在哪里被引用的（sample.bar)，而不是在哪里被定义的 (sample.core.foo)。
-
-但上面的理论无法解释为什么 test_my_bark 测试通过。原因可能还是传值引用的原因。在 my_bark 中，当调用 foo.bark() 时，foo 对象并没有自己的 bark 方法，因此它还是会去寻找 sample.core.foo.Foo 中的 bark 方法，而这个方法已经被 patch 了，因此 test_my_bark 测试通过。
-
-前面我们讨论了 patch 的一个用法，即 patch 一个函数的返回值。有时候我们不关心函数的返回值，而是希望函数在被调用时，能够无条件地抛出某个异常，这时就需要用到`side_effect`参数。
-
-```python title="tests/test_bar.py"
-# 示例 7 - 17
-import pytest
-def test_mock_side_effect(mocker):
-    with mocker.patch('builtins.input', side_effect = ValueError):
-        with pytest.raises(ValueError) as e:
-            input()
-```
-上述代码不仅模拟出了一个 ValueError，还检测这个异常是否抛出。通过这种方式，异常处理代码现在也可以轻松覆盖到了。
-
-side_effect 不仅可以用来模拟异常，还可以用来模拟多次调用的返回值。比如，我们希望某个函数在第一次调用时返回 1，第二次调用时返回 2，第三次调用时返回 3，以此类推。这时可以这样写：
-```python title="tests/test_bar.py"
-# 示例 7 - 18
-def test_mock_multiple_return(mocker):
-    with mocker.patch('builtins.input', side_effect = [1, 2, 3]):
-        assert input() == 1
-        assert input() == 2
-        assert input() == 3
-```
-我们一共调用了 input 三次，每次 mock 都按期望返回了不同的数值。
-
-上面的例子中，我们给 patch 传入的 target 是一个字符串，显然，在 patch 作用域内，所有的新生成的对象都会被 patch。如果在 patch 之前，对象已经生成了，我们则需要使用`patch.object`来完成 patch。
-
-```python title="sample/core/foo.py"
+```python {.line-numbers}
 # 示例 7 - 19
 def bar():
     logger = logging.getLogger(__name__)
@@ -646,14 +476,200 @@ with mock.patch.object(logger, 'info') as m:
     m.assert_called_once_with("please check if I was called")
 ```
 
-两个 logger(root_logger 和'sample.core.foo'对应的 logger) 都被调用，但我们只拦截了后一个 logger 的`info`方法，结果验证它被调用，且仅被调用一次。
+在 bar 方法里，两个 logger(root_logger 和'sample.core.foo'对应的 logger) 都被调用，但我们只拦截了后一个 logger 的`info`方法，结果验证它被调用，且仅被调用一次。
 
 这里要提及 pytest 中 mocker.patch 与 unitest.mock.patch 的一个细微差别。后者进行 patch 时，可以返回 mock 对象，我们可以通过它进行更多的检查（见上面示例代码中的第 14，16 行）；但 mocker.patch 的返回值是 None。
+#### 3.2.2. 异步对象
+从 3.8 起，unittest.mock 一般就不再区分同步和异步对象，比如：
 
-# 2.5. 衡量测试的覆盖率
-我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。coverage.py 是最常用的测量 Python 程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别可能已执行但未执行的代码。
+```python
+# FUNCTION UNDER TEST
 
-覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分正在被测试执行，哪些没有。
+class Foo:
+    async def bar():
+        pass
+        
+# TESTING CODE
+class FooTest(TestCase):
+    async def test_bar(self):
+        foo = Foo()
+        with patch("__main__.Foo.bar", return_value="hello from async mock!"):
+            res = await foo.bar()
+            print(res)
+            
+test = FooTest()
+await test.test_bar()
+```
+
+原函数 bar 的返回值为空。但输出结果是 "hello from async mock"，说明该函数被 mock 了。
+
+被 mock 的方法 bar 是一个异步函数，如果我们只需要 mock 它的返回值的话，仍然是用同样的方法，直接给 return_value 赋值就好。如果我们要将其替换成另一个函数，也只需要将该函数声明成为异步函数即可。
+
+但是，如果我们要 mock 的是一个异步的生成器，则方法会有所不同：
+
+```python
+# FUNCTION UNDER TEST
+from unittest import mock
+
+class Foo:
+    async def bar():
+        for i in range(5):
+            yield f"called {i}th"
+    
+# TESTING CODE
+class FooTest(TestCase):
+    async def test_bar(self):
+        foo = Foo()
+        with mock.patch(
+            "__main__.Foo.bar"
+        ) as mocked:
+            mocked.return_value.__aiter__.return_value = [0, 2, 4, 6, 8]
+            print([i async for i in foo.bar()])
+
+            
+test = FooTest()
+await test.test_bar()
+```
+理解这段代码的关键是，我们要 mock 的对象是 bar 方法，它的返回值（即 mocked.return_value）是一个 coroutine。我们需要对该 coroutine 的__aiter__方法设置返回值，这样才能得到正确的结果。此外，由于__aiter__本身就是迭代器的意思，所以，即使我们设置它的 return_value，而不是 side_effect 为一个列表，它也会按次返回迭代结果，而不是整个 list。这是与我们前面介绍 return_value 和 side_effect 的区别时所讲的内容相区别的。
+
+同样需要特别注意的是 async with 方法。你需要 mock 住它的__aexit__，将其替换成你要实现的方法。
+
+#### 3.2.3. builtin 对象
+如果我们有一个程序，读取用户从控制台输入的参数，根据该参数进行计算。显然，我们需要 Mock 用户输入，否则单元测试没法自动化。
+
+在 Python 中，接受用户控制台输入的函数是 input。要 mock 这个方法，按照前面学习中得到的经验，我们需要知道它属于哪个名字空间。在 Python 中，像 input, open, eval 等一类的函数大约有 80 个左右，被称为 [builtin（内置函数）](https://docs.python.org/3/library/functions.html)。
+
+在 mock 它们时，我们使用 builtins 名字空间来进行引用：
+
+```python
+with patch('builtins.input', return_value="input is mocked"):
+    user_input = input("please say something:")
+    print(user_input)
+```
+
+执行上述代码时，用户并不会有机会真正输入数据，input 方法被 mock，并且会返回"input is mocked"。
+
+#### 3.2.4. 让时间就停留在这一刻
+有时候我们会在代码中，通过 datetime.datetime.now() 来获取系统的当前时间。显然，在不同的时间测试，我们会得到不同的取值，导致测试结果无法固定。因此，这也是需要被 mock 的对象。
+
+要实现对这个方法的 mock，可能比我们一开始以为的要难一些。我们的推荐是，使用 freezegun 这个库，而避开自己去 mock 它。
+
+```python
+# 请使用 PYTEST 来运行，或者自行改写为 UNITTEST
+from freezegun import freeze_time
+
+import datetime
+import unittest
+
+# FREEZE TIME FOR A PYTEST STYLE TEST:
+
+@freeze_time("2012-01-14")
+def test():
+    assert datetime.datetime.now() == datetime.datetime(2012, 1, 14)
+
+def test_case2():
+    assert datetime.datetime.now() != datetime.datetime(2012, 1, 14)
+    with freeze_time("2012-01-14"):
+        assert datetime.datetime.now() == datetime.datetime(2012, 1, 14)
+    assert datetime.datetime.now() != datetime.datetime(2012, 1, 14)
+```
+
+注意 Python 的时间库很多，如果您使用的是其它的库来获取当前时间，则 freeze_gun 很可能会不起作用。不过，对第三方的时间库，一般很容易实现 mock。
+#### 3.2.5. 如何制造一场“混乱”？
+假设我们有一个爬虫在抓取百度的热搜词。它的功能主要由 crawl_baidu 来实现。我们另外有一个函数在调用它，以保存 crawl_baidu 的返回结果。我们想知道，如果 crawl_baidu 中抛出异常，那么调用函数是否能够正确处理这种情况。
+
+这里的关键是，我们要让 crawl_baidu 能抛出异常。当然，我们不能靠拔网线来实现这一点。
+
+```python{.line-numbers}
+import httpx
+from httpx import get, ConnectError
+from unittest.mock import patch
+from unittest import TestCase
+
+def crawl_baidu():
+    return httpx.get("https://www.baidu.com")
+    
+class ConnectivityTest(TestCase):
+    def test_connectivity(self):
+        with patch('httpx.get', side_effect=["ok", ConnectError("disconnected")]):
+            print(crawl_baidu())
+
+            with self.assertRaises(ConnectError):
+                crawl_baidu()
+        
+
+case = ConnectivityTest()
+case.test_connectivity()
+```
+
+crawl_baidu 依靠 httpx.get 来爬取数据。我们通过 mock httpx.get 方法，让它有时返回正常结果，有时返回异常。这是通过 side_effect 来实现的。
+
+注意第 14 行，我们使用的是 self.assertRaises，而不是 try-except 来捕捉异常。两者都能够实现检查异常是否抛出的功能。但通过 self.assertRaises，我们强调了这里应该抛出一个异常，它是我们测试逻辑的一部分。而 try-except 则应该用来处理真正的异常。
+
+#### 3.2.6. 消失的魔法
+
+再强调一遍，“使用 mock 的关键，是要找到引用被 mock 对象的正确方式。”而正确引用的关键，则是这样一句“咒语”
+
+!!! Warning
+    Mock an item where it is used, not where it came from
+
+    在对象被使用的地方进行 mock, 而不是在它出生的地方。
+
+我们通过一个简单的例子来说明这一点：
+
+```python {.line-numbers}
+from os import system
+from unittest import mock
+import pytest
+
+def echo():
+    system('echo "Hello"')
+
+with mock.patch('os.system', side_effect=[Exception("patched")]) as mocked:
+    with pytest.raises(Exception) as e:
+        echo()
+```
+
+我们在 echo 方法中，调用了系统的 echo 命令。在测试中，我们试图 mock 住 os.system 方法，让它一被调用，就返回一个异常。然后我们通过 pytest 来检查，如果异常抛出，则证明 mock 成功，否则，mock 失败。
+
+但是如果我们运行这个示例，只会得到一个友好的问候，No errors, No warnings! 为什么？
+
+因为当我们在 echo() 函数中调用 system 函数时，此时的 system 存在于__main__名字空间，而不是 os 的名字空间。os 名字空间是 system 出生的地方，而__main__名字空间才是使用它的地方。因此，我们应该 patch 的对象是'__main__.system'，而不是'os.system'。
+
+现在，让我们将`os.system`改为`__main__.system`，重新运行，你会发现，魔法又生效了！
+
+在配套代码中，还有一个名为 where_to_patch 的示例，我们也来看一下。
+
+```python
+# FOO.PY
+def get_name():
+    return "Alice"
+
+# BAR.PY
+from .foo import get_name
+
+class Bar:
+    def name(self):
+        return get_name()
+
+# TEST.PY
+from unittest.mock import patch
+
+from where_to_patch.bar import Bar
+
+tmp = Bar()
+
+with patch('where_to_patch.foo.get_name', return_value="Bob"):
+    name = tmp.name()
+    assert name == "Bob"
+```
+
+测试代码会抛出 `AssertionError: assert "Alice" == "Bob"的错误。如果我们把`where_to_patch.foo`改为`where_to_patch.bar`，则测试通过。这个稍微扩展了一下的例子，进一步清晰地演示了如何正确引用被 mock 对象。
+
+## 4. Coverage - 衡量测试的覆盖率
+我们已经掌握了如何进行单元测试。接下来，一个很自然的问题浮现出来，我们如何知道单元测试的质量呢？这就提出了测试覆盖率的概念。覆盖率测量通常用于衡量测试的有效性。它可以显示您的代码的哪些部分已被测试过，哪些没有。
+
+coverage.py 是最常用的测量 Python 程序代码覆盖率的工具。它监视您的程序，记录代码的哪些部分已被执行，然后分析源代码以识别已执行和未执行的代码。
 
 我们可以通过下面的方法来安装 coverage.py：
 ```shell
@@ -663,7 +679,6 @@ $ pip install coverage
 ```shell
 $ coverage run -m pytest arg1 arg2 arg3
 ```
-不过，更多人选择使用 pytest-cov 插件来进行测试覆盖率的收集。这也是 ppw 的选择。通过 ppw 生成的工程，pytest-cov 已被加入到测试依赖中，因此也就自然安装到环境中去了。
 
 当测试运行完成后，我们可以通过`coverage report -m`来查看测试覆盖率的报告：
 ```
@@ -675,13 +690,15 @@ my_other_module.py           56      6    89%   17-23
 TOTAL                        76     10    87%
 ```
 如果希望得到更好的视觉效果，也可以使用 coverage html 命令来生成带注释的 HTML 报告，然后在浏览器中打开 htmlcov/index.html。
-![](https://images.jieyu.ai/images/20230120230120204634.png)
+![75%](https://images.jieyu.ai/images/2023/01/20230120204634.png)
 
-不过，通过 ppw 配置的工程，我们一般不需要直接调用 coverage 命令，而是使用 pytest 命令来进行测试。pytest-cov 插件会自动收集测试覆盖率数据，然后在测试完成后，自动将测试覆盖率报告打印到控制台上。如果希望生成带注释的 HTML 报告，可以使用`pytest --cov-report=html`命令。对 pytest 我们一般也不需要直接调用，而是通过 tox 来调用。
+不过，更多人选择使用 pytest-cov 插件来进行测试覆盖率的收集。这也是 ppw 的选择。通过 ppw 生成的工程，pytest-cov 已被加入到测试依赖中，因此也就自然安装到环境中去了。
+
+因此，通过 ppw 配置的工程，我们一般不需要直接调用 coverage 命令，而是使用 pytest 命令来进行测试。pytest-cov 插件会自动收集测试覆盖率数据，然后在测试完成后，自动将测试覆盖率报告打印到控制台上。如果希望生成带注释的 HTML 报告，可以使用`pytest --cov-report=html`命令。对 pytest 我们一般也不需要直接调用，而是通过 tox 来调用。
 
 默认情况下，coverage.py 将测试行（语句）覆盖率，但通过配置，还可以测量分支覆盖率。这需要一些配置。
 
-### 2.5.1. 配置 Pycoverage
+### 4.1. 配置 Pycoverage
 配置文件的默认名称是。coveragerc，在 ppw 生成的工程中，这个文件处在项目根目录下（读者可以回到第 4 章的结束部分查看 ppw 生成的文件列表）。
 
 如果没有使用其他配置文件，Coverage.py 将从其他常用配置文件中读取设置。如果存在，它将自动从“setup.cfg”或“tox.ini”中读取。如果节 (section) 名称有“coverage:”前缀，则会当成是 coverage 的配置，比如.coveragerc 中有一节名为 run，当它出现在 tox.ini 中，节名字就应该是 [coverage:run]。
@@ -722,7 +739,7 @@ directory = coverage_html_report
 我们前面提到过可以让 coverage.py 按分支覆盖率来统计，这可以按照第 3 行一样进行配置。[report] 这一节中的配置项可以让 coverage.py 忽略一些不需要统计的代码，比如 debug 代码。[html] 这一节配置了如果生成的 html 文件存放在何处。如果没有指定，将存放在 htmlcov 目录下。
 
 [run] 这一节比较常用的配置项有 include 和 omit，用来特别把某个文件或者目录加入到测试覆盖，或者排除掉。在 [report] 这一节中，也有相同的配置项，两者有所区别。在 [report] 中指定 omit 或者 include，都仅适用于报告的生成，但不影响实际的测试覆盖率统计。
-### 2.5.2. 发布覆盖率报告
+### 4.2. 发布覆盖率报告
 如果我们的项目是开源项目，你可能希望把覆盖率报告发布到网上，这样其他人就可以看到你的项目的覆盖率了。这里我们使用 codecov.io 来发布覆盖率报告。
 
 codecov 是一个在线的代码覆盖率报告服务，它可以从 GitHub、Bitbucket、GitLab 等代码托管平台上获取代码覆盖率报告，然后生成一个在线的报告。这个报告可以让其他人看到你的项目的覆盖率情况。
@@ -750,18 +767,18 @@ $ ./codecov
 ![](https://images.jieyu.ai/images/2023/01/20230120213318.png)
 这会让你的开源项目看上去非常专业，不是吗？更重要的是，让你的潜在用户更加信任这是一个高质量的项目。
 
-# Tox 环境矩阵加速测试
+## 5. TOX 实现矩阵测试
 如果我们的软件支持 3 种操作系统，4 个 python 版本，我们就必须在 3 种操作系统上，分别创建 4 个虚拟环境，安装上我们的软件和依赖，再执行测试，上传测试报告。这个动作不仅相当繁琐，还很容易引入错误。
 
 tox 与 CI 结合，就可以帮助我们自动化完成这些环境的创建与测试执行。
-### 2.6.1. 什么是 Tox？
-tox 是一个通用的 virtualenv 管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。
+### 5.1. 什么是 Tox？
+tox 是一个通用的 Python 虚拟环境管理和测试命令行工具，旨在自动化和标准化 Python 测试。它是简化 Python 软件的打包、测试和发布过程的更大愿景的一部分。大多数项目都使用它来确保软件在多个 Python 解释器版本之间的兼容性。
 
 实际上，tox 主要完成以下工作：
 1. 根据配置创建基于多个版本的 python 虚拟环境，并且保证这些虚拟环境的可复制性（需要与 poetry 或者其它依赖管理工具一起）。
-2. 运行测试和代码检查工具，比如 pytest 和 flake8, black, mypy 等。
+2. 在多个环境中运行测试和代码检查工具，比如 pytest 和 flake8, black, mypy 等。
 3. 隔离环境变量。tox 不会从系统传递任何环境变量到虚拟环境中，这样可以保证测试的可重复性。
-### 2.6.2. Tox 的工作原理
+### 5.2. Tox 的工作原理
 下图是 tox 文档显示的工作原理图：
 
 ![](https://images.jieyu.ai/images/2023/01/20230120223442.png)
@@ -769,7 +786,7 @@ tox 是一个通用的 virtualenv 管理和测试命令行工具，旨在自动�
 根据这张图，tox 读取配置文件，打包待测试软件，按照配置文件创建虚拟环境，并安装待测试软件和依赖，然后依次执行测试命令。最终，当所有虚拟环境下的测试都通过后，tox 会生成测试报告。
 
 下面，我们主要通过一个典型的配置文件来介绍 tox 是如何配置和工作的。
-### 2.6.3. 如何配置 Tox
+### 5.3. 如何配置 Tox
 在 ppw 生成的项目中，存在以下 tox.ini 文件：
 ```ini title="tox.ini"
 [tox]
@@ -811,7 +828,7 @@ commands =
 ```
 
 配置文件仍然是标准的 ini 文件格式（tox 也支持通过 pyproject.toml 来进行配置）。我们主要关注以下几个部分：
-#### 2.6.3.1. [tox] 节
+#### 5.3.1. [tox] 节
 在测试一个 package 之前，tox 首先需要构建一个 sdit 分发包。在打包这件事上，python 走过了很长的一段历程，打包工具和标准也经历了很多变化，这些我们将用专门的一章来介绍。现在我们需要知道的是，最新的标准是 PEP517 和 PEP518，tox 已经支持这两个标准。但是，如果项目本身不支持这两个 PEP，那么 tox 必须回到之前的打包方式。
 
 因此，tox 引入了 isolated_build 这个选项，如果设置为 true，tox 会使用 PEP517 和 PEP518 的方式来打包项目。如果设置为 false，tox 会使用传统的方式 (setup.py) 来打包项目。如果通过 poetry 创建项目，并且在 pyproject.toml 中设置了 requires 和 build-backend 项的话，那么我们是需要设置 isolated_build 为 true 的。
@@ -852,7 +869,7 @@ You can
 ```
 这个选项在 tox 中是默认为 false 的，多数情况下无须配置。我们出于帮助大家理解 tox 工作原理的目的介绍它
 
-#### 2.6.3.2. [testenv]
+#### 5.3.2. [testenv]
 这一节的配置项适用于所有的虚拟环境。如果在某个虚拟环境下存在特别的选项和动作，需要象 [testenv:lint] 那样定义在自己的节中。
 
 这里我们还额外设置了一些环境变量字段。比如设置了 PYTHONPATH，另外也忽略了一些警告信息。如果我们使用的一些库没有更新，那么将在测试过程中打印大量的 deprecation 警告，从而干扰我们检查测试过程中的错误信息。当然，我们也应该至少在测试中打开一次这种警告，以便知道哪些用法已经需要更新。
@@ -881,5 +898,5 @@ commands =
 
 最后，tests 是我们测试代码所在的文件夹。
 
-#### 2.6.3.3. [testenv.lint]
+#### 5.3.3. [testenv.lint]
 这一节的语法与 [testenv] 并无二致。只不过要运行的命令不一样。这里就不再一一解释。
