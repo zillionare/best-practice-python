@@ -1,5 +1,5 @@
 ---
-title: 为什么要学 Python
+title: 01 为什么要学 Python
 output: word_document
 ---
 
@@ -13,11 +13,11 @@ output: word_document
 
 做出这个选择并不奇怪。实际上，随着人工智能的兴起，Python 已成为当前最炙手可热的开发语言，其排名在编程语言最重要的排行榜 TIOBE[^TIOBE] 上逐年攀升：
 
-![50%](assets/img/chap01/toibe_2023_rank.png)
+![50%](https://images.jieyu.ai/images/2023/12/toibe_2023_rank.png)
 
 不仅如此，自从 TIOBE 开始编制各种开发语言的排行榜以来，Python 还分别于 2021 年、2020 年、2018 年、2010 年和 2007 年五夺年度之星称号，这也是唯一五次获得该称号的开发语言：
 
-![50%](assets/img/chap01/toibe_hall_of_fame.png)
+![50%](https://images.jieyu.ai/images/2023/12/toibe_lang_trending.png)
 
 此外，我们还可以从 VS Code 中 Python 语言扩展的下载次数（超过 7500 万次，对应 C/C++是 4200 万次），Docker Hub 下 Python 镜像的下载次数（超过 10 亿次，对应 Java 则只有 1 亿次）上看出来 Python 的受欢迎程度。
 
