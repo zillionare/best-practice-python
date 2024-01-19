@@ -1,6 +1,10 @@
 ---
 title: 07 代码单元测试
 ---
+
+!!! quote
+    Testing leads to failure. Failure leads to understanding.
+    
 单元测试的概念可能多数读者都有接触过。作为开发人员，我们编写一个个测试用例，测试框架发现这些测试用例，将它们组装成测试 suite 并运行，收集测试报告，并且提供测试基础设施（断言、mock、setup 和 teardown 等）。Python 当中最主流的单元测试框架有三种，Pytest, nose 和 Unittest，其中 Unittest 是标准库，其它两种是第三方工具。在 ppw 向导生成的项目中，就使用了 Pytest 来驱动测试。
 
 这里主要比较一下 pytest 和 unittest。多数情况下，当我们选择单元测试框架时，选择二者之一就好了。unitttest 基于类来组织测试用例，而 pytest 则是函数式的，基于模块来组织测试用例，同时它也提供了 group 概念来组织测试用例。pytest 的 mock 是基于第三方的 pytest-mock，而 pytest-mock 实际上只是对标准库中的 mock 的简单封装。单元测试都会有 setup 和 teardown 的概念，unittest 直接使用了 setUp 和 tearDown 作为测试入口和结束的 API，在 pytest 中，则是通过 fixture 来实现，这方面学习曲线可能稍微陡峭一点。在断言方面，pytest 使用 python 的关键字 assert 进行断言，比 unittest 更为简洁，不过断言类型上没有 unittest 丰富。
@@ -553,6 +557,13 @@ with patch('builtins.input', return_value="input is mocked"):
 执行上述代码时，用户并不会有机会真正输入数据，input 方法被 mock，并且会返回"input is mocked"。
 
 #### 3.2.4. 让时间就停留在这一刻
+
+!!! quote
+    Verweile doch, du bist so schön!
+    你是如此美丽，请逗留片刻！
+
+    <p style="text-align:right"> -- 浮士德</p>
+
 有时候我们会在代码中，通过 datetime.datetime.now() 来获取系统的当前时间。显然，在不同的时间测试，我们会得到不同的取值，导致测试结果无法固定。因此，这也是需要被 mock 的对象。
 
 要实现对这个方法的 mock，可能比我们一开始以为的要难一些。我们的推荐是，使用 freezegun 这个库，而避开自己去 mock 它。
