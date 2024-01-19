@@ -323,7 +323,7 @@ session_mocker [session scope] -- .../pytest_mock/plugin.py:419
 ## 3. MOCK 魔法
 在单元测试时，我们希望测试环境尽可能单纯、可控。因此我们不希望依赖于用户输入，不希望连接无法独占的数据库或者第三方微服务等。这时候，我们需要通 mock 来模拟出这些外部接口。mock 可能是单元测试中最核心的技术。
 
-!!! Readmore
+!!! note
     感谢容器技术！现在单元测试中，越来越多地连接数据库、缓存和第三方微服务了。因为对有一些接口进行 mock 的代价，已经超过了 launch 一个容器，初始化数据库再开始测试了。
 
 无论是 unittest 还是 pytest，都是直接或者间接使用了 unittest 中的 mock 模块。所以，当你遇到 mock 相关的问题，请参阅 [mock](https://docs.python.org/3/library/unittest.mock.html)。我们接下来关于 mock 的介绍，也将以 Unittest 中的 mock 为主。不过，两个框架的 mock，在基本概念上都是相通的。
@@ -383,7 +383,7 @@ foo
 
 这里还出现了它的一个重要方法，assert_called_with，即检查被替换的方法是否被以期望的参数调用了。除此之外，还可以断言被调用的次数，等等。
 
-!!! note:
+!!! note
     如果你之前接触过其它 mock 框架的话，可能需要注意，python 中的 mock 是`action -> assertion`模式，而不是其它语言中常见的`record -> replay`模式。
 
 这个例子非常简单。但它也演示了使用 Mock 的精髓，即生成 Mock 实例，设置行为（比如返回值），替换生产系统中的对象（方法、属性等），最后，检验结果。
