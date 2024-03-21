@@ -751,7 +751,7 @@ poetry 支持向 pypi 进行发布，其命令是`poetry publish`。不过，在
 ```shell
 # 发布到 TEST PYPI 时的配置和命令
 $ poetry config repositories.testpypi https://test.pypi.org/legacy/
-$ poetry config testpypi-token.pypi my-token
+$ poetry config pypi-token.testpypi my-token
 $ poetry publish -r testpypi
 
 # 发布到 PYPI 时的配置和命令
