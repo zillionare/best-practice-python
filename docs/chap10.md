@@ -333,7 +333,7 @@ markdown 没有 rst 那样的指令语法，因此对超出核心语法的特性
     This is the second paragraph.
 ```
 
-这是 commonmark 的扩展语法。感叹号后面的英文单词是警示文本的类型，commonmark 并没有限定有哪些类型。在实现上，这些类型都是 css 的一个 class，因此具体显示效果如何实现，取决于渲染器的决定。比如，本书的网页版使用了 mkdocs-material 主题，material 支持的类型有 note, abstract, info, tip, success, question, warning, example, quote 等。如果使用了不在上述列表之中的类型，mkdocs-material 就会使用默认的样式来显示这段警示文本。
+这是 commonmark 的扩展语法。感叹号后面的英文单词是警示文本的类型，commonmark 并没有限定有哪些类型。在实现上，这些类型都是 css 的一个 类（class），因此具体显示效果如何实现，取决于渲染器的决定。比如，本书的网页版使用了 mkdocs-material 主题，material 支持的类型有 note, abstract, info, tip, success, question, warning, example, quote 等。如果使用了不在上述列表之中的类型，mkdocs-material 就会使用默认的样式来显示这段警示文本。
 
 比如，下面是引用它人文字的一例：
 ```
