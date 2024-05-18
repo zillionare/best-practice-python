@@ -1,6 +1,5 @@
 
 from typing import Any
-import cfg4py
 
 s = 1         # Statically typed (type int)
 reveal_type(s)

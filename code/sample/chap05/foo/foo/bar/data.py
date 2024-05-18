@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 
 from gino import Gino
 
@@ -17,8 +18,12 @@ async def main():
     await db.set_bind("postgresql://zillionare:123456@localhost/bpp")
     await db.gino.create_all()
 
-    # further code goes here
+    # 其它功能代码
+    await User.create(name="zillionare", dob=datetime.date(2024,1,1))
 
+    # select * from users
+    users = await User.query.gino.all()
+    print(users[0].name, users[0].dob)
     await db.pop_bind().close()
 
 
