@@ -1,19 +1,12 @@
 ## fixture的使用
 
-chap07/sample/app.py及chap07/tests/sample/test_app.py对应书中第102页。要运行此处的程序，需要先安装pytest和pytest-asyncio：
-
-```
-pip install pytest
-pip install pytest_asyncio==0.23.6
-```
-
-以及参照第5章示例给出的方法，安装gino和postgres db。
+chap07/sample/app.py及chap07/tests/sample/test_app.py对应书中第102页。
 
 在运行测试之前，需要重新创建postgres的容器（这样将确保每次测试都使用最新的数据）：
 
 ```
-sudo docker rm -f ppw-postgres
-sudo docker run -d --name ppw-postgres -p5432:5432 -e POSTGRES_PASSWORD=123456 -e POSTGRES_USER=zillionare -e POSTGRES_DB=bpp postgres
+sudo docker rm -f pbp-postgres
+sudo docker run -d --name pbp-postgres -p5432:5432 -e POSTGRES_PASSWORD=123456 -e POSTGRES_USER=zillionare -e POSTGRES_DB=pbp postgres
 ```
 
 如果不执行上述步骤，则chap07/sample/test_app.py处的断言会失败，因为此时返回的user_id可能大于1。
@@ -21,7 +14,7 @@ sudo docker run -d --name ppw-postgres -p5432:5432 -e POSTGRES_PASSWORD=123456 -
 运行：
 
 ```bash
-pytest code/sample/chap07/sample/test_app.py 
+pytest sample/chap07/tests/sample/test_app.py 
 ```
 
 你应该看到pytest报告" 1 passed..."。
@@ -32,12 +25,12 @@ pytest code/sample/chap07/sample/test_app.py
 通过以下命令运行代码：
 
 ```bash
-pytest code/sample/chap07/tests/where_to_patch/test_bar.py 
+pytest sample/chap07/tests/where_to_patch/test_bar.py 
 ```
 你将看到pytest报告如下错误：
 
 ```
-ERROR code/sample/chap07/tests/wher_to_patch/test_bar.py - AssertionError: assert 'Alice' == 'Bob'
+ERROR sample/chap07/tests/wher_to_patch/test_bar.py - AssertionError: assert 'Alice' == 'Bob'
 ```
 表明我们的mock并没有生效。`tmp.name()`应该调用`get_name`，如果mock生效的话，`name`就应该等于"Bob"。
 

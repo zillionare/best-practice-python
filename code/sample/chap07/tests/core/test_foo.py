@@ -1,10 +1,10 @@
 import asyncio
+import datetime
 
 import pytest
 import pytest_asyncio
-from sample.core.foo import add_user, get_operating_system
 from freezegun import freeze_time
-import datetime
+from sample.core.foo import add_user, get_operating_system
 
 
 def test_assertion():
@@ -54,7 +54,7 @@ def event_loop():
 async def db():
     import asyncpg
 
-    conn = await asyncpg.connect("postgresql://zillionare:123456@localhost/bpp")
+    conn = await asyncpg.connect("postgresql://zillionare:123456@localhost/pbp")
     yield conn
 
     await conn.close()

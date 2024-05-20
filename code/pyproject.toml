@@ -8,7 +8,11 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.8"
 asyncpg = "^0.29.0"
-pytest-asyncio = "^0.23.2"
+pytest-asyncio = "^0.23.6"
+gino = "1.0.1"
+pylint = "2.4.0"
+pyflakes = "3.2.0"
+mypy = "1.10.0"
 
 
 [build-system]

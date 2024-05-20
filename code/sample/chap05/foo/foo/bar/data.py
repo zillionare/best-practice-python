@@ -15,7 +15,7 @@ class User(db.Model):
 
 
 async def main():
-    await db.set_bind("postgresql://zillionare:123456@localhost/bpp")
+    await db.set_bind("postgresql://zillionare:123456@localhost/pbp")
     await db.gino.create_all()
 
     # 其它功能代码

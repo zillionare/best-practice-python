@@ -9,7 +9,7 @@
 
 rootfs存放了镜像的根文件系统，这个目录下的内容会被复制到docker容器中。dockerfile用来指导如何构建这个镜像。build.sh则是一个调用docker build的脚本。它主要完成Python项目的构建和打包，为镜像设置版本等工作。
 
-要实现镜像构建，请进入chap11/docker/sample/docker目录，然后运行：
+要实现镜像构建，请进入sample/chap11/docker/sample/docker目录，然后运行：
 
 ```bash
 ./build.sh

@@ -18,7 +18,7 @@ class User(engine.Model):
 async def setup():
     global engine
 
-    await engine.set_bind("postgresql://zillionare:123456@localhost/bpp")
+    await engine.set_bind("postgresql://zillionare:123456@localhost/pbp")
     await engine.gino.create_all()
 
 # pytest-asyncio已经提供了一个event_loop的fixture,但它是function级别的
@@ -35,7 +35,7 @@ def event_loop():
 async def db():
     import asyncpg
 
-    conn = await asyncpg.connect("postgresql://zillionare:123456@localhost/bpp")
+    conn = await asyncpg.connect("postgresql://zillionare:123456@localhost/pbp")
     yield conn
 
     await conn.close()
