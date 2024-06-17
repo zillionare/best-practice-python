@@ -30,11 +30,19 @@ sudo docker run -d --name pbp-postgres -p5432:5432 -e POSTGRES_PASSWORD=123456 -
 
 这将创建一个名为pbp-postgres的容器。数据库名为pbp，用户名为zillionare，密码为123456，监听在端口5432，可以从宿主机本机访问这个端口。
 
-在运行每章的示例前，请新建该数据库容器。删除容器的命令是：
+在运行每章的示例前，请重建该数据库容器。删除容器的命令是：
 
 ```bash
 sudo docker rm -f pbp-postgres
 ```
+
+然后再执行命令：
+
+```bash
+sudo docker run -d --name pbp-postgres -p5432:5432 -e POSTGRES_PASSWORD=123456 -e POSTGRES_USER=zillionare -e POSTGRES_DB=pbp postgres
+```
+
+来重建数据库容器。
 
 ## 示例代码目录
 
